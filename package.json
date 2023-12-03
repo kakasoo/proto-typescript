@@ -1,5 +1,5 @@
 {
-    "name": "proto-typescript",
+    "name": "@kakasoo/proto-typescript",
     "version": "1.0.0",
     "description": "Utility types and implementations based on JavaScript prototypes.",
     "main": "./dist/index.js",
