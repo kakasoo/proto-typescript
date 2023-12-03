@@ -1,13 +1,44 @@
+import {
+    Add,
+    Divide,
+    Multiply,
+    NToNumber,
+    Remainder,
+    Sub,
+} from "./number.type";
 import { Equal, Merge } from "./object.type";
+import { ToString, ToStringTuple } from "./string.type";
 
 export type Length<T extends any[]> = T["length"];
 
+/**
+ * 현재 튜플 형태에 새로운 타입 하나를 추가하는 타입
+ *
+ * Push<[], any> // [any]
+ * Push<[], 1> // [1]
+ */
 export type Push<T extends any[], V> = [...T, V];
 
 export type NTuple<
     N extends number,
     T extends any[] = []
 > = T["length"] extends N ? T : NTuple<N, Push<T, any>>;
+
+/**
+ * N1 * N2 크기의 NTuple을 반환하는 타입으로, 최적화를 위해 N1, N2 숫자를 비교하는 과정이 포함된 타입
+ *
+ * NNTuple<2,3> = [...NTuple<3>, ...NTuple<3>]
+ * NNTuple<3,2> = [...NTuple<3>, ...NTuple<3>]
+ */
+export type NNTuple<N1 extends number, N2 extends number> = [
+    Sub<N1, N2>
+] extends [never]
+    ? Sub<N1, 1> extends never
+        ? []
+        : [...NNTuple<Sub<N1, 1>, N2>, ...NTuple<N2>]
+    : Sub<N2, 1> extends never
+    ? []
+    : [...NNTuple<Sub<N2, 1>, N1>, ...NTuple<N1>];
 
 /**
  * Returns matching A to matching B in tuple form.
@@ -63,3 +94,135 @@ export type EntriesToObject<T extends Array<NTuple<2>>> = T extends [
             : never
         : never
     : {};
+
+export type ArrayToUnion<T extends any[]> = T[number];
+
+/**
+ * PartitionByTwo<[1,2,3,4,5,6,7,8]> // [[1,2],[3,4],[5,6],[7,8]]
+ */
+export type PartitionByTwo<
+    T extends any[],
+    L extends number = Length<T>
+> = T extends [infer First, infer Second, ...infer Rest]
+    ? [[First, Second], ...PartitionByTwo<Rest, Sub<L, 2>>]
+    : [];
+
+/**
+ * Join<['a', 'b', 'c']> // 'abc'
+ * Join<['a', 'b', 'c'], '-'> // 'a-b-c'
+ */
+export type Join<T extends string[], U extends string | number> = T extends [
+    infer F,
+    ...infer Rest
+]
+    ? Rest extends []
+        ? `${ToString<F>}`
+        : `${ToString<F>}${U}${Join<ToStringTuple<Rest>, U>}`
+    : "";
+
+export type IsTuple<T extends readonly any[] | { length: number }> = [
+    T
+] extends [never]
+    ? false
+    : T extends readonly any[]
+    ? number extends T["length"]
+        ? false
+        : true
+    : false;
+
+/**
+ * Reverse<[1,2,3]> // [3,2,1]
+ */
+export type Reverse<T extends any[]> = T extends [infer F, ...infer Rest]
+    ? [...Reverse<Rest>, F]
+    : [];
+
+/**
+ * Shift<[1,2,3]> // [2,3]
+ */
+export type Shift<T extends any[]> = T extends [infer F, ...infer Rest]
+    ? Rest
+    : [];
+
+/**
+ * Unshift<[1, 2, 3], 4> // [4,1,2,3]
+ */
+export type Unshift<T extends any[], V> = [V, ...T];
+
+/**
+ * Pop<[1,2,3]> // [1,2]
+ */
+export type Pop<T extends any[]> = T extends [...infer Rest, infer Last]
+    ? Rest
+    : [];
+
+export type Includes<T extends readonly any[], U> = T extends [
+    infer P,
+    ...infer R
+]
+    ? Equal<U, P> extends true
+        ? true
+        : Includes<R, U>
+    : false;
+
+/**
+ * 튜플에서 중복 요소를 제거하는 타입
+ *
+ * Distinct<[1,1,2,2,3,3,3,4]> // [1,2,3,4]
+ */
+export type Distinct<T extends any[], P extends any[] = []> = T extends [
+    infer F,
+    ...infer Rest
+]
+    ? Includes<P, F> extends false
+        ? Distinct<Rest, [...P, F]>
+        : Distinct<Rest, P>
+    : P;
+
+export type Compare<N1 extends number, N2 extends number> = N1 extends N2
+    ? true
+    : [Sub<N1, N2>] extends [never]
+    ? false
+    : true;
+
+export type BubbleSort<
+    T extends any[],
+    L extends number = Length<T>,
+    ASC extends boolean = false
+> = L extends 1
+    ? T
+    : T extends [infer F, infer S, ...infer Rest]
+    ? BubbleSort<
+          [
+              ...(Compare<NToNumber<F>, NToNumber<S>> extends ASC
+                  ? [F, ...BubbleSort<[S, ...Rest], Sub<L, 1>>]
+                  : [S, ...BubbleSort<[F, ...Rest], Sub<L, 1>>])
+          ],
+          Sub<L, 1>
+      >
+    : never;
+
+/**
+ * 사칙연산을 튜플에 적용한 타입
+ *
+ * type a = Map<[3, 4, 5], "Add", 2>; // [5, 6, 7]
+ * type b = Map<[3, 4, 5], "Multiply", 2>; // [6, 8, 10]
+ * type c = Map<[3, 4, 5], "Sub", 2>; // [1, 2, 3]
+ * type d = Map<[3, 4, 5], "Divide", 2>; // [1, 2, 2]
+ * type e = Map<[3, 4, 5], "Remainder", 2>; // [1, 0, 1]
+ */
+export type Map<
+    T extends readonly number[],
+    OP extends "Add" | "Multiply" | "Sub" | "Divide" | "Remainder",
+    N extends number
+> = OP extends "Add"
+    ? { [K in keyof T]: Add<T[K], N> }
+    : OP extends "Multiply"
+    ? { [K in keyof T]: Multiply<T[K], N> }
+    : OP extends "Sub"
+    ? { [K in keyof T]: Sub<T[K], N> }
+    : OP extends "Divide"
+    ? { [K in keyof T]: Divide<T[K], N> }
+    : OP extends "Remainder"
+    ? { [K in keyof T]: Remainder<T[K], N> }
+    : never;

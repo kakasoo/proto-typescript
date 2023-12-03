@@ -68,3 +68,28 @@ export type Replaced<T extends string> = StringIncludes<
 > extends true
     ? never
     : T;
+
+/**
+ * StartsWith<'abc', 'a'> // true
+ */
+export type StartsWith<
+    T extends string,
+    U extends string
+> = T extends `${U}${string}` ? true : false;
+
+/**
+ * EndsWith<'abc', 'c'> // true
+ */
+export type EndsWith<
+    T extends string,
+    U extends string
+> = T extends `${string}${U}` ? true : false;
+
+/**
+ * 글자를 분리하여 튜플로 변경하는 타입
+ *
+ * Split<"abcdefg"> // ["a", "b", "c", "d", "e", "f", "g"]
+ */
+export type Split<T extends string> = T extends `${infer F}${infer Rest}`
+    ? [F, ...Split<Rest>]
+    : [];
