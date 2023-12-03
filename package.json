@@ -1,6 +1,9 @@
 {
     "name": "@kakasoo/proto-typescript",
     "version": "1.0.0",
+    "publishConfig": {
+        "access": "public"
+    },
     "description": "Utility types and implementations based on JavaScript prototypes.",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
