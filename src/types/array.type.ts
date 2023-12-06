@@ -109,15 +109,19 @@ export type PartitionByTwo<
 /**
  * Join<['a', 'b', 'c']> // 'abc'
  * Join<['a', 'b', 'c'], '-'> // 'a-b-c'
+ * Join<string[], "-">; // string
  */
-export type Join<T extends string[], U extends string | number> = T extends [
-    infer F extends string,
-    ...infer Rest extends string[]
+export type Join<
+    T extends readonly (string | number)[] | (string | number)[],
+    U extends string = ","
+> = T extends readonly [
+    infer F extends string | number,
+    ...infer Rest extends (string | number)[]
 ]
     ? Rest extends []
-        ? F
+        ? `${F}`
         : `${F}${U}${Join<Rest, U>}`
-    : "";
+    : string; // if `T` is not readonly tuple. ( for example, just `string[]` array type. )
 
 export type IsTuple<T extends readonly any[] | { length: number }> = [
     T
