@@ -7,7 +7,6 @@ import {
     Sub,
 } from "./number.type";
 import { Equal, Merge } from "./object.type";
-import { ToString, ToStringTuple } from "./string.type";
 
 export type Length<T extends any[]> = T["length"];
 
@@ -112,12 +111,12 @@ export type PartitionByTwo<
  * Join<['a', 'b', 'c'], '-'> // 'a-b-c'
  */
 export type Join<T extends string[], U extends string | number> = T extends [
-    infer F,
-    ...infer Rest
+    infer F extends string,
+    ...infer Rest extends string[]
 ]
     ? Rest extends []
-        ? `${ToString<F>}`
-        : `${ToString<F>}${U}${Join<ToStringTuple<Rest>, U>}`
+        ? F
+        : `${F}${U}${Join<Rest, U>}`
     : "";
 
 export type IsTuple<T extends readonly any[] | { length: number }> = [

@@ -8,15 +8,6 @@ export type ToString<T> = T extends string
     ? `${T}`
     : never;
 
-export type Join<T extends string[], U extends string | number> = T extends [
-    infer F,
-    ...infer Rest
-]
-    ? Rest extends []
-        ? F
-        : `${ToString<F>}${U}${Join<ToStringTuple<Rest>, U>}`
-    : "";
-
 export type IsAlphabet<T extends string> = Uppercase<T> extends Lowercase<T>
     ? Lowercase<T> extends Uppercase<T>
         ? true
