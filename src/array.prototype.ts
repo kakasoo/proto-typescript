@@ -1,8 +1,6 @@
 import { Join } from "./types";
 
 export namespace ArrayPrototype {
-    const _JoinDefaultParamter = "," as const;
-
     /**
 		 * type-safe join.
 		 * 
@@ -18,7 +16,7 @@ export namespace ArrayPrototype {
         Separator extends string = ","
     >(
         arr: Container,
-        separator: Separator = _JoinDefaultParamter as Separator
+        separator: Separator = "," as Separator
     ): Join<Container, Separator> {
         return arr.join(separator) as Join<Container, Separator>;
     }

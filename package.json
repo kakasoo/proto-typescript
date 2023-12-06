@@ -1,6 +1,6 @@
 {
     "name": "@kakasoo/proto-typescript",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "publishConfig": {
         "access": "public"
     },
@@ -11,7 +11,9 @@
         "./dist"
     ],
     "scripts": {
-        "build": "tsc"
+        "build": "tsc",
+        "prepublish": "tsc",
+        "publish": "npm publish"
     },
     "keywords": [],
     "author": "",
