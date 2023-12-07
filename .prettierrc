@@ -1,0 +1,9 @@
+{
+    "singleQuote": true,
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "printWidth": 120,
+    "plugins": ["@trivago/prettier-plugin-sort-imports"],
+    "importOrderParserPlugins": ["typescript", "dcorators", "decorators-legacy"]
+  }
+  

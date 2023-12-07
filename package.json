@@ -13,9 +13,14 @@
     "scripts": {
         "build": "tsc",
         "prepublish": "tsc",
-        "publish": "npm publish"
+        "publish": "npm publish",
+        "format": "prettier --write \"src/**/*.ts\""
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+        "prettier": "^3.1.0"
+    }
 }
