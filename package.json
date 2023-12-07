@@ -1,26 +1,26 @@
 {
-    "name": "@kakasoo/proto-typescript",
-    "version": "1.0.3",
-    "publishConfig": {
-        "access": "public"
-    },
-    "description": "Utility types and implementations based on JavaScript prototypes.",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "files": [
-        "./dist"
-    ],
-    "scripts": {
-        "build": "tsc",
-        "prepublish": "tsc",
-        "publish": "npm publish",
-        "format": "prettier --write \"src/**/*.ts\""
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-        "prettier": "^3.1.0"
-    }
+  "name": "@kakasoo/proto-typescript",
+  "version": "1.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Utility types and implementations based on JavaScript prototypes.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "tsc",
+    "publish": "npm publish",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "prettier": "^3.1.0"
+  }
 }
