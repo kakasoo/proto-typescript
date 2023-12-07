@@ -1,4 +1,4 @@
-import { Join } from './types';
+import { Join } from '../types';
 
 export namespace ArrayPrototype {
   /**
