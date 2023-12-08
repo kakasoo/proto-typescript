@@ -49,8 +49,13 @@ export type StartsWith<T extends string, U extends string> = T extends `${U}${st
 export type EndsWith<T extends string, U extends string> = T extends `${string}${U}` ? true : false;
 
 /**
- * 글자를 분리하여 튜플로 변경하는 타입
- *
  * Split<"abcdefg"> // ["a", "b", "c", "d", "e", "f", "g"]
  */
-export type Split<T extends string> = T extends `${infer F}${infer Rest}` ? [F, ...Split<Rest>] : [];
+export type Split<
+  Conatiner extends string,
+  Splitter extends string = '',
+> = Conatiner extends `${infer FirstWord}${Splitter}${infer Rest}`
+  ? [FirstWord, ...Split<Rest, Splitter>]
+  : Conatiner extends ''
+    ? []
+    : [Conatiner];
