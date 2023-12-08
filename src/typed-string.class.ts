@@ -1,4 +1,4 @@
-import { toPrimitive } from '../interfaces/to-primitive.interface';
+import { toPrimitive } from './interfaces/to-primitive.interface';
 
 export class TypedString<T extends string | number | boolean> implements toPrimitive<`${T}`> {
   private readonly data: `${T}`;

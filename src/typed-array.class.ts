@@ -1,6 +1,6 @@
 import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
-import { TypedString } from './types/typed-string.class';
+import { TypedString } from './typed-string.class';
 
 export class TypedArray<T extends any[] | readonly any[]> implements toPrimitive<[...T]> {
   constructor(private readonly data: T) {}
