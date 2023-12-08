@@ -35,3 +35,7 @@ export type StringToNumberStringTuple<T extends string> = T extends `${infer F}$
  */
 export type NumberToString<N extends number> = `${N}`;
 export type StringToNumber<S extends string> = S extends NumberToString<infer P> ? P : never;
+
+export type Falsy = false | 0 | '' | null | undefined;
+export type Truthy<T> = T extends Falsy ? false : true;
+export type Conditional<Condition, T, F> = Truthy<Condition> extends true ? T : F;
