@@ -11,7 +11,7 @@ export class TypedArray<T extends any[] | readonly any[]> implements toPrimitive
    * @returns
    */
   join<Separator extends string>(
-    separator: Separator,
+    separator: Separator = '' as Separator,
   ): TypedString<ReturnType<typeof ArrayPrototype.join<T, Separator>>> {
     const initalValue = ArrayPrototype.join(this.data, separator);
     return new TypedString(initalValue);
