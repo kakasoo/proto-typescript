@@ -8,6 +8,8 @@ export const StringPrototype = {
    * @param container original string value.
    * @param splitter An object that can split a string.
    * @param limit A value used to limit the number of elements returned in the array.
+   *
+   * @todo support `RegExp` as splitter
    */
   split<Container extends string, Splitter extends string = '', Limit extends number = 0>(
     container: Container,

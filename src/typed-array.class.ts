@@ -10,7 +10,8 @@ export class TypedArray<T extends any[] | readonly any[]> implements toPrimitive
    * @example new TypedArray([1, 2, 3] as const).join(',');
    *
    * @param separator A string used to separate one element of the array from the next in the resulting string. If omitted, the array elements are separated with a comma.
-   * @returns
+   * @todo support `TypedArray` type as Container
+   * @todo support `TypedString` type as Separator
    */
   join<Separator extends string>(
     separator: Separator = '' as Separator,

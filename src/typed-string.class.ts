@@ -14,6 +14,9 @@ export class TypedString<T extends string | number | boolean> implements toPrimi
    * type-safe split.
    * @param splitter An object that can split a string.
    * @param limit A value used to limit the number of elements returned in the array.
+   *
+   * @todo support `TypedArray` type as Splitter
+   * @todo support `TypedNumber` type as Limit
    */
   split<Splitter extends string = '', Limit extends number = 0>(
     splitter: Splitter = '' as Splitter,

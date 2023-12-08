@@ -8,7 +8,8 @@ export const ArrayPrototype = {
    *
    * @param container
    * @param separator A string used to separate one element of the array from the next in the resulting string. If omitted, the array elements are separated with a comma.
-   * @returns
+   *
+   * @todo support bigint type (es2020) as element of Array.
    */
   join<
     Container extends readonly (string | number | boolean)[] | (string | number | boolean)[],
