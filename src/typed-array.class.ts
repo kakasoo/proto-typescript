@@ -1,5 +1,6 @@
 import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
+import { TypedString } from './types/typed-string.class';
 
 export class TypedArray<T extends any[] | readonly any[]> implements toPrimitive<[...T]> {
   constructor(private readonly data: T) {}
@@ -9,8 +10,11 @@ export class TypedArray<T extends any[] | readonly any[]> implements toPrimitive
    * @param separator
    * @returns
    */
-  join<Separator extends string>(separator: Separator): ReturnType<typeof ArrayPrototype.join<T, Separator>> {
-    return ArrayPrototype.join(this.data, separator);
+  join<Separator extends string>(
+    separator: Separator,
+  ): TypedString<ReturnType<typeof ArrayPrototype.join<T, Separator>>> {
+    const initalValue = ArrayPrototype.join(this.data, separator);
+    return new TypedString(initalValue);
   }
 
   toPrimitive(): [...T] {
