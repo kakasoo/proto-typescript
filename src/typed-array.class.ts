@@ -1,6 +1,7 @@
+import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
 
-export class TypedArray<T extends any[] | readonly any[]> {
+export class TypedArray<T extends any[] | readonly any[]> implements toPrimitive<[...T]> {
   constructor(private readonly data: T) {}
 
   /**
@@ -10,5 +11,9 @@ export class TypedArray<T extends any[] | readonly any[]> {
    */
   join<Separator extends string>(separator: Separator): ReturnType<typeof ArrayPrototype.join<T, Separator>> {
     return ArrayPrototype.join(this.data, separator);
+  }
+
+  toPrimitive(): [...T] {
+    return [...this.data];
   }
 }
