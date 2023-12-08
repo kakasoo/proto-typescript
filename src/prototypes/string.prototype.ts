@@ -1,7 +1,16 @@
 import { Split } from '../types';
 
 export const StringPrototype = {
-  split<Container extends string, Splitter extends string, Limit extends number>(
+  /**
+   * type-safe split.
+   * @example StringPrototype.split('abcde', 'c', 1) // ['ab']
+   *
+   * @param container
+   * @param splitter
+   * @param limit
+   * @returns
+   */
+  split<Container extends string, Splitter extends string = '', Limit extends number = 0>(
     container: Container,
     splitter: Splitter,
     limit?: Limit,
