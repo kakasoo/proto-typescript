@@ -13,8 +13,8 @@ export class TypedArray<T extends any[] | readonly any[]> implements toPrimitive
   join<Separator extends string>(
     separator: Separator = '' as Separator,
   ): TypedString<ReturnType<typeof ArrayPrototype.join<T, Separator>>> {
-    const initalValue = ArrayPrototype.join(this.data, separator);
-    return new TypedString(initalValue);
+    const initialValue = ArrayPrototype.join(this.data, separator);
+    return new TypedString(initialValue);
   }
 
   toPrimitive(): [...T] {
