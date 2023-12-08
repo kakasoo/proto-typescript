@@ -1,6 +1,6 @@
 import { Join } from '../types';
 
-export namespace ArrayPrototype {
+export const ArrayPrototype = {
   /**
    * type-safe join.
    *
@@ -10,10 +10,10 @@ export namespace ArrayPrototype {
    * @param separator
    * @returns
    */
-  export function join<
-    Container extends readonly (string | number)[] | (string | number)[],
+  join<
+    Container extends readonly (string | number | boolean)[] | (string | number | boolean)[],
     Separator extends string = ',',
   >(arr: Container, separator: Separator = ',' as Separator): Join<Container, Separator> {
     return arr.join(separator) as Join<Container, Separator>;
-  }
-}
+  },
+};

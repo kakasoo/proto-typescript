@@ -89,11 +89,13 @@ export type PartitionByTwo<T extends any[], L extends number = Length<T>> = T ex
  * Join<['a', 'b', 'c']> // 'abc'
  * Join<['a', 'b', 'c'], '-'> // 'a-b-c'
  * Join<string[], "-">; // string
+ * Join<['a', 'b', 'c', true], '-'>; // 'a-b-c-true'
+ * Join<['a', 'b', 'c', number], '-'>; // 'a-b-c-${number}'
  */
 export type Join<
-  T extends readonly (string | number)[] | (string | number)[],
+  T extends readonly (string | number | boolean)[] | (string | number | boolean)[],
   U extends string = ',',
-> = T extends readonly [infer F extends string | number, ...infer Rest extends (string | number)[]]
+> = T extends readonly [infer F extends string | number | boolean, ...infer Rest extends (string | number | boolean)[]]
   ? Rest extends []
     ? `${F}`
     : `${F}${U}${Join<Rest, U>}`
