@@ -10,6 +10,11 @@ export class TypedString<T extends string | number | boolean> implements toPrimi
     this.data = String(data) as `${T}`;
   }
 
+  /**
+   * type-safe split.
+   * @param splitter An object that can split a string.
+   * @param limit A value used to limit the number of elements returned in the array.
+   */
   split<Splitter extends string = '', Limit extends number = 0>(
     splitter: Splitter = '' as Splitter,
     limit: Limit = 0 as Limit,

@@ -6,8 +6,10 @@ export class TypedArray<T extends any[] | readonly any[]> implements toPrimitive
   constructor(private readonly data: T) {}
 
   /**
+   * type-safe join.
    * @example new TypedArray([1, 2, 3] as const).join(',');
-   * @param separator
+   *
+   * @param separator A string used to separate one element of the array from the next in the resulting string. If omitted, the array elements are separated with a comma.
    * @returns
    */
   join<Separator extends string>(
