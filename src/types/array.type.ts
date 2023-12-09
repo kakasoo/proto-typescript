@@ -5,6 +5,8 @@ export type ElementOf<Tuple extends readonly any[] | any[]> = [...Tuple] extends
 
 export type Length<T extends any[]> = T['length'];
 
+export type ArrayValues<T extends any[]> = T[number];
+
 /**
  * 현재 튜플 형태에 새로운 타입 하나를 추가하는 타입
  *
@@ -54,7 +56,7 @@ export type Take<T extends any[], P extends number, R extends any[] = []> = Leng
   ? R
   : T extends [infer F, ...infer Rest]
     ? Take<Rest, P, Push<R, F>>
-    : never;
+    : R;
 
 export type TupleIncludes<T extends readonly any[], U> = T extends [infer P, ...infer R] // T가 P와 나머지 R로 이루어진 배열이라면, 즉 length가 최소한 1 이상인 경우라면
   ? Equal<U, P> extends true
