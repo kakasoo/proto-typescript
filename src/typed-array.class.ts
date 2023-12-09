@@ -1,5 +1,6 @@
 import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
+import { TypedNumber } from './typed-number.class';
 import { TypedString } from './typed-string.class';
 import { ElementOf, MethodsFrom, NTuple } from './types';
 
@@ -13,8 +14,11 @@ export class TypedArray<T extends any[] | readonly any[]>
   /**
    * @inheritDoc
    */
-  at<Index extends number = 0>(index: Index): ReturnType<typeof ArrayPrototype.at<T, Index>> {
-    return this.at(index);
+  at<Index extends number = 0>(
+    index: Index | TypedNumber<Index> = new TypedNumber(),
+  ): ReturnType<typeof ArrayPrototype.at<T, Index>> {
+    const primitiveIndex = typeof index === 'number' ? index : index.toPrimitive();
+    return this.at(primitiveIndex);
   }
 
   /**
