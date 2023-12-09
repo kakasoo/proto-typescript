@@ -1,6 +1,19 @@
-import { Join } from '../types';
+import { At, Join } from '../types';
 
 export const ArrayPrototype = {
+  /**
+   * Returns the item located at the specified index.
+   * @param container
+   * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+   * @returns
+   */
+  at<Container extends any[] | readonly any[], Index extends number>(
+    container: Container,
+    index: Index,
+  ): At<Container, Index> {
+    return container.at(index);
+  },
+
   /**
    * type-safe join.
    * @example ArrayPrototype.join(["a", "b"]);

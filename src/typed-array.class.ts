@@ -1,9 +1,20 @@
 import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
 import { TypedString } from './typed-string.class';
+import { MethodsFrom } from './types';
 
-export class TypedArray<T extends any[] | readonly any[]> implements toPrimitive<[...T]> {
+export class TypedArray<T extends any[] | readonly any[]>
+  implements Pick<MethodsFrom<Array<any>>, 'join' | 'at'>, toPrimitive<[...T]>
+{
   constructor(private readonly data: T) {}
+
+  /**
+   * Returns the item located at the specified index.
+   * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+   */
+  at<Index extends number = 0>(index: Index): ReturnType<typeof ArrayPrototype.at<T, Index>> {
+    return this.at(index);
+  }
 
   /**
    * type-safe join.

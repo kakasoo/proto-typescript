@@ -1,3 +1,3 @@
-export type MethodNames<T> = {
-  [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
-}[keyof T];
+export type MethodsFrom<T> = {
+  [K in keyof T as T[K] extends (...args: any[]) => any ? K : never]: Function;
+};

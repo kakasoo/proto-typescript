@@ -191,3 +191,5 @@ export type Map<
         : OP extends 'Remainder'
           ? { [K in keyof T]: Remainder<T[K], N> }
           : never;
+
+export type At<Tuple extends any[] | readonly any[], Index extends number> = Tuple[Index];
