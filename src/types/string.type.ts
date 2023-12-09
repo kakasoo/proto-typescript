@@ -1,6 +1,7 @@
 import { Conditional } from './arithmetic.type';
 import { Take } from './array.type';
 import { Sub } from './number.type';
+import { Equal } from './object.type';
 
 export type ToStringTuple<T> = T extends string[] ? T : never;
 
@@ -50,14 +51,13 @@ export type StartsWith<T extends string, U extends string> = T extends `${U}${st
  */
 export type EndsWith<T extends string, U extends string> = T extends `${string}${U}` ? true : false;
 
-type _Split<
-  Conatiner extends string,
-  Splitter extends string = '',
-> = Conatiner extends `${infer FirstWord}${Splitter}${infer Rest}`
-  ? [FirstWord, ...Split<Rest, Splitter>]
-  : Conatiner extends ''
-    ? []
-    : [Conatiner];
+type _Split<Conatiner extends string, Splitter extends string = ''> = Conatiner extends ''
+  ? []
+  : Equal<Splitter, string> extends true
+    ? string[]
+    : Conatiner extends `${infer FirstWord}${Splitter}${infer Rest}`
+      ? [FirstWord, ...Split<Rest, Splitter>]
+      : [Conatiner];
 
 /**
  * Split<"abcdefg"> // ["a", "b", "c", "d", "e", "f", "g"]
