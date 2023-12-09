@@ -4,7 +4,7 @@ import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
 import { Split } from './types';
 
-export class TypedString<T extends string | number | boolean> implements toPrimitive<`${T}`> {
+export class TypedString<T extends string | number | boolean = ''> implements toPrimitive<`${T}`> {
   private readonly data: `${T}`;
 
   constructor(data: T = '' as T) {
