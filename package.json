@@ -15,7 +15,11 @@
     "prepublishOnly": "tsc",
     "format": "prettier --write \"src/**/*.ts\""
   },
-  "keywords": [],
+  "keywords": [
+    "type-safe",
+    "prototype",
+    "utility-types"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {

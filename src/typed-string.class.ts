@@ -1,4 +1,3 @@
-import typia from 'typia';
 import { toPrimitive } from './interfaces/to-primitive.interface';
 import { StringPrototype } from './prototypes';
 import { TypedArray } from './typed-array.class';
@@ -16,7 +15,6 @@ export class TypedString<T extends string | number | boolean> implements toPrimi
    * @param splitter An object that can split a string.
    * @param limit A value used to limit the number of elements returned in the array.
    *
-   * @todo support `TypedString` type as Splitter
    * @todo support `TypedNumber` type as Limit
    */
   split<Splitter extends string = '', Limit extends number = 0>(
