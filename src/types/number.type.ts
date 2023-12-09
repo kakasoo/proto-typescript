@@ -1,4 +1,4 @@
-import { ArrayToUnion, Length, NNTuple, NTuple, Push, TupleIncludes } from './array.type';
+import { ArrayToUnion, ArrayValues, Length, NNTuple, NTuple, Push, TupleIncludes } from './array.type';
 
 export type NToNumber<N> = N extends number ? N : never;
 
@@ -23,6 +23,12 @@ export type ToNumberFromString<T extends string> = T extends NumberString<infer 
 export type LessThan<N extends number, T extends any[] = []> = T['length'] extends N
   ? T
   : LessThan<N, Push<T, T['length']>>;
+
+export type AIsLessThanOrEqualB<A extends number, B extends number> = ArrayValues<LessThan<A>> extends ArrayValues<
+  LessThan<B>
+>
+  ? true
+  : false;
 
 export type LessThanEqual<N extends number, T extends any[] = []> = LessThan<NToNumber<Add<N, 1>>>;
 
