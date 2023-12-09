@@ -26,7 +26,9 @@ export class TypedString<T extends string | number | boolean = ''> implements to
     return new TypedArray(initialValue);
   }
 
-  toPrimitive(): `${T}` {
+  toPrimitive(): T;
+  toPrimitive(): `${T}`;
+  toPrimitive(): T | `${T}` {
     return this.data;
   }
 }
