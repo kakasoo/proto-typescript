@@ -1,7 +1,8 @@
 import { At, Concat, Join } from '../types';
+import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
 export const ArrayPrototype = {
-  push<Conatiner extends any[] | readonly any[], Items extends any[] | readonly any[]>(
+  push<Conatiner extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
     container: Conatiner,
     ...items: Items
   ): Concat<Conatiner, Items> {
@@ -12,7 +13,7 @@ export const ArrayPrototype = {
    * @inheritdoc
    * @param container
    */
-  at<Container extends any[] | readonly any[], Index extends number>(
+  at<Container extends ReadonlyOrNot<any[]>, Index extends number>(
     container: Container,
     index: Index,
   ): At<Container, Index> {
@@ -30,10 +31,10 @@ export const ArrayPrototype = {
    *
    * @todo support bigint type (es2020) as element of Array.
    */
-  join<
-    Container extends readonly (string | number | boolean)[] | (string | number | boolean)[],
-    Separator extends string = ',',
-  >(container: Container, separator: Separator = ',' as Separator): Join<Container, Separator> {
+  join<Container extends ReadonlyOrNot<Exclude<Primitive, symbol>[]>, Separator extends string = ','>(
+    container: Container,
+    separator: Separator = ',' as Separator,
+  ): Join<Container, Separator> {
     return container.join(separator) as Join<Container, Separator>;
   },
 };

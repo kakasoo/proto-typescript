@@ -1,11 +1,12 @@
 import { Add, Divide, Multiply, NToNumber, Remainder, Sub } from './number.type';
 import { Equal, Merge } from './object.type';
+import { Primitive, ReadonlyOrNot } from './primitive.type';
 
-export type ElementOf<Tuple extends readonly any[] | any[]> = [...Tuple] extends (infer E)[] ? E : never;
+export type ElementOf<Tuple extends ReadonlyOrNot<any[]>> = [...Tuple] extends (infer E)[] ? E : never;
 
-export type Length<T extends any[] | readonly any[]> = T['length'];
+export type Length<T extends ReadonlyOrNot<any[]>> = T['length'];
 
-export type ArrayValues<T extends any[]> = T[number];
+export type ArrayValues<T extends ReadonlyOrNot<any[]>> = T[number];
 
 /**
  * 현재 튜플 형태에 새로운 타입 하나를 추가하는 타입
@@ -13,10 +14,12 @@ export type ArrayValues<T extends any[]> = T[number];
  * Push<[], any> // [any]
  * Push<[], 1> // [1]
  */
-export type Push<T extends any[] | readonly any[], V extends any> = [...T, V];
-export type Concat<T extends any[] | readonly any[], P extends any[] | readonly any[]> = [...T, ...P];
+export type Push<T extends ReadonlyOrNot<any[]>, V extends any> = [...T, V];
+export type Concat<T extends ReadonlyOrNot<any[]>, P extends ReadonlyOrNot<any[]>> = [...T, ...P];
 
-export type NTuple<N extends number, T extends any[] = []> = T['length'] extends N ? T : NTuple<N, Push<T, any>>;
+export type NTuple<N extends number, T extends ReadonlyOrNot<any[]> = []> = T['length'] extends N
+  ? T
+  : NTuple<N, Push<T, any>>;
 
 /**
  * N1 * N2 크기의 NTuple을 반환하는 타입으로, 최적화를 위해 N1, N2 숫자를 비교하는 과정이 포함된 타입
@@ -36,10 +39,12 @@ export type NNTuple<N1 extends number, N2 extends number> = [Sub<N1, N2>] extend
  * Returns matching A to matching B in tuple form.
  * If there are no elements that match A or B, then never type.
  */
-export type Slice<T extends any[], A extends any, B extends any, CONDITION extends boolean = false> = T extends [
-  infer X,
-  ...infer Rest,
-]
+export type Slice<
+  T extends ReadonlyOrNot<any[]>,
+  A extends any,
+  B extends any,
+  CONDITION extends boolean = false,
+> = T extends [infer X, ...infer Rest]
   ? CONDITION extends true
     ? X extends B // If you find something that matches B,
       ? [X, ...Slice<Rest, A, B, false>] // End the option to include unconditionally if you find a match for B
@@ -53,13 +58,13 @@ export type Slice<T extends any[], A extends any, B extends any, CONDITION exten
     ? never
     : [];
 
-export type Take<T extends any[], P extends number, R extends any[] = []> = Length<R> extends P
-  ? R
-  : T extends [infer F, ...infer Rest]
-    ? Take<Rest, P, Push<R, F>>
-    : R;
+export type Take<
+  T extends ReadonlyOrNot<any[]>,
+  P extends number,
+  R extends ReadonlyOrNot<any[]> = [],
+> = Length<R> extends P ? R : T extends [infer F, ...infer Rest] ? Take<Rest, P, Push<R, F>> : R;
 
-export type TupleIncludes<T extends readonly any[], U> = T extends [infer P, ...infer R] // T가 P와 나머지 R로 이루어진 배열이라면, 즉 length가 최소한 1 이상인 경우라면
+export type TupleIncludes<T extends ReadonlyOrNot<any[]>, U> = T extends [infer P, ...infer R] // T가 P와 나머지 R로 이루어진 배열이라면, 즉 length가 최소한 1 이상인 경우라면
   ? Equal<U, P> extends true
     ? true
     : TupleIncludes<R, U> // U가 P랑 같다면 true, 아니라면 Includes를 재귀적으로 호출한다.
@@ -75,12 +80,12 @@ export type EntriesToObject<T extends Array<NTuple<2>>> = T extends [infer F, ..
     : never
   : {};
 
-export type ArrayToUnion<T extends any[]> = T[number];
+export type ArrayToUnion<T extends ReadonlyOrNot<any[]>> = T[number];
 
 /**
  * PartitionByTwo<[1,2,3,4,5,6,7,8]> // [[1,2],[3,4],[5,6],[7,8]]
  */
-export type PartitionByTwo<T extends any[], L extends number = Length<T>> = T extends [
+export type PartitionByTwo<T extends ReadonlyOrNot<any[]>, L extends number = Length<T>> = T extends [
   infer First,
   infer Second,
   ...infer Rest,
@@ -95,18 +100,18 @@ export type PartitionByTwo<T extends any[], L extends number = Length<T>> = T ex
  * Join<['a', 'b', 'c', true], '-'>; // 'a-b-c-true'
  * Join<['a', 'b', 'c', number], '-'>; // 'a-b-c-${number}'
  */
-export type Join<
-  T extends readonly (string | number | boolean)[] | (string | number | boolean)[],
-  U extends string = ',',
-> = T extends readonly [infer F extends string | number | boolean, ...infer Rest extends (string | number | boolean)[]]
+export type Join<T extends ReadonlyOrNot<Exclude<Primitive, symbol>[]>, U extends string = ','> = T extends readonly [
+  infer F extends Exclude<Primitive, symbol>,
+  ...infer Rest extends ReadonlyOrNot<Exclude<Primitive, symbol>[]>,
+]
   ? Rest extends []
     ? `${F}`
     : `${F}${U}${Join<Rest, U>}`
   : string; // if `T` is not readonly tuple. ( for example, just `string[]` array type. )
 
-export type IsTuple<T extends readonly any[] | { length: number }> = [T] extends [never]
+export type IsTuple<T extends ReadonlyOrNot<any[]> | { length: number }> = [T] extends [never]
   ? false
-  : T extends readonly any[]
+  : T extends ReadonlyOrNot<any[]>
     ? number extends T['length']
       ? false
       : true
@@ -115,24 +120,24 @@ export type IsTuple<T extends readonly any[] | { length: number }> = [T] extends
 /**
  * Reverse<[1,2,3]> // [3,2,1]
  */
-export type Reverse<T extends any[]> = T extends [infer F, ...infer Rest] ? [...Reverse<Rest>, F] : [];
+export type Reverse<T extends ReadonlyOrNot<any[]>> = T extends [infer F, ...infer Rest] ? [...Reverse<Rest>, F] : [];
 
 /**
  * Shift<[1,2,3]> // [2,3]
  */
-export type Shift<T extends any[]> = T extends [infer F, ...infer Rest] ? Rest : [];
+export type Shift<T extends ReadonlyOrNot<any[]>> = T extends [infer F, ...infer Rest] ? Rest : [];
 
 /**
  * Unshift<[1, 2, 3], 4> // [4,1,2,3]
  */
-export type Unshift<T extends any[], V> = [V, ...T];
+export type Unshift<T extends ReadonlyOrNot<any[]>, V> = [V, ...T];
 
 /**
  * Pop<[1,2,3]> // [1,2]
  */
-export type Pop<T extends any[]> = T extends [...infer Rest, infer Last] ? Rest : [];
+export type Pop<T extends ReadonlyOrNot<any[]>> = T extends [...infer Rest, infer Last] ? Rest : [];
 
-export type Includes<T extends readonly any[], U> = T extends [infer P, ...infer R]
+export type Includes<T extends ReadonlyOrNot<any[]>, U> = T extends [infer P, ...infer R]
   ? Equal<U, P> extends true
     ? true
     : Includes<R, U>
@@ -143,7 +148,10 @@ export type Includes<T extends readonly any[], U> = T extends [infer P, ...infer
  *
  * Distinct<[1,1,2,2,3,3,3,4]> // [1,2,3,4]
  */
-export type Distinct<T extends any[], P extends any[] = []> = T extends [infer F, ...infer Rest]
+export type Distinct<T extends ReadonlyOrNot<any[]>, P extends ReadonlyOrNot<any[]> = []> = T extends [
+  infer F,
+  ...infer Rest,
+]
   ? Includes<P, F> extends false
     ? Distinct<Rest, [...P, F]>
     : Distinct<Rest, P>
@@ -155,7 +163,11 @@ export type Compare<N1 extends number, N2 extends number> = N1 extends N2
     ? false
     : true;
 
-export type BubbleSort<T extends any[], L extends number = Length<T>, ASC extends boolean = false> = L extends 1
+export type BubbleSort<
+  T extends ReadonlyOrNot<any[]>,
+  L extends number = Length<T>,
+  ASC extends boolean = false,
+> = L extends 1
   ? T
   : T extends [infer F, infer S, ...infer Rest]
     ? BubbleSort<
@@ -193,4 +205,4 @@ export type Map<
           ? { [K in keyof T]: Remainder<T[K], N> }
           : never;
 
-export type At<Tuple extends any[] | readonly any[], Index extends number> = Tuple[Index];
+export type At<Tuple extends ReadonlyOrNot<any[]>, Index extends number> = Tuple[Index];
