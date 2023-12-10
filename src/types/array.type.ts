@@ -3,7 +3,7 @@ import { Equal, Merge } from './object.type';
 
 export type ElementOf<Tuple extends readonly any[] | any[]> = [...Tuple] extends (infer E)[] ? E : never;
 
-export type Length<T extends any[]> = T['length'];
+export type Length<T extends any[] | readonly any[]> = T['length'];
 
 export type ArrayValues<T extends any[]> = T[number];
 
