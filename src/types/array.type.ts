@@ -13,7 +13,8 @@ export type ArrayValues<T extends any[]> = T[number];
  * Push<[], any> // [any]
  * Push<[], 1> // [1]
  */
-export type Push<T extends any[], V> = [...T, V];
+export type Push<T extends any[] | readonly any[], V extends any> = [...T, V];
+export type Concat<T extends any[] | readonly any[], P extends any[] | readonly any[]> = [...T, ...P];
 
 export type NTuple<N extends number, T extends any[] = []> = T['length'] extends N ? T : NTuple<N, Push<T, any>>;
 

@@ -2,9 +2,11 @@ import { toPrimitive } from './interfaces/to-primitive.interface';
 import { StringPrototype } from './prototypes';
 import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
-import { Split } from './types';
+import { MethodsFrom, Split } from './types';
 
-export class TypedString<T extends string | number | boolean = ''> implements toPrimitive<`${T}`> {
+export class TypedString<T extends string | number | boolean = ''>
+  implements Pick<MethodsFrom<String>, 'split'>, toPrimitive<T | `${T}`>
+{
   private readonly data: `${T}`;
 
   constructor(data: T = '' as T) {

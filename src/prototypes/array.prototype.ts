@@ -1,11 +1,16 @@
-import { At, Join } from '../types';
+import { At, Concat, Join } from '../types';
 
 export const ArrayPrototype = {
+  push<Conatiner extends any[] | readonly any[], Items extends any[] | readonly any[]>(
+    container: Conatiner,
+    ...items: Items
+  ): Concat<Conatiner, Items> {
+    return [...container, ...items];
+  },
+
   /**
-   * Returns the item located at the specified index.
+   * @inheritdoc
    * @param container
-   * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-   * @returns
    */
   at<Container extends any[] | readonly any[], Index extends number>(
     container: Container,
