@@ -206,3 +206,15 @@ export type Map<
           : never;
 
 export type At<Tuple extends ReadonlyOrNot<any[]>, Index extends number> = Tuple[Index];
+
+/**
+ * If any of the type elements constituting Union Type U correspond to `If`, it returns true or false.
+ */
+export type UnionSome<If, U, T, F> = T extends (U extends If ? T : F) ? T : F;
+
+/**
+ * If any of the type elements constituting Tuple Type U correspond to `If`, it returns true or false.
+ */
+export type ArraySome<Target, Tuple extends ReadonlyOrNot<any[]>> =
+  | UnionSome<Target, Tuple[number], true, false>
+  | boolean;
