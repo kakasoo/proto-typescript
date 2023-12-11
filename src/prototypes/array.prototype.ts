@@ -1,7 +1,25 @@
-import { At, Concat, Join } from '../types';
+import { At, Concat, ElementOf, Equal, Join, ArraySome } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
 export const ArrayPrototype = {
+  some<Target, Conatiner extends ReadonlyOrNot<any[]>>(
+    container: Conatiner,
+    predicate: <INNER_TARGET = Target, Index extends number = number>(
+      value: At<Conatiner, Index>,
+      index: Index,
+      array: Conatiner,
+    ) => ArraySome<INNER_TARGET, Conatiner>,
+    // thisArg?: any,
+  ): boolean {
+    for (let i = 0; i < container.length; i++) {
+      if (predicate(container[i], i, container)) {
+        return true;
+      }
+    }
+
+    return false;
+  },
+
   push<Conatiner extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
     container: Conatiner,
     ...items: Items
@@ -38,3 +56,7 @@ export const ArrayPrototype = {
     return container.join(separator) as Join<Container, Separator>;
   },
 };
+
+const a = ArrayPrototype.some<'a', ['a', 'b', 'c']>(['a', 'b', 'c'] as const, (value, index, array) => {
+  return array.at(index) === 'a';
+});
