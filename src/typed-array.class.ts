@@ -2,15 +2,26 @@ import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
 import { TypedNumber } from './typed-number.class';
 import { TypedString } from './typed-string.class';
-import { MethodsFrom } from './types';
+import { ElementOf, MethodsFrom } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
-  implements Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push'>, toPrimitive<[...T]>
+  implements Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push'>, toPrimitive<[...T]>, Iterable<ElementOf<T>>
 {
   constructor(data: T);
   constructor(...data: T);
   constructor(private readonly data: T) {}
+
+  [Symbol.iterator](): Iterator<ElementOf<T>, any> {
+    let i = 0;
+    return {
+      next: () => {
+        return i === this.data.length
+          ? { done: true as const, value: undefined }
+          : { value: this.data.at(i++), done: false as const };
+      },
+    };
+  }
 
   /**
    * Appends new elements to the end of an array
@@ -23,7 +34,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    * @param items
    * @returns Unlike JavaScript's Array.prototype.join, it returns a new TypeArray instance rather than the length of the inserted data.
    */
-  push<Items extends ReadonlyOrNot<any[]>>(
+  push<Items extends ReadonlyOrNot<ElementOf<T>[]>>(
     ...items: Items
   ): TypedArray<ReturnType<typeof ArrayPrototype.push<T, Items>>> {
     return new TypedArray([...this.data, ...items]);
