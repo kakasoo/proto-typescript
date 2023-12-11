@@ -56,7 +56,3 @@ export const ArrayPrototype = {
     return container.join(separator) as Join<Container, Separator>;
   },
 };
-
-const a = ArrayPrototype.some<'a', ['a', 'b', 'c']>(['a', 'b', 'c'] as const, (value, index, array) => {
-  return array.at(index) === 'a';
-});
