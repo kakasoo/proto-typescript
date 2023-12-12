@@ -2,11 +2,14 @@ import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
 import { TypedNumber } from './typed-number.class';
 import { TypedString } from './typed-string.class';
-import { ElementOf, MethodsFrom } from './types';
+import { ArraySome, At, ElementOf, MethodsFrom } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
-  implements Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push'>, toPrimitive<[...T]>, Iterable<ElementOf<T>>
+  implements
+    Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some'>,
+    toPrimitive<[...T]>,
+    Iterable<ElementOf<T>>
 {
   constructor(data: T);
   constructor(...data: T);
@@ -21,6 +24,22 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
           : { value: this.data.at(i++), done: false as const };
       },
     };
+  }
+
+  /**
+   * @inheritdoc
+   *
+   * I'm reviewing whether internal functions that are different from the existing som should be provided by default for type inference.
+   * @todo add function named `IsSameElement` for type inference.
+   */
+  some<Target>(
+    predicate: <INNER_TARGET = Target, Index extends number = number>(
+      value: At<T, Index>,
+      index: Index,
+      array: T,
+    ) => ArraySome<INNER_TARGET, T>,
+  ): ReturnType<typeof ArrayPrototype.some> {
+    return ArrayPrototype.some(this.data, predicate);
   }
 
   /**

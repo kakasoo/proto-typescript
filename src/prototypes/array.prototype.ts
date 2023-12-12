@@ -1,4 +1,4 @@
-import { At, Concat, ElementOf, Equal, Join, ArraySome } from '../types';
+import { At, Concat, Join, ArraySome } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
 export const ArrayPrototype = {
