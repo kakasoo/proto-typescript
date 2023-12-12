@@ -7,7 +7,7 @@ import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
   implements
-    Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some'>,
+    Pick<MethodsFrom<Array<ElementOf<T>>>, 'join' | 'at' | 'push' | 'some'>,
     toPrimitive<[...T]>,
     Iterable<ElementOf<T>>
 {

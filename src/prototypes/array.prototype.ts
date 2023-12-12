@@ -2,6 +2,13 @@ import { At, Concat, Join, ArraySome } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
 export const ArrayPrototype = {
+  /**
+   * @todo add paramter of this method, named `thisArg`.
+   *
+   * @param container
+   * @param predicate
+   * @returns
+   */
   some<Target, Conatiner extends ReadonlyOrNot<any[]>>(
     container: Conatiner,
     predicate: <INNER_TARGET = Target, Index extends number = number>(
@@ -20,6 +27,11 @@ export const ArrayPrototype = {
     return false;
   },
 
+  /**
+   * @param container
+   * @param items
+   * @returns
+   */
   push<Conatiner extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
     container: Conatiner,
     ...items: Items
