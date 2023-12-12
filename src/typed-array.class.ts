@@ -7,7 +7,7 @@ import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
   implements
-    Pick<MethodsFrom<Array<ElementOf<T>>>, 'join' | 'at' | 'push' | 'some'>,
+    Pick<MethodsFrom<Array<ElementOf<T>>>, 'join' | 'at' | 'push' | 'some' | 'unshift'>,
     toPrimitive<[...T]>,
     Iterable<ElementOf<T>>
 {
@@ -28,6 +28,22 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
 
   /**
    * @inheritdoc
+   * @example
+   * ```ts
+   * new TypedArray([1, 2, 3] as const).unshift(4 as const); // [4, 1, 2, 3]
+   * ```
+   *
+   * @param items
+   * @returns Unlike JavaScript's Array.prototype.unshift, it returns a new TypeArray instance rather than the length of the inserted data.
+   */
+  unshift<Items extends ReadonlyOrNot<ElementOf<T>[]>>(
+    ...items: Items
+  ): TypedArray<ReturnType<typeof ArrayPrototype.unshift<T, Items>>> {
+    return new TypedArray([...items, ...this.data]);
+  }
+
+  /**
+   * @inheritdoc
    *
    * I'm reviewing whether internal functions that are different from the existing som should be provided by default for type inference.
    * @todo add function named `IsSameElement` for type inference.
@@ -43,15 +59,14 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
   }
 
   /**
-   * Appends new elements to the end of an array
-   *
+   * @inheritdoc
    * @example
    * ```ts
    * new TypedArray([1, 2, 3] as const).push(4 as const); // [1, 2, 3, 4]
    * ```
    *
    * @param items
-   * @returns Unlike JavaScript's Array.prototype.join, it returns a new TypeArray instance rather than the length of the inserted data.
+   * @returns Unlike JavaScript's Array.prototype.push, it returns a new TypeArray instance rather than the length of the inserted data.
    */
   push<Items extends ReadonlyOrNot<ElementOf<T>[]>>(
     ...items: Items
