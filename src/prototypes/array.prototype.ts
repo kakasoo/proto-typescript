@@ -3,6 +3,18 @@ import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
 export const ArrayPrototype = {
   /**
+   * @param container
+   * @param items
+   * @returns
+   */
+  unshift<Conatiner extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
+    container: Conatiner,
+    ...items: Items
+  ): Concat<Items, Conatiner> {
+    return [...items, ...container];
+  },
+
+  /**
    * @todo add paramter of this method, named `thisArg`.
    *
    * @param container
