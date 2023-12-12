@@ -81,7 +81,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
     index: Index | TypedNumber<Index> = new TypedNumber(),
   ): ReturnType<typeof ArrayPrototype.at<T, Index>> {
     const primitiveIndex = typeof index === 'number' ? index : index.toPrimitive();
-    return this.at(primitiveIndex);
+    return this.data.at(primitiveIndex);
   }
 
   /**
