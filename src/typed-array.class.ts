@@ -2,12 +2,12 @@ import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
 import { TypedNumber } from './typed-number.class';
 import { TypedString } from './typed-string.class';
-import { ArraySome, At, ElementOf, Equal, MethodsFrom } from './types';
+import { ArraySome, ArrayAt, ElementOf, Equal, MethodsFrom } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
   implements
-    Pick<MethodsFrom<Array<ElementOf<T>>>, 'join' | 'at' | 'push' | 'some' | 'unshift'>,
+    Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift'>,
     toPrimitive<[...T]>,
     Iterable<ElementOf<T>>
 {
@@ -48,7 +48,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    */
   some<Target>(
     predicate: <INNER_TARGET = Target, Index extends number = number>(
-      value: At<T, Index>,
+      value: ArrayAt<T, Index>,
       index: Index,
       array: T,
     ) => ArraySome<INNER_TARGET, T>,

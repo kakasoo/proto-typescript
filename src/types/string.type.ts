@@ -1,11 +1,7 @@
 import { Conditional } from './arithmetic.type';
-import { Take } from './array.type';
+import { ArrayAt, Take } from './array.type';
 import { Sub } from './number.type';
 import { Equal } from './object.type';
-
-export type ToStringTuple<T> = T extends string[] ? T : never;
-
-export type ToString<T> = T extends string ? T : T extends number ? `${T}` : never;
 
 export type IsAlphabet<T extends string> = Uppercase<T> extends Lowercase<T>
   ? Lowercase<T> extends Uppercase<T>
@@ -69,3 +65,13 @@ export type Split<Conatiner extends string, Splitter extends string = '', Limit 
   _Split<Conatiner, Splitter>,
   Take<_Split<Conatiner, Splitter>, Limit>
 >;
+
+/**
+ * Type of getting one character from that location with index as the key value in the string
+ *
+ * @example
+ * ```ts
+ * type Answer = StringAt<'abcdefg', 2>; // c
+ * ```
+ */
+export type StringAt<Container extends string, Index extends number> = ArrayAt<Split<Container>, Index>;

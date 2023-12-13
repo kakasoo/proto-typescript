@@ -205,7 +205,7 @@ export type Map<
           ? { [K in keyof T]: Remainder<T[K], N> }
           : never;
 
-export type At<Tuple extends ReadonlyOrNot<any[]>, Index extends number> = Tuple[Index];
+export type ArrayAt<Tuple extends ReadonlyOrNot<any[]>, Index extends number> = Tuple[Index];
 
 /**
  * If any of the type elements constituting Union Type U correspond to `If`, it returns true or false.

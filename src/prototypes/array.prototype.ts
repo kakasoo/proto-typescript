@@ -1,4 +1,4 @@
-import { At, Concat, Join, ArraySome } from '../types';
+import { ArrayAt, Concat, Join, ArraySome } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
 export const ArrayPrototype = {
@@ -24,7 +24,7 @@ export const ArrayPrototype = {
   some<Target, Conatiner extends ReadonlyOrNot<any[]>>(
     container: Conatiner,
     predicate: <INNER_TARGET = Target, Index extends number = number>(
-      value: At<Conatiner, Index>,
+      value: ArrayAt<Conatiner, Index>,
       index: Index,
       array: Conatiner,
     ) => ArraySome<INNER_TARGET, Conatiner>,
@@ -58,7 +58,7 @@ export const ArrayPrototype = {
   at<Container extends ReadonlyOrNot<any[]>, Index extends number>(
     container: Container,
     index: Index,
-  ): At<Container, Index> {
+  ): ArrayAt<Container, Index> {
     return container.at(index);
   },
 
