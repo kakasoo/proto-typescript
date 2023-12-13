@@ -2,16 +2,28 @@ import { toPrimitive } from './interfaces/to-primitive.interface';
 import { StringPrototype } from './prototypes';
 import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
-import { Length, MethodsFrom, Split } from './types';
+import { Join, Length, MethodsFrom, Split } from './types';
 import { AIsLessThanOrEqualB } from './types/number.type';
+import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedString<T extends string | number | boolean = ''>
-  implements Pick<MethodsFrom<String>, 'split' | 'at'>, toPrimitive<T | `${T}`>
+  implements Pick<MethodsFrom<String>, 'split' | 'at' | 'concat'>, toPrimitive<T | `${T}`>
 {
   private readonly data: `${T}`;
 
   constructor(data: T = '' as T) {
     this.data = String(data) as `${T}`;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  concat<Strings extends ReadonlyOrNot<(string | TypedString<string>)[]>>(
+    ...strings: Strings
+  ): TypedString<ReturnType<typeof StringPrototype.concat<`${T}`, TypedString.ValueTypes<Strings>>>> {
+    const primitiveStrs = strings.map((el) => (typeof el === 'string' ? el : el.toPrimitive()));
+    const initialValue = [this.data, primitiveStrs].join('') as Join<[`${T}`, ...TypedString.ValueTypes<Strings>], ''>;
+    return new TypedString(initialValue);
   }
 
   /**
@@ -51,4 +63,25 @@ export class TypedString<T extends string | number | boolean = ''>
   toPrimitive(): T | `${T}` {
     return this.data;
   }
+}
+
+export namespace TypedString {
+  /**
+   * Inference of value type.
+   */
+  export type ValueType<Pointer extends TypedString<any> | string> = Pointer extends TypedString<infer T>
+    ? `${T}`
+    : Pointer extends string
+      ? Pointer
+      : never;
+
+  /**
+   * Inference of value types.
+   */
+  export type ValueTypes<Pointer extends ReadonlyOrNot<(TypedString<any> | string)[]>> = Pointer extends [
+    infer F extends TypedString<infer T> | string,
+    ...infer Rest extends ReadonlyOrNot<(TypedString<any> | string)[]>,
+  ]
+    ? [TypedString.ValueType<F>, ...TypedString.ValueTypes<Rest>]
+    : [];
 }
