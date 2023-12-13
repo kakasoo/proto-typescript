@@ -2,10 +2,11 @@ import { toPrimitive } from './interfaces/to-primitive.interface';
 import { StringPrototype } from './prototypes';
 import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
-import { MethodsFrom, Split } from './types';
+import { Length, MethodsFrom, Split } from './types';
+import { AIsLessThanOrEqualB } from './types/number.type';
 
 export class TypedString<T extends string | number | boolean = ''>
-  implements Pick<MethodsFrom<String>, 'split'>, toPrimitive<T | `${T}`>
+  implements Pick<MethodsFrom<String>, 'split' | 'at'>, toPrimitive<T | `${T}`>
 {
   private readonly data: `${T}`;
 
@@ -14,9 +15,26 @@ export class TypedString<T extends string | number | boolean = ''>
   }
 
   /**
+   * If a value greater than the length of the current data is given as an index, it is inferred as underdefined that no wrapper exists.
+   * @inheritdoc
+   */
+  at<
+    Index extends number,
+    RETURN_TYPE extends AIsLessThanOrEqualB<Index, Length<`${T}`>> extends true
+      ? TypedString<ReturnType<typeof StringPrototype.at<`${T}`, Index>>>
+      : undefined,
+  >(index: Index | TypedNumber<Index> = new TypedNumber()): RETURN_TYPE {
+    const primitiveIndex = typeof index === 'number' ? index : index.toPrimitive();
+    const initialValue = this.data.at(primitiveIndex);
+    if (initialValue) {
+      return new TypedString(initialValue) as RETURN_TYPE;
+    }
+    return undefined as RETURN_TYPE;
+  }
+
+  /**
    * type-safe split.
-   * @param splitter An object that can split a string.
-   * @param limit A value used to limit the number of elements returned in the array.
+   * @inheritdoc
    */
   split<Splitter extends string = '', Limit extends number = 0>(
     splitter: Splitter | TypedString<Splitter> = new TypedString<Splitter>(),
