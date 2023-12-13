@@ -1,6 +1,6 @@
 import { Conditional } from './arithmetic.type';
-import { ArrayAt, Take } from './array.type';
-import { Sub } from './number.type';
+import { ArrayAt, Length, Take } from './array.type';
+import { AIsLessThanOrEqualB, Sub } from './number.type';
 import { Equal } from './object.type';
 
 export type IsAlphabet<T extends string> = Uppercase<T> extends Lowercase<T>

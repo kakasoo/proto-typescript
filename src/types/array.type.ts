@@ -4,7 +4,10 @@ import { Primitive, ReadonlyOrNot } from './primitive.type';
 
 export type ElementOf<Tuple extends ReadonlyOrNot<any[]>> = [...Tuple] extends (infer E)[] ? E : never;
 
-export type Length<T extends ReadonlyOrNot<any[]>> = T['length'];
+/**
+ * Get length of tuple or string literal type.
+ */
+export type Length<T extends ReadonlyOrNot<any[]> | string> = T['length'];
 
 export type ArrayValues<T extends ReadonlyOrNot<any[]>> = T[number];
 
