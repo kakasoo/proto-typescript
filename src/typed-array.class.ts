@@ -2,7 +2,7 @@ import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
 import { TypedNumber } from './typed-number.class';
 import { TypedString } from './typed-string.class';
-import { ArraySome, At, ElementOf, MethodsFrom } from './types';
+import { ArraySome, At, ElementOf, Equal, MethodsFrom } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
@@ -36,9 +36,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    * @param items
    * @returns Unlike JavaScript's Array.prototype.unshift, it returns a new TypeArray instance rather than the length of the inserted data.
    */
-  unshift<Items extends ReadonlyOrNot<ElementOf<T>[]>>(
-    ...items: Items
-  ): TypedArray<ReturnType<typeof ArrayPrototype.unshift<T, Items>>> {
+  unshift<Items extends any[]>(...items: Items): TypedArray<ReturnType<typeof ArrayPrototype.unshift<T, Items>>> {
     return new TypedArray([...items, ...this.data]);
   }
 
@@ -68,9 +66,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    * @param items
    * @returns Unlike JavaScript's Array.prototype.push, it returns a new TypeArray instance rather than the length of the inserted data.
    */
-  push<Items extends ReadonlyOrNot<ElementOf<T>[]>>(
-    ...items: Items
-  ): TypedArray<ReturnType<typeof ArrayPrototype.push<T, Items>>> {
+  push<Items extends any[]>(...items: Items): TypedArray<ReturnType<typeof ArrayPrototype.push<T, Items>>> {
     return new TypedArray([...this.data, ...items]);
   }
 
