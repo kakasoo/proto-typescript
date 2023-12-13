@@ -78,7 +78,7 @@ export namespace TypedString {
   /**
    * Inference of value types.
    */
-  export type ValueTypes<Pointer extends ReadonlyOrNot<(TypedString<any> | string)[]>> = Pointer extends [
+  export type ValueTypes<Pointers extends ReadonlyOrNot<(TypedString<any> | string)[]>> = Pointers extends [
     infer F extends TypedString<infer T> | string,
     ...infer Rest extends ReadonlyOrNot<(TypedString<any> | string)[]>,
   ]
