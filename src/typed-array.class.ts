@@ -36,7 +36,9 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    * @param items
    * @returns Unlike JavaScript's Array.prototype.unshift, it returns a new TypeArray instance rather than the length of the inserted data.
    */
-  unshift<Items extends any[]>(...items: Items): TypedArray<ReturnType<typeof ArrayPrototype.unshift<T, Items>>> {
+  unshift<Items extends ReadonlyOrNot<any[]>>(
+    ...items: Items
+  ): TypedArray<ReturnType<typeof ArrayPrototype.unshift<T, Items>>> {
     return new TypedArray([...items, ...this.data]);
   }
 
@@ -65,8 +67,14 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    *
    * @param items
    * @returns Unlike JavaScript's Array.prototype.push, it returns a new TypeArray instance rather than the length of the inserted data.
+   *
+   * @todo
+   * Supporting TypedString and TypedNumber for items that are element type of items.
+   * I'm wondering if this is the right type reasoning or if it should still be in the form of the Wrapper class.
    */
-  push<Items extends any[]>(...items: Items): TypedArray<ReturnType<typeof ArrayPrototype.push<T, Items>>> {
+  push<Items extends ReadonlyOrNot<any[]>>(
+    ...items: Items
+  ): TypedArray<ReturnType<typeof ArrayPrototype.push<T, Items>>> {
     return new TypedArray([...this.data, ...items]);
   }
 
