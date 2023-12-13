@@ -1,8 +1,18 @@
-import { Split, StringAt } from '../types';
-
-String.prototype.at;
+import { Join, Split, StringAt } from '../types';
+import { ReadonlyOrNot } from '../types/primitive.type';
 
 export const StringPrototype = {
+  /**
+   * Returns a string that contains the concatenation of two or more strings.
+   * @param strings The strings to append to the end of the string.
+   */
+  concat<Container extends string, Strings extends ReadonlyOrNot<string[]>>(
+    container: Container,
+    ...strings: Strings
+  ): Join<[Container, ...Strings], ''> {
+    return [container, ...strings].join('') as Join<[Container, ...Strings], ''>;
+  },
+
   /**
    * Returns a new String consisting of the single UTF-16 code unit located at the specified index.
    * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
