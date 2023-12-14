@@ -7,14 +7,20 @@ import { ArraySome, ArrayAt, ElementOf, Equal, MethodsFrom } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
+  extends TypedObject<T>
   implements
     Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift'>,
     toPrimitive<[...T]>,
     Iterable<ElementOf<T>>
 {
-  constructor(array: T);
-  constructor(...array: T);
-  constructor(private readonly array: T) {}
+  private readonly array: T;
+
+  constructor(data: T);
+  constructor(...data: T);
+  constructor(data: T) {
+    super(data);
+    this.array = data;
+  }
 
   [Symbol.iterator](): Iterator<ElementOf<T>, any> {
     let i = 0;

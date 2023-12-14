@@ -2,16 +2,19 @@ import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype, StringPrototype } from './prototypes';
 import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
+import { TypedObject } from './typed-object.class';
 import { Join, Length, MethodsFrom } from './types';
 import { AIsLessThanOrEqualB } from './types/number.type';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedString<T extends string | number | boolean = ''>
+  extends TypedObject<T>
   implements Pick<MethodsFrom<String>, 'split' | 'at' | 'concat'>, toPrimitive<T | `${T}`>
 {
   private readonly string: `${T}`;
 
   constructor(data: T = '' as T) {
+    super(data);
     this.string = String(data) as `${T}`;
   }
 
