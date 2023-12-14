@@ -7,6 +7,9 @@ import { Join, Length, MethodsFrom } from './types';
 import { AIsLessThanOrEqualB } from './types/number.type';
 import { ReadonlyOrNot } from './types/primitive.type';
 
+/**
+ * @todo support iterator.
+ */
 export class TypedString<T extends string | number | boolean = ''>
   extends TypedObject<T>
   implements Pick<MethodsFrom<String>, 'split' | 'at' | 'concat'>, toPrimitive<T | `${T}`>
