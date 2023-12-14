@@ -1,5 +1,5 @@
 import { toPrimitive } from './interfaces/to-primitive.interface';
-import { StringPrototype } from './prototypes';
+import { ArrayPrototype, StringPrototype } from './prototypes';
 import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
 import { Join, Length, MethodsFrom, Split } from './types';
@@ -22,7 +22,10 @@ export class TypedString<T extends string | number | boolean = ''>
     ...strings: Strings
   ): TypedString<ReturnType<typeof StringPrototype.concat<`${T}`, TypedString.ValueTypes<Strings>>>> {
     const primitiveStrs = strings.map((el) => (typeof el === 'string' ? el : el.toPrimitive()));
-    const initialValue = [this.data, primitiveStrs].join('') as Join<[`${T}`, ...TypedString.ValueTypes<Strings>], ''>;
+    const initialValue = ArrayPrototype.join([this.data, ...primitiveStrs], '') as Join<
+      [`${T}`, ...TypedString.ValueTypes<Strings>],
+      ''
+    >;
     return new TypedString(initialValue);
   }
 
@@ -37,7 +40,7 @@ export class TypedString<T extends string | number | boolean = ''>
       : undefined,
   >(index: Index | TypedNumber<Index> = new TypedNumber()): RETURN_TYPE {
     const primitiveIndex = typeof index === 'number' ? index : index.toPrimitive();
-    const initialValue = this.data.at(primitiveIndex);
+    const initialValue = StringPrototype.at(this.data, primitiveIndex);
     if (initialValue) {
       return new TypedString(initialValue) as RETURN_TYPE;
     }
@@ -54,7 +57,7 @@ export class TypedString<T extends string | number | boolean = ''>
   ): TypedArray<ReturnType<typeof StringPrototype.split<`${T}`, Splitter, Limit>>> {
     const primitiveContainer = typeof splitter === 'string' ? splitter : splitter.toPrimitive();
     const primitiveLimit = typeof limit === 'number' ? limit : limit.toPrimitive();
-    const initialValue = this.data.split(primitiveContainer, primitiveLimit) as Split<`${T}`, Splitter, Limit>;
+    const initialValue = StringPrototype.split(this.data, primitiveContainer, primitiveLimit);
     return new TypedArray(initialValue);
   }
 
