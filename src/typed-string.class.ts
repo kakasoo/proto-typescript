@@ -2,17 +2,17 @@ import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype, StringPrototype } from './prototypes';
 import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
-import { Join, Length, MethodsFrom, Split } from './types';
+import { Join, Length, MethodsFrom } from './types';
 import { AIsLessThanOrEqualB } from './types/number.type';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedString<T extends string | number | boolean = ''>
   implements Pick<MethodsFrom<String>, 'split' | 'at' | 'concat'>, toPrimitive<T | `${T}`>
 {
-  private readonly data: `${T}`;
+  private readonly string: `${T}`;
 
   constructor(data: T = '' as T) {
-    this.data = String(data) as `${T}`;
+    this.string = String(data) as `${T}`;
   }
 
   /**
@@ -22,7 +22,7 @@ export class TypedString<T extends string | number | boolean = ''>
     ...strings: Strings
   ): TypedString<ReturnType<typeof StringPrototype.concat<`${T}`, TypedString.ValueTypes<Strings>>>> {
     const primitiveStrs = strings.map((el) => (typeof el === 'string' ? el : el.toPrimitive()));
-    const initialValue = ArrayPrototype.join([this.data, ...primitiveStrs], '') as Join<
+    const initialValue = ArrayPrototype.join([this.string, ...primitiveStrs], '') as Join<
       [`${T}`, ...TypedString.ValueTypes<Strings>],
       ''
     >;
@@ -40,7 +40,7 @@ export class TypedString<T extends string | number | boolean = ''>
       : undefined,
   >(index: Index | TypedNumber<Index> = new TypedNumber()): RETURN_TYPE {
     const primitiveIndex = typeof index === 'number' ? index : index.toPrimitive();
-    const initialValue = StringPrototype.at(this.data, primitiveIndex);
+    const initialValue = StringPrototype.at(this.string, primitiveIndex);
     if (initialValue) {
       return new TypedString(initialValue) as RETURN_TYPE;
     }
@@ -57,14 +57,14 @@ export class TypedString<T extends string | number | boolean = ''>
   ): TypedArray<ReturnType<typeof StringPrototype.split<`${T}`, Splitter, Limit>>> {
     const primitiveContainer = typeof splitter === 'string' ? splitter : splitter.toPrimitive();
     const primitiveLimit = typeof limit === 'number' ? limit : limit.toPrimitive();
-    const initialValue = StringPrototype.split(this.data, primitiveContainer, primitiveLimit);
+    const initialValue = StringPrototype.split(this.string, primitiveContainer, primitiveLimit);
     return new TypedArray(initialValue);
   }
 
   toPrimitive(): T;
   toPrimitive(): `${T}`;
   toPrimitive(): T | `${T}` {
-    return this.data;
+    return this.string;
   }
 }
 

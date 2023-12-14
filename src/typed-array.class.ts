@@ -1,6 +1,7 @@
 import { toPrimitive } from './interfaces/to-primitive.interface';
 import { ArrayPrototype } from './prototypes';
 import { TypedNumber } from './typed-number.class';
+import { TypedObject } from './typed-object.class';
 import { TypedString } from './typed-string.class';
 import { ArraySome, ArrayAt, ElementOf, Equal, MethodsFrom } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
@@ -11,17 +12,17 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
     toPrimitive<[...T]>,
     Iterable<ElementOf<T>>
 {
-  constructor(data: T);
-  constructor(...data: T);
-  constructor(private readonly data: T) {}
+  constructor(array: T);
+  constructor(...array: T);
+  constructor(private readonly array: T) {}
 
   [Symbol.iterator](): Iterator<ElementOf<T>, any> {
     let i = 0;
     return {
       next: () => {
-        return i === this.data.length
+        return i === this.array.length
           ? { done: true as const, value: undefined }
-          : { value: this.data.at(i++), done: false as const };
+          : { value: this.array.at(i++), done: false as const };
       },
     };
   }
@@ -39,7 +40,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
   unshift<Items extends ReadonlyOrNot<any[]>>(
     ...items: Items
   ): TypedArray<ReturnType<typeof ArrayPrototype.unshift<T, Items>>> {
-    return new TypedArray([...items, ...this.data]);
+    return new TypedArray([...items, ...this.array]);
   }
 
   /**
@@ -55,7 +56,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
       array: T,
     ) => ArraySome<INNER_TARGET, T>,
   ): ReturnType<typeof ArrayPrototype.some> {
-    return ArrayPrototype.some(this.data, predicate);
+    return ArrayPrototype.some(this.array, predicate);
   }
 
   /**
@@ -75,7 +76,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
   push<Items extends ReadonlyOrNot<any[]>>(
     ...items: Items
   ): TypedArray<ReturnType<typeof ArrayPrototype.push<T, Items>>> {
-    return new TypedArray([...this.data, ...items]);
+    return new TypedArray([...this.array, ...items]);
   }
 
   /**
@@ -85,7 +86,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
     index: Index | TypedNumber<Index> = new TypedNumber(),
   ): ReturnType<typeof ArrayPrototype.at<T, Index>> {
     const primitiveIndex = typeof index === 'number' ? index : index.toPrimitive();
-    return this.data.at(primitiveIndex);
+    return this.array.at(primitiveIndex);
   }
 
   /**
@@ -102,11 +103,11 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
     separator: Separator | TypedString<Separator> = ',' as Separator,
   ): TypedString<ReturnType<typeof ArrayPrototype.join<T, Separator>>> {
     const primitiveSeparator = typeof separator === 'string' ? separator : separator.toPrimitive();
-    const initialValue = ArrayPrototype.join(this.data, primitiveSeparator);
+    const initialValue = ArrayPrototype.join(this.array, primitiveSeparator);
     return new TypedString(initialValue);
   }
 
   toPrimitive(): [...T] {
-    return [...this.data];
+    return [...this.array];
   }
 }
