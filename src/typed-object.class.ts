@@ -1,12 +1,9 @@
+import { IS_TYPED_CLASS, IsTypedInteface } from './interfaces/is-typed.interface';
 import { TypedClass } from './types/primitive.type';
 
-export const IS_TYPED_CLASS = Symbol('TYPED_CLASS');
-
-export class TypedObject<T extends any> {
-  private readonly [IS_TYPED_CLASS]: true;
-  constructor(private readonly object: T) {
-    this[IS_TYPED_CLASS] = true as const;
-  }
+export class TypedObject<T extends any> implements IsTypedInteface {
+  readonly [IS_TYPED_CLASS]: true = true;
+  constructor(private readonly object: T) {}
 
   toPrimitive(): T {
     return this.object;

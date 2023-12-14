@@ -1,3 +1,5 @@
+export const IS_TYPED_CLASS = Symbol('TYPED_CLASS');
+
 export interface IsTypedInteface {
-  readonly isTyped: true;
+  [IS_TYPED_CLASS]: true;
 }
