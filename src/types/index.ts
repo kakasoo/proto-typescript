@@ -2,6 +2,8 @@ export * from './arithmetic.type';
 export * from './array.type';
 export * from './function.type';
 export * from './never.type';
+export * from './number.type';
 export * from './object.type';
+export * from './primitive.type';
 export * from './string.type';
 export * from './union.type';
