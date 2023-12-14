@@ -24,7 +24,7 @@ export class TypedString<T extends string | number | boolean = ''>
   concat<Strings extends ReadonlyOrNot<(string | TypedString<string>)[]>>(
     ...strings: Strings
   ): TypedString<ReturnType<typeof StringPrototype.concat<`${T}`, TypedString.ValueTypes<Strings>>>> {
-    const primitiveStrs = strings.map((el) => (typeof el === 'string' ? el : el.toPrimitive()));
+    const primitiveStrs = strings.map((el) => (this.isTypedClass(el) ? el.toPrimitive() : el));
     const initialValue = ArrayPrototype.join([this.string, ...primitiveStrs], '') as Join<
       [`${T}`, ...TypedString.ValueTypes<Strings>],
       ''
@@ -42,7 +42,7 @@ export class TypedString<T extends string | number | boolean = ''>
       ? TypedString<ReturnType<typeof StringPrototype.at<`${T}`, Index>>>
       : undefined,
   >(index: Index | TypedNumber<Index> = new TypedNumber()): RETURN_TYPE {
-    const primitiveIndex = typeof index === 'number' ? index : index.toPrimitive();
+    const primitiveIndex = this.isTypedClass(index) ? index.toPrimitive() : index;
     const initialValue = StringPrototype.at(this.string, primitiveIndex);
     if (initialValue) {
       return new TypedString(initialValue) as RETURN_TYPE;
@@ -58,8 +58,8 @@ export class TypedString<T extends string | number | boolean = ''>
     splitter: Splitter | TypedString<Splitter> = new TypedString<Splitter>(),
     limit: Limit | TypedNumber<Limit> = new TypedNumber<Limit>(),
   ): TypedArray<ReturnType<typeof StringPrototype.split<`${T}`, Splitter, Limit>>> {
-    const primitiveContainer = typeof splitter === 'string' ? splitter : splitter.toPrimitive();
-    const primitiveLimit = typeof limit === 'number' ? limit : limit.toPrimitive();
+    const primitiveContainer = this.isTypedClass(splitter) ? splitter.toPrimitive() : splitter;
+    const primitiveLimit = this.isTypedClass(limit) ? limit.toPrimitive() : limit;
     const initialValue = StringPrototype.split(this.string, primitiveContainer, primitiveLimit);
     return new TypedArray(initialValue);
   }

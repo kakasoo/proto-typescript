@@ -91,7 +91,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
   at<Index extends number = 0>(
     index: Index | TypedNumber<Index> = new TypedNumber(),
   ): ReturnType<typeof ArrayPrototype.at<T, Index>> {
-    const primitiveIndex = typeof index === 'number' ? index : index.toPrimitive();
+    const primitiveIndex = this.isTypedClass(index) ? index.toPrimitive() : index;
     return this.array.at(primitiveIndex);
   }
 
@@ -108,7 +108,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
   join<Separator extends string = ','>(
     separator: Separator | TypedString<Separator> = ',' as Separator,
   ): TypedString<ReturnType<typeof ArrayPrototype.join<T, Separator>>> {
-    const primitiveSeparator = typeof separator === 'string' ? separator : separator.toPrimitive();
+    const primitiveSeparator = this.isTypedClass(separator) ? separator.toPrimitive() : separator;
     const initialValue = ArrayPrototype.join(this.array, primitiveSeparator);
     return new TypedString(initialValue);
   }
