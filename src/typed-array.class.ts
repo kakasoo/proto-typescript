@@ -117,3 +117,24 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
     return [...this.array];
   }
 }
+
+export namespace TypedArray {
+  /**
+   * Inference of value type.
+   */
+  export type ValueType<Pointer extends TypedArray<any> | Array<any>> = Pointer extends TypedArray<infer T>
+    ? T
+    : Pointer extends Array<any>
+      ? Pointer
+      : never;
+
+  /**
+   * Inference of value types.
+   */
+  export type ValueTypes<Pointers extends ReadonlyOrNot<(TypedArray<any> | Array<any>)[]>> = Pointers extends [
+    infer F extends TypedArray<infer T> | Array<any>,
+    ...infer Rest extends ReadonlyOrNot<(TypedArray<any> | Array<any>)[]>,
+  ]
+    ? [TypedArray.ValueType<F>, ...TypedArray.ValueTypes<Rest>]
+    : [];
+}
