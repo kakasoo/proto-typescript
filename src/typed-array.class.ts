@@ -3,13 +3,13 @@ import { ArrayPrototype } from './prototypes';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
 import { TypedString } from './typed-string.class';
-import { ArraySome, ArrayAt, ElementOf, Equal, MethodsFrom } from './types';
+import { ArraySome, ArrayAt, ElementOf, MethodsFrom } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
   extends TypedObject<T>
   implements
-    Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift'>,
+    Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift' | 'pop'>,
     toPrimitive<[...T]>,
     Iterable<ElementOf<T>>
 {
@@ -32,6 +32,8 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
       },
     };
   }
+
+  pop(...args: any[]) {}
 
   /**
    * @inheritdoc

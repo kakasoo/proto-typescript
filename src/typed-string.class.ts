@@ -28,7 +28,7 @@ export class TypedString<T extends string | number | boolean = ''>
     ...strings: Strings
   ): TypedString<ReturnType<typeof StringPrototype.concat<`${T}`, TypedString.ValueTypes<Strings>>>> {
     const primitiveStrs = strings.map((el) => (this.isTypedClass(el) ? el.toPrimitive() : el));
-    const initialValue = ArrayPrototype.join([this.string, ...primitiveStrs], '') as Join<
+    const initialValue = ArrayPrototype.join([this.string, ...primitiveStrs] as const, '') as Join<
       [`${T}`, ...TypedString.ValueTypes<Strings>],
       ''
     >;

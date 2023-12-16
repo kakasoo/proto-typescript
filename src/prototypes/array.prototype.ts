@@ -1,7 +1,15 @@
-import { ArrayAt, Concat, Join, ArraySome } from '../types';
+import { ArrayAt, Concat, Join, ArraySome, Sub } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
 export const ArrayPrototype = {
+  shift<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayAt<Conatiner, 0> {
+    return conatiner.at(0);
+  },
+
+  pop<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayAt<Conatiner, Sub<Conatiner['length'], 1>> {
+    return conatiner.at(conatiner.length - 1);
+  },
+
   /**
    * @param container
    * @param items
