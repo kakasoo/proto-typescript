@@ -76,4 +76,6 @@ export namespace StringType {
    * ```
    */
   export type At<Container extends string, Index extends number> = ArrayType.At<Split<Container>, Index>;
+
+  export type Length<T extends string> = ArrayType.Length<Split<T>>;
 }

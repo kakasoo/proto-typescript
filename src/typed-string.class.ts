@@ -3,7 +3,7 @@ import { ArrayPrototype, StringPrototype } from './prototypes';
 import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
-import { ArrayType, FunctionType, NumberType } from './types';
+import { ArrayType, FunctionType, NumberType, StringType } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 /**
@@ -40,7 +40,7 @@ export class TypedString<T extends string | number | boolean = ''>
    */
   at<
     Index extends number,
-    RETURN_TYPE extends NumberType.Compare<Index, '<=', ArrayType.Length<`${T}`>> extends true
+    RETURN_TYPE extends NumberType.Compare<Index, '<', StringType.Length<`${T}`>> extends true
       ? TypedString<ReturnType<typeof StringPrototype.at<`${T}`, Index>>>
       : undefined,
   >(index: Index | TypedNumber<Index> = new TypedNumber()): RETURN_TYPE {

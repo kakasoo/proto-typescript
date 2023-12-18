@@ -6,7 +6,7 @@ export namespace ArrayType {
   /**
    * Get length of tuple or string literal type.
    */
-  export type Length<T extends ReadonlyOrNot<any[]> | string> = T['length'];
+  export type Length<T extends ReadonlyOrNot<any[]>> = T['length'];
 
   export type Push<T extends ReadonlyOrNot<any[]>, V extends any> = [...T, V];
 
