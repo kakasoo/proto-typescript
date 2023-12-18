@@ -17,7 +17,7 @@ export namespace NumberType {
     ? ArrayType.Length<U>
     : never;
 
-  export type IsDigit<T extends string> = ArrayType.TupleIncludes<Digits, T>;
+  export type IsDigit<T extends string> = ArrayType.Includes<Digits, T>;
 
   export type NumberString<T extends number> = `${T}`;
 
@@ -27,15 +27,43 @@ export namespace NumberType {
     ? T
     : LessThan<N, ArrayType.Push<T, T['length']>>;
 
-  export type AIsLessThanOrEqualB<A extends number, B extends number> = ArrayType.Values<
-    LessThan<A>
-  > extends ArrayType.Values<LessThan<B>>
-    ? true
-    : false;
+  export type Compare<
+    N1 extends number,
+    Operator extends '>' | '<' | '>=' | '<=' | '=',
+    N2 extends number,
+  > = Operator extends '>='
+    ? N1 extends N2
+      ? true
+      : [NumberType.Sub<N1, N2>] extends [never]
+        ? false
+        : true
+    : Operator extends '<='
+      ? N1 extends N2
+        ? true
+        : [NumberType.Sub<N2, N1>] extends [never]
+          ? false
+          : true
+      : Operator extends '>'
+        ? N1 extends N2
+          ? false
+          : [NumberType.Sub<N1, N2>] extends [never]
+            ? false
+            : true
+        : Operator extends '<'
+          ? N1 extends N2
+            ? false
+            : [NumberType.Sub<N2, N1>] extends [never]
+              ? false
+              : true
+          : Operator extends '='
+            ? N1 extends N2
+              ? true
+              : false
+            : never;
 
   export type LessThanEqual<N extends number, T extends any[] = []> = LessThan<NToNumber<Add<N, 1>>>;
 
-  export type GaussSum<N1 extends number, K = ArrayType.ArrayToUnion<LessThanEqual<N1>>> = K extends number
+  export type GaussSum<N1 extends number, K = ArrayType.Values<LessThanEqual<N1>>> = K extends number
     ? NTuple<K>
     : never;
 

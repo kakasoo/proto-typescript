@@ -40,7 +40,7 @@ export class TypedString<T extends string | number | boolean = ''>
    */
   at<
     Index extends number,
-    RETURN_TYPE extends NumberType.AIsLessThanOrEqualB<Index, ArrayType.Length<`${T}`>> extends true
+    RETURN_TYPE extends NumberType.Compare<Index, '<=', ArrayType.Length<`${T}`>> extends true
       ? TypedString<ReturnType<typeof StringPrototype.at<`${T}`, Index>>>
       : undefined,
   >(index: Index | TypedNumber<Index> = new TypedNumber()): RETURN_TYPE {

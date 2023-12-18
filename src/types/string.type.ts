@@ -72,8 +72,8 @@ export namespace StringType {
    *
    * @example
    * ```ts
-   * type Answer = StringAt<'abcdefg', 2>; // c
+   * type Answer = StringType.At<'abcdefg', 2>; // c
    * ```
    */
-  export type StringAt<Container extends string, Index extends number> = ArrayType.ArrayAt<Split<Container>, Index>;
+  export type At<Container extends string, Index extends number> = ArrayType.At<Split<Container>, Index>;
 }

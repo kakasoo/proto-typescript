@@ -20,8 +20,8 @@ export const StringPrototype = {
   at<Container extends string, Index extends number>(
     container: Container,
     index: Index,
-  ): StringType.StringAt<Container, Index> {
-    return container.at(index) as StringType.StringAt<Container, Index>;
+  ): StringType.At<Container, Index> {
+    return container.at(index) as StringType.At<Container, Index>;
   },
 
   /**

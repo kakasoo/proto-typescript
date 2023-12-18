@@ -7,7 +7,7 @@ export const ArrayPrototype = {
    * @param conatiner
    * @returns
    */
-  shift<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayType.ArrayAt<Conatiner, 0> {
+  shift<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayType.At<Conatiner, 0> {
     return conatiner.at(0);
   },
 
@@ -18,7 +18,7 @@ export const ArrayPrototype = {
    */
   pop<Conatiner extends ReadonlyOrNot<any[]>>(
     conatiner: Conatiner,
-  ): ArrayType.ArrayAt<Conatiner, NumberType.Sub<ArrayType.Length<Conatiner>, 1>> {
+  ): ArrayType.At<Conatiner, NumberType.Sub<ArrayType.Length<Conatiner>, 1>> {
     return conatiner.at(conatiner.length - 1);
   },
 
@@ -44,10 +44,10 @@ export const ArrayPrototype = {
   some<Target, Conatiner extends ReadonlyOrNot<any[]>>(
     container: Conatiner,
     predicate: <INNER_TARGET = Target, Index extends number = number>(
-      value: ArrayType.ArrayAt<Conatiner, Index>,
+      value: ArrayType.At<Conatiner, Index>,
       index: Index,
       array: Conatiner,
-    ) => ArrayType.ArraySome<INNER_TARGET, Conatiner>,
+    ) => ArrayType.Some<INNER_TARGET, Conatiner>,
     // thisArg?: any,
   ): boolean {
     for (let i = 0; i < container.length; i++) {
@@ -78,7 +78,7 @@ export const ArrayPrototype = {
   at<Container extends ReadonlyOrNot<any[]>, Index extends number>(
     container: Container,
     index: Index,
-  ): ArrayType.ArrayAt<Container, Index> {
+  ): ArrayType.At<Container, Index> {
     return container.at(index);
   },
 

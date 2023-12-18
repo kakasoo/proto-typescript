@@ -73,10 +73,10 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    */
   some<Target>(
     predicate: <INNER_TARGET = Target, Index extends number = number>(
-      value: ArrayType.ArrayAt<T, Index>,
+      value: ArrayType.At<T, Index>,
       index: Index,
       array: T,
-    ) => ArrayType.ArraySome<INNER_TARGET, T>,
+    ) => ArrayType.Some<INNER_TARGET, T>,
   ): ReturnType<typeof ArrayPrototype.some> {
     return ArrayPrototype.some(this.array, predicate);
   }

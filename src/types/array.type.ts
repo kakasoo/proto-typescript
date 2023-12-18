@@ -15,6 +15,7 @@ export namespace ArrayType {
   export type ElementOf<Tuple extends ReadonlyOrNot<any[]>> = [...Tuple] extends (infer E)[] ? E : never;
 
   export type Values<T extends ReadonlyOrNot<any[]>> = T[number];
+  export type TupleToUnion<T extends NTuple<number>> = T[number];
 
   export type Take<
     T extends ReadonlyOrNot<any[]>,
@@ -45,7 +46,7 @@ export namespace ArrayType {
       ? never
       : [];
 
-  export type ArrayAt<Tuple extends ReadonlyOrNot<any[]>, Index extends number> = Tuple[Index];
+  export type At<Tuple extends ReadonlyOrNot<any[]>, Index extends number> = Tuple[Index];
 
   /**
    * If any of the type elements constituting Union Type U correspond to `If`, it returns true or false.
@@ -55,14 +56,14 @@ export namespace ArrayType {
   /**
    * If any of the type elements constituting Tuple Type U correspond to `If`, it returns true or false.
    */
-  export type ArraySome<Target, Tuple extends ReadonlyOrNot<any[]>> =
+  export type Some<Target, Tuple extends ReadonlyOrNot<any[]>> =
     | UnionSome<Target, Tuple[number], true, false>
     | boolean;
 
-  export type TupleIncludes<T extends ReadonlyOrNot<any[]>, U> = T extends [infer P, ...infer R] // T가 P와 나머지 R로 이루어진 배열이라면, 즉 length가 최소한 1 이상인 경우라면
+  export type Includes<T extends ReadonlyOrNot<any[]>, U> = T extends [infer P, ...infer R] // T가 P와 나머지 R로 이루어진 배열이라면, 즉 length가 최소한 1 이상인 경우라면
     ? Equal<U, P> extends true
       ? true
-      : TupleIncludes<R, U> // U가 P랑 같다면 true, 아니라면 Includes를 재귀적으로 호출한다.
+      : Includes<R, U> // U가 P랑 같다면 true, 아니라면 Includes를 재귀적으로 호출한다.
     : false;
 
   /**
@@ -109,12 +110,6 @@ export namespace ArrayType {
    */
   export type Pop<T extends ReadonlyOrNot<any[]>> = T extends [...infer Rest, infer Last] ? Rest : [];
 
-  export type Includes<T extends ReadonlyOrNot<any[]>, U> = T extends [infer P, ...infer R]
-    ? Equal<U, P> extends true
-      ? true
-      : Includes<R, U>
-    : false;
-
   /**
    * 튜플에서 중복 요소를 제거하는 타입
    *
@@ -129,8 +124,6 @@ export namespace ArrayType {
       : Distinct<Rest, P>
     : P;
 
-  export type TupleToUnion<T extends NTuple<number>> = T[number];
-
   export type EntriesToObject<T extends Array<NTuple<2>>> = T extends [infer F, ...infer Rest]
     ? F extends [infer K extends string, infer V]
       ? Rest extends NTuple<2>[]
@@ -138,8 +131,6 @@ export namespace ArrayType {
         : never
       : never
     : {};
-
-  export type ArrayToUnion<T extends ReadonlyOrNot<any[]>> = T[number];
 
   /**
    * PartitionByTwo<[1,2,3,4,5,6,7,8]> // [[1,2],[3,4],[5,6],[7,8]]
@@ -152,12 +143,6 @@ export namespace ArrayType {
     ? [[First, Second], ...PartitionByTwo<Rest, NumberType.Sub<L, 2>>]
     : [];
 
-  export type Compare<N1 extends number, N2 extends number> = N1 extends N2
-    ? true
-    : [NumberType.Sub<N1, N2>] extends [never]
-      ? false
-      : true;
-
   export type BubbleSort<
     T extends ReadonlyOrNot<any[]>,
     L extends number = ArrayType.Length<T>,
@@ -167,7 +152,7 @@ export namespace ArrayType {
     : T extends [infer F, infer S, ...infer Rest]
       ? BubbleSort<
           [
-            ...(Compare<NumberType.NToNumber<F>, NumberType.NToNumber<S>> extends ASC
+            ...(NumberType.Compare<NumberType.NToNumber<F>, '>=', NumberType.NToNumber<S>> extends ASC
               ? [F, ...BubbleSort<[S, ...Rest], NumberType.Sub<L, 1>>]
               : [S, ...BubbleSort<[F, ...Rest], NumberType.Sub<L, 1>>]),
           ],
