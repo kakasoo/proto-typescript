@@ -1,12 +1,22 @@
-import { ArrayAt, Concat, Join, ArraySome, Sub } from '../types';
+import { ArrayAt, Concat, Join, ArraySome, Sub, Length } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
 export const ArrayPrototype = {
+  /**
+   * It only returns the 0th index without subtracting the elements inside the actual container.
+   * @param conatiner
+   * @returns
+   */
   shift<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayAt<Conatiner, 0> {
     return conatiner.at(0);
   },
 
-  pop<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayAt<Conatiner, Sub<Conatiner['length'], 1>> {
+  /**
+   * Only return the last index without subtracting the elements inside the actual container.
+   * @param conatiner
+   * @returns
+   */
+  pop<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayAt<Conatiner, Sub<Length<Conatiner>, 1>> {
     return conatiner.at(conatiner.length - 1);
   },
 

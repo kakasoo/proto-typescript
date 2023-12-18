@@ -9,7 +9,7 @@ import { ReadonlyOrNot } from './types/primitive.type';
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
   extends TypedObject<T>
   implements
-    Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift' | 'pop'>,
+    Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift' | 'pop' | 'shift'>,
     toPrimitive<[...T]>,
     Iterable<ElementOf<T>>
 {
@@ -33,7 +33,21 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
     };
   }
 
-  pop(...args: any[]) {}
+  /**
+   * It only returns the 0th index without subtracting the elements inside the actual container.
+   * @todo Add an option parameter for if you want to cause the type after the element has been removed from the interior of the container to be inferred.
+   */
+  shift(): ReturnType<typeof ArrayPrototype.shift<T>> {
+    return this.at(0);
+  }
+
+  /**
+   * Only return the last index without subtracting the elements inside the actual container.
+   * @todo Add an option parameter for if you want to cause the type after the element has been removed from the interior of the container to be inferred.
+   */
+  pop(): ReturnType<typeof ArrayPrototype.pop<T>> {
+    return this.at(this.array.length - 1);
+  }
 
   /**
    * @inheritdoc
