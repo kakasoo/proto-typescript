@@ -3,8 +3,7 @@ import { ArrayPrototype, StringPrototype } from './prototypes';
 import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
-import { Join, Length, MethodsFrom } from './types';
-import { AIsLessThanOrEqualB } from './types/number.type';
+import { ArrayType, FunctionType, NumberType } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 /**
@@ -12,7 +11,7 @@ import { ReadonlyOrNot } from './types/primitive.type';
  */
 export class TypedString<T extends string | number | boolean = ''>
   extends TypedObject<T>
-  implements Pick<MethodsFrom<String>, 'split' | 'at' | 'concat'>, toPrimitive<T | `${T}`>
+  implements Pick<FunctionType.MethodsFrom<String>, 'split' | 'at' | 'concat'>, toPrimitive<T | `${T}`>
 {
   private readonly string: `${T}`;
 
@@ -28,7 +27,7 @@ export class TypedString<T extends string | number | boolean = ''>
     ...strings: Strings
   ): TypedString<ReturnType<typeof StringPrototype.concat<`${T}`, TypedString.ValueTypes<Strings>>>> {
     const primitiveStrs = strings.map((el) => (this.isTypedClass(el) ? el.toPrimitive() : el));
-    const initialValue = ArrayPrototype.join([this.string, ...primitiveStrs] as const, '') as Join<
+    const initialValue = ArrayPrototype.join([this.string, ...primitiveStrs] as const, '') as ArrayType.Join<
       [`${T}`, ...TypedString.ValueTypes<Strings>],
       ''
     >;
@@ -41,7 +40,7 @@ export class TypedString<T extends string | number | boolean = ''>
    */
   at<
     Index extends number,
-    RETURN_TYPE extends AIsLessThanOrEqualB<Index, Length<`${T}`>> extends true
+    RETURN_TYPE extends NumberType.AIsLessThanOrEqualB<Index, ArrayType.Length<`${T}`>> extends true
       ? TypedString<ReturnType<typeof StringPrototype.at<`${T}`, Index>>>
       : undefined,
   >(index: Index | TypedNumber<Index> = new TypedNumber()): RETURN_TYPE {

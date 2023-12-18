@@ -1,5 +1,5 @@
-import { Length } from './array.type';
-import { Split } from './string.type';
+import { ArrayType } from './array.type';
+import { StringType } from './string.type';
 
 export interface StringToNumberMap {
   '0': 0;
@@ -16,7 +16,7 @@ export interface StringToNumberMap {
 /**
  * 자리수를 의미하며, T가 1의 자리면 1, 10의 자리면 2, 100의 자리면 3, 이런 식으로 10의 N승 이상, N + 1 승 미만을 의미
  */
-export type NDigit<T extends string> = T extends `${number}` ? Length<Split<T>> : never;
+export type NDigit<T extends string> = T extends `${number}` ? ArrayType.Length<StringType.Split<T>> : never;
 
 /**
  * 문자열로 된 숫자를 각 자릿수마다의 숫자를 담은 튜플으로 변경하는 타입

@@ -1,4 +1,4 @@
-import { ArrayAt, Concat, Join, ArraySome, Sub, Length } from '../types';
+import { ArrayType, NumberType } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
 export const ArrayPrototype = {
@@ -7,7 +7,7 @@ export const ArrayPrototype = {
    * @param conatiner
    * @returns
    */
-  shift<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayAt<Conatiner, 0> {
+  shift<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayType.ArrayAt<Conatiner, 0> {
     return conatiner.at(0);
   },
 
@@ -16,7 +16,9 @@ export const ArrayPrototype = {
    * @param conatiner
    * @returns
    */
-  pop<Conatiner extends ReadonlyOrNot<any[]>>(conatiner: Conatiner): ArrayAt<Conatiner, Sub<Length<Conatiner>, 1>> {
+  pop<Conatiner extends ReadonlyOrNot<any[]>>(
+    conatiner: Conatiner,
+  ): ArrayType.ArrayAt<Conatiner, NumberType.Sub<ArrayType.Length<Conatiner>, 1>> {
     return conatiner.at(conatiner.length - 1);
   },
 
@@ -28,7 +30,7 @@ export const ArrayPrototype = {
   unshift<Conatiner extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
     container: Conatiner,
     ...items: Items
-  ): Concat<Items, Conatiner> {
+  ): ArrayType.Concat<Items, Conatiner> {
     return [...items, ...container];
   },
 
@@ -42,10 +44,10 @@ export const ArrayPrototype = {
   some<Target, Conatiner extends ReadonlyOrNot<any[]>>(
     container: Conatiner,
     predicate: <INNER_TARGET = Target, Index extends number = number>(
-      value: ArrayAt<Conatiner, Index>,
+      value: ArrayType.ArrayAt<Conatiner, Index>,
       index: Index,
       array: Conatiner,
-    ) => ArraySome<INNER_TARGET, Conatiner>,
+    ) => ArrayType.ArraySome<INNER_TARGET, Conatiner>,
     // thisArg?: any,
   ): boolean {
     for (let i = 0; i < container.length; i++) {
@@ -65,7 +67,7 @@ export const ArrayPrototype = {
   push<Conatiner extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
     container: Conatiner,
     ...items: Items
-  ): Concat<Conatiner, Items> {
+  ): ArrayType.Concat<Conatiner, Items> {
     return [...container, ...items];
   },
 
@@ -76,7 +78,7 @@ export const ArrayPrototype = {
   at<Container extends ReadonlyOrNot<any[]>, Index extends number>(
     container: Container,
     index: Index,
-  ): ArrayAt<Container, Index> {
+  ): ArrayType.ArrayAt<Container, Index> {
     return container.at(index);
   },
 
@@ -94,7 +96,7 @@ export const ArrayPrototype = {
   join<Container extends ReadonlyOrNot<Exclude<Primitive, symbol>[]>, Separator extends string = ','>(
     container: Container,
     separator: Separator = ',' as Separator,
-  ): Join<Container, Separator> {
-    return container.join(separator) as Join<Container, Separator>;
+  ): ArrayType.Join<Container, Separator> {
+    return container.join(separator) as ArrayType.Join<Container, Separator>;
   },
 };

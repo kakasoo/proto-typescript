@@ -3,15 +3,15 @@ import { ArrayPrototype } from './prototypes';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
 import { TypedString } from './typed-string.class';
-import { ArraySome, ArrayAt, ElementOf, MethodsFrom } from './types';
+import { FunctionType, ArrayType } from './types';
 import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
   extends TypedObject<T>
   implements
-    Pick<MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift' | 'pop' | 'shift'>,
+    Pick<FunctionType.MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift' | 'pop' | 'shift'>,
     toPrimitive<[...T]>,
-    Iterable<ElementOf<T>>
+    Iterable<ArrayType.ElementOf<T>>
 {
   private readonly array: T;
 
@@ -22,7 +22,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
     this.array = data;
   }
 
-  [Symbol.iterator](): Iterator<ElementOf<T>, any> {
+  [Symbol.iterator](): Iterator<ArrayType.ElementOf<T>, any> {
     let i = 0;
     return {
       next: () => {
@@ -73,10 +73,10 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    */
   some<Target>(
     predicate: <INNER_TARGET = Target, Index extends number = number>(
-      value: ArrayAt<T, Index>,
+      value: ArrayType.ArrayAt<T, Index>,
       index: Index,
       array: T,
-    ) => ArraySome<INNER_TARGET, T>,
+    ) => ArrayType.ArraySome<INNER_TARGET, T>,
   ): ReturnType<typeof ArrayPrototype.some> {
     return ArrayPrototype.some(this.array, predicate);
   }
