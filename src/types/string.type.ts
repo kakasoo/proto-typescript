@@ -6,9 +6,20 @@ import { Equal } from './object.type';
 export namespace StringType {
   export type Blank = ' ' | '\n' | '\t';
 
-  export type TrimLeft<S extends string> = S extends `${Blank}${infer Rest}` ? TrimLeft<Rest> : S;
-  export type TrimRight<S extends string> = S extends `${infer Rest}${Blank}` ? TrimRight<Rest> : S;
-  export type Trim<S extends string> = TrimRight<TrimLeft<S>>;
+  /**
+   * Remove the blank characters that are clustered on the left side of the string.
+   */
+  export type TrimStart<S extends string> = S extends `${Blank}${infer Rest}` ? TrimStart<Rest> : S;
+
+  /**
+   * Remove the blank characters that are clustered on the right side of the string.
+   */
+  export type TrimEnd<S extends string> = S extends `${infer Rest}${Blank}` ? TrimEnd<Rest> : S;
+
+  /**
+   * Remove the blank characters that are clustered on the left and right side of the string.
+   */
+  export type Trim<S extends string> = TrimEnd<TrimStart<S>>;
 
   export type IsAlphabet<T extends string> = Uppercase<T> extends Lowercase<T>
     ? Lowercase<T> extends Uppercase<T>
