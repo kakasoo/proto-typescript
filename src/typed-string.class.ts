@@ -11,13 +11,39 @@ import { ReadonlyOrNot } from './types/primitive.type';
  */
 export class TypedString<T extends string | number | boolean = ''>
   extends TypedObject<T>
-  implements Pick<FunctionType.MethodsFrom<String>, 'split' | 'at' | 'concat'>, toPrimitive<T | `${T}`>
+  implements
+    Pick<FunctionType.MethodsFrom<String>, 'split' | 'at' | 'concat' | 'trimStart' | 'trimEnd' | 'trim'>,
+    toPrimitive<T | `${T}`>
 {
   private readonly string: `${T}`;
 
   constructor(data: T = '' as T) {
     super(data);
     this.string = String(data) as `${T}`;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  trim(): TypedString<ReturnType<typeof StringPrototype.trim<`${T}`>>> {
+    const initialValue = StringPrototype.trim(this.string);
+    return new TypedString(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  trimEnd(): TypedString<ReturnType<typeof StringPrototype.trimEnd<`${T}`>>> {
+    const initialValue = StringPrototype.trimEnd(this.string);
+    return new TypedString(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  trimStart(): TypedString<ReturnType<typeof StringPrototype.trimStart<`${T}`>>> {
+    const initialValue = StringPrototype.trimStart(this.string);
+    return new TypedString(initialValue);
   }
 
   /**
