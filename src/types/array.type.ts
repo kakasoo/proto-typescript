@@ -3,6 +3,8 @@ import { Equal, ObjectType } from './object.type';
 import { Primitive, ReadonlyOrNot } from './primitive.type';
 
 export namespace ArrayType {
+  export type Filter = any;
+
   /**
    * Get length of tuple or string literal type.
    */
