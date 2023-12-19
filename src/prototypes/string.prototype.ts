@@ -3,6 +3,33 @@ import { ReadonlyOrNot } from '../types/primitive.type';
 
 export const StringPrototype = {
   /**
+   * Removes the leading white space and line terminator characters from a string.
+   * @param container
+   * @returns
+   */
+  trimStart<Conatiner extends string>(container: Conatiner): StringType.TrimStart<Conatiner> {
+    return container.trimStart() as StringType.TrimStart<Conatiner>;
+  },
+
+  /**
+   * Removes the trailing white space and line terminator characters from a string.
+   * @param container
+   * @returns
+   */
+  trimEnd<Conatiner extends string>(container: Conatiner): StringType.TrimEnd<Conatiner> {
+    return container.trimEnd() as StringType.TrimEnd<Conatiner>;
+  },
+
+  /**
+   * Removes the leading and trailing white space and line terminator characters from a string.
+   * @param container
+   * @returns
+   */
+  trim<Conatiner extends string>(container: Conatiner): StringType.Trim<Conatiner> {
+    return container.trim() as StringType.Trim<Conatiner>;
+  },
+
+  /**
    * Returns a string that contains the concatenation of two or more strings.
    * @param strings The strings to append to the end of the string.
    */
