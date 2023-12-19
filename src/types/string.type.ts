@@ -3,6 +3,8 @@ import { ArrayType } from './array.type';
 import { NumberType } from './number.type';
 import { Equal } from './object.type';
 
+type a = StringType.Includes<'abcde', 'b', 1>;
+
 export namespace StringType {
   export type Blank = ' ' | '\n' | '\t';
 
@@ -48,7 +50,14 @@ export namespace StringType {
             ? `${First}${To}`
             : S;
 
-  export type Includes<T extends string, P extends string> = T extends `${string}${P}${string}` ? true : false;
+  /**
+   * @todo support Position type
+   */
+  export type Includes<
+    Conatiner extends string,
+    SearchString extends string,
+    Position extends number = 0,
+  > = Conatiner extends `${string}${SearchString}${string}` ? true : false;
 
   /**
    * It refers to a substitute string, and if there is an un substitute key-value pair, it is inferred as `never`.
