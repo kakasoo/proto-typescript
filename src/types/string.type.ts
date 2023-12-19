@@ -48,12 +48,12 @@ export namespace StringType {
             ? `${First}${To}`
             : S;
 
-  export type StringIncludes<T extends string, P extends string> = T extends `${string}${P}${string}` ? true : false;
+  export type Includes<T extends string, P extends string> = T extends `${string}${P}${string}` ? true : false;
 
   /**
    * It refers to a substitute string, and if there is an un substitute key-value pair, it is inferred as `never`.
    */
-  export type Replaced<T extends string> = StringIncludes<T, `\${${string}}`> extends true ? never : T;
+  export type Replaced<T extends string> = Includes<T, `\${${string}}`> extends true ? never : T;
 
   /**
    * StartsWith<'abc', 'a'> // true

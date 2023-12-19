@@ -1,7 +1,26 @@
 import { ArrayType, StringType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 
+String.prototype.includes;
+
 export const StringPrototype = {
+  /**
+   * Returns true if searchString appears as a substring of the result of converting this
+   * object to a String, at one or more positions that are
+   * greater than or equal to position; otherwise, returns false.
+   * @param searchString search string
+   * @param position If position is undefined, 0 is assumed, so as to search all of the String.
+   *
+   * @todo support position parameter
+   */
+  includes<Container extends string, SearchString extends string, Position extends number>(
+    container: Container,
+    searchString: SearchString,
+    position?: Position,
+  ): StringType.Includes<Container, SearchString> {
+    return container.includes(searchString) as StringType.Includes<Container, SearchString>;
+  },
+
   /**
    * Removes the leading white space and line terminator characters from a string.
    * @param container
