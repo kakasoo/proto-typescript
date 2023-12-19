@@ -4,6 +4,12 @@ import { NumberType } from './number.type';
 import { Equal } from './object.type';
 
 export namespace StringType {
+  export type Blank = ' ' | '\n' | '\t';
+
+  export type TrimLeft<S extends string> = S extends `${Blank}${infer Rest}` ? TrimLeft<Rest> : S;
+  export type TrimRight<S extends string> = S extends `${infer Rest}${Blank}` ? TrimRight<Rest> : S;
+  export type Trim<S extends string> = TrimRight<TrimLeft<S>>;
+
   export type IsAlphabet<T extends string> = Uppercase<T> extends Lowercase<T>
     ? Lowercase<T> extends Uppercase<T>
       ? true
