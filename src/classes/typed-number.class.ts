@@ -10,6 +10,7 @@ export class TypedNumber<
       | NumberType.Decimal<number, number>
       | NumberType.Float
       | NumberType.Range<number, number> = `${number}`,
+    Signum extends null | '+' | '-' = null,
   >
   extends TypedObject<T>
   implements toPrimitive<T>

@@ -96,4 +96,6 @@ export namespace NumberType {
 
   export type Decimal<Integer extends number, Fractional extends number> = `Decimal(${number},${number})`;
   export type Float = `${number}.${number}`;
+
+  export type RealNumber<T extends number> = `${T}` | `+${T}` | `-${T}`;
 }
