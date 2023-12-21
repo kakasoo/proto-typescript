@@ -1,6 +1,6 @@
-import { TypedBoolean } from '../typed-boolean.class';
-import { TypedNumber } from '../typed-number.class';
-import { TypedString } from '../typed-string.class';
+import { TypedBoolean } from '../classes/typed-boolean.class';
+import { TypedNumber } from '../classes/typed-number.class';
+import { TypedString } from '../classes/typed-string.class';
 import { ArrayType } from './array.type';
 
 export type Primitive = string | boolean | number | undefined | null | bigint | symbol;

@@ -1,6 +1,6 @@
-import { toPrimitive } from './interfaces/to-primitive.interface';
+import { toPrimitive } from '../interfaces/to-primitive.interface';
+import { ReadonlyOrNot } from '../types/primitive.type';
 import { TypedObject } from './typed-object.class';
-import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedNumber<T extends number = 0> extends TypedObject<T> implements toPrimitive<T> {
   constructor(private readonly number: T = 0 as T) {
