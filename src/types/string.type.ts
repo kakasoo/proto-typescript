@@ -1,9 +1,8 @@
 import { Conditional } from './arithmetic.type';
 import { ArrayType } from './array.type';
+import { ErrorType } from './error.type';
 import { NumberType } from './number.type';
 import { Equal } from './object.type';
-
-type a = StringType.Includes<'abcde', 'b', 1>;
 
 export namespace StringType {
   export type Blank = ' ' | '\n' | '\t';
@@ -104,4 +103,23 @@ export namespace StringType {
   export type At<Container extends string, Index extends number> = ArrayType.At<Split<Container>, Index>;
 
   export type Length<T extends string> = ArrayType.Length<Split<T>>;
+
+  export type IsInt<T extends number> = Includes<`${T}`, '.'> extends true ? ErrorType.IS_NOT_INT_FORMAT : T;
+
+  type InsertedInteger<T extends number> = Split<`${T}`, '.'>[0];
+  type InsertedFractional<T extends number> = Split<`${T}`, '.'>[1];
+
+  export type IsDecimal<
+    T extends number,
+    Integer extends number,
+    Fractional extends number,
+  > = InsertedInteger<T> extends `${number}`
+    ? NumberType.Compare<Length<InsertedInteger<T>>, '=', Integer> extends true
+      ? InsertedFractional<T> extends `${number}`
+        ? NumberType.Compare<Length<InsertedFractional<T>>, '=', Fractional> extends true
+          ? T
+          : `INSERTED FRACTIONAL DOES NOT EQUAL. : ${InsertedFractional<T>}`
+        : `INSERTED FRACTIONAL IS NOT NUMBER FORMAT. : ${InsertedFractional<T>}`
+      : `INTEGER DOES NOT EQUAL. : ${InsertedInteger<T>}`
+    : `INSERTED INTEGER IS NOT NUMBER FORMAT. : ${InsertedInteger<T>}`;
 }

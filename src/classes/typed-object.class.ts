@@ -1,5 +1,5 @@
-import { IS_TYPED_CLASS, IsTypedInteface } from './interfaces/is-typed.interface';
-import { TypedClass } from './types/primitive.type';
+import { IS_TYPED_CLASS, IsTypedInteface } from '../interfaces/is-typed.interface';
+import { TypedClass } from '../types/primitive.type';
 
 export class TypedObject<T extends any> implements IsTypedInteface {
   readonly [IS_TYPED_CLASS]: true = true;

@@ -1,10 +1,10 @@
-import { toPrimitive } from './interfaces/to-primitive.interface';
-import { ArrayPrototype } from './prototypes';
+import { toPrimitive } from '../interfaces/to-primitive.interface';
+import { ArrayPrototype } from '../prototypes';
+import { FunctionType, ArrayType } from '../types';
+import { ReadonlyOrNot } from '../types/primitive.type';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
 import { TypedString } from './typed-string.class';
-import { FunctionType, ArrayType } from './types';
-import { ReadonlyOrNot } from './types/primitive.type';
 
 export class TypedArray<T extends ReadonlyOrNot<any[]>>
   extends TypedObject<T>

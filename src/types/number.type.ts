@@ -1,4 +1,6 @@
 import { ArrayType, NNTuple, NTuple } from './array.type';
+import { ErrorType } from './error.type';
+import { StringType } from './string.type';
 
 export namespace NumberType {
   export type NToNumber<N> = N extends number ? N : never;
@@ -82,4 +84,19 @@ export namespace NumberType {
    * 수의 절대값을 추론하는 타입
    */
   export type Absolute<T extends number | string | bigint> = `${T}` extends `-${infer R}` ? R : `${T}`;
+
+  /**
+   * number range
+   *
+   * @exmple 1-9 ok
+   * @exmple 5-1 x  (right is less than left)
+   * @exmple 2-2 ok (case which is left and right is equals)
+   */
+  export type Range<T extends number, P extends number> = Compare<T, '<=', P> extends true
+    ? `${T}-${P}`
+    : never | ErrorType.TO_HAVE_TO_BE_BIGGER_THAN_FROM;
+
+  // export type Decimal<Integer extends number, Fractional extends number> = `Decimal(${Integer},${Fractional})`;
+  // export type Float<Integer extends number, Fractional extends number> = `${Integer}.${Fractional}`;
+  // export type RealNumber<T extends number> = `${T}` | `+${T}` | `-${T}`;
 }

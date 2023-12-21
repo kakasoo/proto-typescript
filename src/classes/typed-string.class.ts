@@ -1,10 +1,10 @@
-import { toPrimitive } from './interfaces/to-primitive.interface';
-import { ArrayPrototype, StringPrototype } from './prototypes';
+import { toPrimitive } from '../interfaces/to-primitive.interface';
+import { ArrayPrototype, StringPrototype } from '../prototypes';
+import { ArrayType, FunctionType, NumberType, StringType } from '../types';
+import { ReadonlyOrNot } from '../types/primitive.type';
 import { TypedArray } from './typed-array.class';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
-import { ArrayType, FunctionType, NumberType, StringType } from './types';
-import { ReadonlyOrNot } from './types/primitive.type';
 
 /**
  * @todo support iterator.
