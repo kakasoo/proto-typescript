@@ -82,4 +82,18 @@ export namespace NumberType {
    * 수의 절대값을 추론하는 타입
    */
   export type Absolute<T extends number | string | bigint> = `${T}` extends `-${infer R}` ? R : `${T}`;
+
+  /**
+   * number range
+   *
+   * @exmple 1-9 ok
+   * @exmple 5-1 x  (right is less than left)
+   * @exmple 2-2 ok (case which is left and right is equals)
+   */
+  export type Range<T extends number, P extends number> = Compare<T, '<=', P> extends true
+    ? `${T}-${P}`
+    : never | '`TO` HAVE TO BE BIGGER THAN `FROM`';
+
+  export type Decimal<Integer extends number, Fractional extends number> = `Decimal(${number},${number})`;
+  export type Float = `${number}.${number}`;
 }
