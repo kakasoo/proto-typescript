@@ -1,22 +1,13 @@
 import { toPrimitive } from '../interfaces/to-primitive.interface';
-import { NumberType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 import { TypedObject } from './typed-object.class';
 
-export class TypedNumber<
-    T extends number = 0,
-    Format extends
-      | `${number}`
-      | NumberType.Decimal<number, number>
-      | NumberType.Float
-      | NumberType.Range<number, number> = `${number}`,
-    Signum extends null | '+' | '-' = null,
-  >
-  extends TypedObject<T>
-  implements toPrimitive<T>
-{
-  constructor(private readonly number: T = 0 as T) {
-    super(number);
+export class TypedNumber<T extends number> extends TypedObject<T> implements toPrimitive<T> {
+  private readonly number: T;
+
+  constructor(data = 0 as T) {
+    super(data);
+    this.number = data;
   }
 
   toPrimitive(): T {
@@ -25,6 +16,7 @@ export class TypedNumber<
 }
 
 export namespace TypedNumber {
+  export type Format = 'number' | 'int' | `decimal(${number},${number})` | 'float' | `range(${number},${number})`;
   /**
    * Inference of value type.
    */
