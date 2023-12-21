@@ -1,5 +1,6 @@
 import { Conditional } from './arithmetic.type';
 import { ArrayType } from './array.type';
+import { ErrorType } from './error.type';
 import { NumberType } from './number.type';
 import { Equal } from './object.type';
 
@@ -104,4 +105,6 @@ export namespace StringType {
   export type At<Container extends string, Index extends number> = ArrayType.At<Split<Container>, Index>;
 
   export type Length<T extends string> = ArrayType.Length<Split<T>>;
+
+  export type IsInt<T extends number> = Includes<`${T}`, '.'> extends true ? ErrorType.IS_NOT_INT_FORMAT : T;
 }

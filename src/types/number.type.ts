@@ -1,4 +1,6 @@
 import { ArrayType, NNTuple, NTuple } from './array.type';
+import { ErrorType } from './error.type';
+import { StringType } from './string.type';
 
 export namespace NumberType {
   export type NToNumber<N> = N extends number ? N : never;
@@ -92,10 +94,9 @@ export namespace NumberType {
    */
   export type Range<T extends number, P extends number> = Compare<T, '<=', P> extends true
     ? `${T}-${P}`
-    : never | '`TO` HAVE TO BE BIGGER THAN `FROM`';
+    : never | ErrorType.TO_HAVE_TO_BE_BIGGER_THAN_FROM;
 
-  export type Decimal<Integer extends number, Fractional extends number> = `Decimal(${number},${number})`;
-  export type Float = `${number}.${number}`;
-
+  export type Decimal<Integer extends number, Fractional extends number> = `Decimal(${Integer},${Fractional})`;
+  export type Float<Integer extends number, Fractional extends number> = `${Integer}.${Fractional}`;
   export type RealNumber<T extends number> = `${T}` | `+${T}` | `-${T}`;
 }
