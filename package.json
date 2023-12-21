@@ -14,19 +14,40 @@
     "prebuild": "rimraf dist",
     "build": "tsc",
     "prepublishOnly": "tsc",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
   },
   "keywords": [
     "type-safe",
     "prototype",
     "utility-types"
   ],
-  "author": "",
+  "author": "kakasoo",
   "license": "ISC",
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/jest": "^29.5.11",
+    "jest": "^29.7.0",
     "prettier": "^3.1.0",
     "rimraf": "^5.0.5",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.3.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ],
+    "rootDir": ".",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node"
   }
 }

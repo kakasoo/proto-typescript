@@ -1,0 +1,3 @@
+describe('TypedNumberClass', () => {
+  it('check', () => {});
+});
