@@ -96,7 +96,7 @@ export namespace NumberType {
     ? `${T}-${P}`
     : never | ErrorType.TO_HAVE_TO_BE_BIGGER_THAN_FROM;
 
-  export type Decimal<Integer extends number, Fractional extends number> = `Decimal(${Integer},${Fractional})`;
-  export type Float<Integer extends number, Fractional extends number> = `${Integer}.${Fractional}`;
-  export type RealNumber<T extends number> = `${T}` | `+${T}` | `-${T}`;
+  // export type Decimal<Integer extends number, Fractional extends number> = `Decimal(${Integer},${Fractional})`;
+  // export type Float<Integer extends number, Fractional extends number> = `${Integer}.${Fractional}`;
+  // export type RealNumber<T extends number> = `${T}` | `+${T}` | `-${T}`;
 }
