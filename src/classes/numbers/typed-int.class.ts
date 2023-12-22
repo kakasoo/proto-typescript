@@ -1,9 +1,9 @@
-import { toPrimitive } from '../../interfaces';
+import { ToPrimitive } from '../../interfaces';
 import { ToTypedNumber } from '../../interfaces/to-typed-number.interface';
 import { StringType } from '../../types';
 import { TypedNumber } from '../typed-number.class';
 
-export class TypedInt<T extends number> implements toPrimitive<T>, ToTypedNumber<T> {
+export class TypedInt<T extends number> implements ToPrimitive<T>, ToTypedNumber<T> {
   private readonly int: T;
   constructor(data: StringType.IsInt<T>) {
     if (typeof data === 'number') {

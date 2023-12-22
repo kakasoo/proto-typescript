@@ -1,4 +1,4 @@
-import { toPrimitive } from '../interfaces/to-primitive.interface';
+import { ToPrimitive } from '../interfaces/to-primitive.interface';
 import { ArrayPrototype, StringPrototype } from '../prototypes';
 import { ArrayType, FunctionType, NumberType, StringType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
@@ -13,7 +13,7 @@ export class TypedString<T extends string | number | boolean = ''>
   extends TypedObject<T>
   implements
     Pick<FunctionType.MethodsFrom<String>, 'split' | 'at' | 'concat' | 'trimStart' | 'trimEnd' | 'trim'>,
-    toPrimitive<T | `${T}`>
+    ToPrimitive<T | `${T}`>
 {
   private readonly string: `${T}`;
 

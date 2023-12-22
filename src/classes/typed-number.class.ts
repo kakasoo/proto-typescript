@@ -1,11 +1,11 @@
-import { toPrimitive } from '../interfaces/to-primitive.interface';
+import { ToPrimitive } from '../interfaces/to-primitive.interface';
 import { StringType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 import { TypedDecimal } from './numbers/typed-decimal.class';
 import { TypedInt } from './numbers/typed-int.class';
 import { TypedObject } from './typed-object.class';
 
-export class TypedNumber<T extends number> extends TypedObject<T> implements toPrimitive<T> {
+export class TypedNumber<T extends number> extends TypedObject<T> implements ToPrimitive<T> {
   private readonly number: T;
 
   constructor(data = 0 as T) {

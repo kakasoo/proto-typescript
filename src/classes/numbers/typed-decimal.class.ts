@@ -1,10 +1,10 @@
-import { toPrimitive } from '../../interfaces';
+import { ToPrimitive } from '../../interfaces';
 import { ToTypedNumber } from '../../interfaces/to-typed-number.interface';
 import { StringType } from '../../types';
 import { TypedNumber } from '../typed-number.class';
 
 export class TypedDecimal<T extends number, Integer extends number, Fractional extends number>
-  implements toPrimitive<T>, ToTypedNumber<T>
+  implements ToPrimitive<T>, ToTypedNumber<T>
 {
   private readonly decimal: T;
   constructor(data: StringType.IsDecimal<T, Integer, Fractional>) {

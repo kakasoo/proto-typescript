@@ -1,4 +1,4 @@
-import { toPrimitive } from '../interfaces/to-primitive.interface';
+import { ToPrimitive } from '../interfaces/to-primitive.interface';
 import { ArrayPrototype } from '../prototypes';
 import { FunctionType, ArrayType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
@@ -10,7 +10,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
   extends TypedObject<T>
   implements
     Pick<FunctionType.MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift' | 'pop' | 'shift'>,
-    toPrimitive<[...T]>,
+    ToPrimitive<[...T]>,
     Iterable<ArrayType.ElementOf<T>>
 {
   private readonly array: T;

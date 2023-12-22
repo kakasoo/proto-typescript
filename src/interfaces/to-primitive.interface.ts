@@ -1,3 +1,3 @@
-export interface toPrimitive<T> {
+export interface ToPrimitive<T> {
   toPrimitive: () => T;
 }
