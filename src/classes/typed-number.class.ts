@@ -13,8 +13,18 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements toP
     this.number = data;
   }
 
+  /**
+   * A function that makes it possible to narrow down the range of TypeNumber types more narrowly.
+   *
+   * @param format 'int' | 'decimal'
+   * @example
+   * ```ts
+   * TypedNumber.refine('decimal', 1, 2)(3.14); // only decimal(1,2).
+   * TypedNumber.refine('decimal')(3.14); // decimal, if is same as float.
+   * TypedNumber.refine('int')(3); // only int.
+   * ```
+   */
   static refine<Integer extends number>(format: 'int'): <N extends number>(data: StringType.IsInt<N>) => TypedInt<N>;
-
   static refine<Integer extends number, Fractional extends number>(
     format: 'decimal',
     integer?: Integer,
@@ -29,13 +39,13 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements toP
       const Int = <N extends number>(data: StringType.IsInt<N>): TypedInt<N> => {
         return new TypedInt<N>(data);
       };
-
       return Int;
     } else {
-      const Decimal = <N extends number>(data: StringType.IsDecimal<N, Integer, Fractional>) => {
+      const Decimal = <N extends number>(
+        data: StringType.IsDecimal<N, Integer, Fractional>,
+      ): TypedDecimal<N, Integer, Fractional> => {
         return new TypedDecimal<N, Integer, Fractional>(data);
       };
-
       return Decimal;
     }
   }
