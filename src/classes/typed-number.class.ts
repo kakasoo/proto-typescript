@@ -13,20 +13,13 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements toP
     this.number = data;
   }
 
-  static refine<Integer extends number>(
-    format: 'int',
-  ): { Int: <N extends number>(data: StringType.IsInt<N>) => TypedInt<N> };
+  static refine<Integer extends number>(format: 'int'): <N extends number>(data: StringType.IsInt<N>) => TypedInt<N>;
 
   static refine<Integer extends number, Fractional extends number>(
     format: 'decimal',
     integer?: Integer,
     fractional?: Fractional,
-  ): {
-    Decimal: <N extends number>(
-      data: StringType.IsDecimal<N, Integer, Fractional>,
-    ) => TypedDecimal<N, Integer, Fractional>;
-  };
-
+  ): <N extends number>(data: StringType.IsDecimal<N, Integer, Fractional>) => TypedDecimal<N, Integer, Fractional>;
   static refine<Integer extends number, Fractional extends number>(
     format: 'int' | 'decimal',
     integer?: Integer,
@@ -37,13 +30,13 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements toP
         return new TypedInt<N>(data);
       };
 
-      return { Int };
+      return Int;
     } else {
       const Decimal = <N extends number>(data: StringType.IsDecimal<N, Integer, Fractional>) => {
         return new TypedDecimal<N, Integer, Fractional>(data);
       };
 
-      return { Decimal };
+      return Decimal;
     }
   }
 

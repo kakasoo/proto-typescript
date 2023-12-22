@@ -1,6 +1,9 @@
 import { toPrimitive } from '../../interfaces';
 import { StringType } from '../../types';
 
+/**
+ * @todo `toTypedNumber` method
+ */
 export class TypedDecimal<T extends number, Integer extends number, Fractional extends number>
   implements toPrimitive<T>
 {

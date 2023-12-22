@@ -1,6 +1,9 @@
 import { toPrimitive } from '../../interfaces';
 import { StringType } from '../../types';
 
+/**
+ * @todo `toTypedNumber` method
+ */
 export class TypedInt<T extends number> implements toPrimitive<T> {
   private readonly int: T;
   constructor(data: StringType.IsInt<T>) {
