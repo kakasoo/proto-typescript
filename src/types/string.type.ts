@@ -7,6 +7,8 @@ import { Equal } from './object.type';
 export namespace StringType {
   export type Blank = ' ' | '\n' | '\t';
 
+  export type ToNumber<T extends string> = T extends NumberType.NumberString<infer R> ? R : never;
+
   /**
    * Remove the blank characters that are clustered on the left side of the string.
    */

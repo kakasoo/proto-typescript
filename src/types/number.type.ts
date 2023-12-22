@@ -9,8 +9,6 @@ export namespace NumberType {
 
   export type Digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-  export type ToNumber<T> = T extends number ? T : never;
-
   export type Add<N1 extends number, N2 extends number> = [...NTuple<N1>, ...NTuple<N2>] extends [...infer U]
     ? ArrayType.Length<U>
     : never;
@@ -22,8 +20,6 @@ export namespace NumberType {
   export type IsDigit<T extends string> = ArrayType.Includes<Digits, T>;
 
   export type NumberString<T extends number> = `${T}`;
-
-  export type ToNumberFromString<T extends string> = T extends NumberString<infer R> ? R : never;
 
   export type LessThan<N extends number, T extends any[] = []> = T['length'] extends N
     ? T
