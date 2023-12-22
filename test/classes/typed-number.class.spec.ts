@@ -1,5 +1,5 @@
 import typia from 'typia';
-import { StringType, TypedNumber } from '../../src';
+import { StringType, TypedArray, TypedBoolean, TypedNumber, TypedString } from '../../src';
 
 describe('TypedInt', () => {
   it('Int TypedInt class constructor can not receive non-int value.', async () => {

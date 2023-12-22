@@ -1,6 +1,6 @@
 import { ArrayType, NNTuple, NTuple } from './array.type';
-import { ErrorType } from './error.type';
-import { StringType } from './string.type';
+import { ReadonlyOrNot } from './primitive.type';
+import { RegExpType } from './regexp.type';
 
 export namespace NumberType {
   export type NToNumber<N> = N extends number ? N : never;
@@ -80,4 +80,10 @@ export namespace NumberType {
    * 수의 절대값을 추론하는 타입
    */
   export type Absolute<T extends number | string | bigint> = `${T}` extends `-${infer R}` ? R : `${T}`;
+
+  export type Range<T extends RegExpType.Range<number, number>> = T extends RegExpType.Range<infer From, infer To>
+    ? ReadonlyOrNot<
+        Exclude<ArrayType.Values<NumberType.LessThanEqual<To>>, ArrayType.Values<NumberType.LessThan<From>>>[]
+      >
+    : never;
 }
