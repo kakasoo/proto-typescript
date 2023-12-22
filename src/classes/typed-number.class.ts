@@ -19,19 +19,21 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements ToP
    * @param format 'int' | 'decimal'
    * @example
    * ```ts
+   * TypedNumber.refine('int')(3); // only int.
+   *
    * TypedNumber.refine('decimal', 1, 2)(3.14); // only decimal(1,2).
    * TypedNumber.refine('decimal')(3.14); // decimal, if is same as float.
-   * TypedNumber.refine('int')(3); // only int.
+   * TypedNumber.refine('decimal(1,2)')(3.14);
    * ```
    */
   static refine<Integer extends number>(format: 'int'): <N extends number>(data: StringType.IsInt<N>) => TypedInt<N>;
   static refine<Integer extends number, Fractional extends number>(
-    format: 'decimal',
+    format: 'decimal' | `decimal(${Integer},${Fractional})`,
     integer?: Integer,
     fractional?: Fractional,
   ): <N extends number>(data: StringType.IsDecimal<N, Integer, Fractional>) => TypedDecimal<N, Integer, Fractional>;
   static refine<Integer extends number, Fractional extends number>(
-    format: 'int' | 'decimal',
+    format: 'int' | 'decimal' | `decimal(${Integer},${Fractional})` | 'range',
     integer?: Integer,
     fractional?: Fractional,
   ) {
@@ -40,6 +42,7 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements ToP
         return new TypedInt<N>(data);
       };
       return Int;
+    } else if (format === 'range') {
     } else {
       const Decimal = <N extends number>(
         data: StringType.IsDecimal<N, Integer, Fractional>,
