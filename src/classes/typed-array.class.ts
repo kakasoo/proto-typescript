@@ -1,28 +1,55 @@
-import { toPrimitive } from '../interfaces/to-primitive.interface';
+import { ToPrimitive } from '../interfaces/to-primitive.interface';
 import { ArrayPrototype } from '../prototypes';
-import { FunctionType, ArrayType } from '../types';
+import { FunctionType, ArrayType, NumberType, RegExpType, ErrorType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
 import { TypedString } from './typed-string.class';
 
-export class TypedArray<T extends ReadonlyOrNot<any[]>>
-  extends TypedObject<T>
+type ParseToArray<T> = T extends ReadonlyOrNot<infer R>
+  ? T
+  : T extends RegExpType.Range<number, number>
+    ? NumberType.Range<T>
+    : [];
+
+export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number, number>>
+  extends TypedObject<ParseToArray<T>>
   implements
     Pick<FunctionType.MethodsFrom<Array<any>>, 'join' | 'at' | 'push' | 'some' | 'unshift' | 'pop' | 'shift'>,
-    toPrimitive<[...T]>,
-    Iterable<ArrayType.ElementOf<T>>
+    ToPrimitive<ParseToArray<T>>,
+    Iterable<ArrayType.ElementOf<ParseToArray<T>>>
 {
-  private readonly array: T;
+  private readonly array: ParseToArray<T>;
 
-  constructor(data: T);
-  constructor(...data: T);
-  constructor(data: T) {
+  constructor(data: T extends Array<any> ? T : never);
+  constructor(...data: T extends Array<any> ? T : never);
+
+  /**
+   * @todo Can't we prioritize the values we received over the range? Why don't we just make a `refine` method for this, too?
+   * @param data
+   */
+  constructor(data: T extends RegExpType.Range<number, number> ? ErrorType.CONSTRUCTOR_RECEIVE_NOTHING_1 : never);
+  constructor(data: ParseToArray<T>) {
     super(data);
     this.array = data;
   }
 
-  [Symbol.iterator](): Iterator<ArrayType.ElementOf<T>, any> {
+  /**
+   * @param data
+   */
+  refine<P extends ReadonlyOrNot<any[]>>(
+    ...data: ArrayType.ElementOf<P> extends ArrayType.ElementOf<ParseToArray<T>> ? P : []
+  ): TypedArray<P>;
+  refine<P extends ReadonlyOrNot<any[]>>(
+    data: ArrayType.ElementOf<P> extends ArrayType.ElementOf<ParseToArray<T>> ? P : [],
+  ): TypedArray<P>;
+  refine<P extends ReadonlyOrNot<any[]>>(
+    data: ArrayType.ElementOf<P> extends ArrayType.ElementOf<ParseToArray<T>> ? P : [],
+  ) {
+    return new TypedArray(data);
+  }
+
+  [Symbol.iterator](): Iterator<ArrayType.ElementOf<ParseToArray<T>>, any> {
     let i = 0;
     return {
       next: () => {
@@ -37,7 +64,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    * It only returns the 0th index without subtracting the elements inside the actual container.
    * @todo Add an option parameter for if you want to cause the type after the element has been removed from the interior of the container to be inferred.
    */
-  shift(): ReturnType<typeof ArrayPrototype.shift<T>> {
+  shift(): ReturnType<typeof ArrayPrototype.shift<ParseToArray<T>>> {
     return this.at(0);
   }
 
@@ -45,7 +72,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    * Only return the last index without subtracting the elements inside the actual container.
    * @todo Add an option parameter for if you want to cause the type after the element has been removed from the interior of the container to be inferred.
    */
-  pop(): ReturnType<typeof ArrayPrototype.pop<T>> {
+  pop(): ReturnType<typeof ArrayPrototype.pop<ParseToArray<T>>> {
     return this.at(this.array.length - 1);
   }
 
@@ -61,8 +88,9 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    */
   unshift<Items extends ReadonlyOrNot<any[]>>(
     ...items: Items
-  ): TypedArray<ReturnType<typeof ArrayPrototype.unshift<T, Items>>> {
-    return new TypedArray([...items, ...this.array]);
+  ): TypedArray<ReturnType<typeof ArrayPrototype.unshift<ParseToArray<T>, Items>>> {
+    const initialValue = ArrayPrototype.unshift<ParseToArray<T>, Items>(this.array, ...items);
+    return new TypedArray(initialValue);
   }
 
   /**
@@ -73,10 +101,10 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    */
   some<Target>(
     predicate: <INNER_TARGET = Target, Index extends number = number>(
-      value: ArrayType.At<T, Index>,
+      value: ArrayType.At<ParseToArray<T>, Index>,
       index: Index,
-      array: T,
-    ) => ArrayType.Some<INNER_TARGET, T>,
+      array: ParseToArray<T>,
+    ) => ArrayType.Some<INNER_TARGET, ParseToArray<T>>,
   ): ReturnType<typeof ArrayPrototype.some> {
     return ArrayPrototype.some(this.array, predicate);
   }
@@ -97,8 +125,9 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    */
   push<Items extends ReadonlyOrNot<any[]>>(
     ...items: Items
-  ): TypedArray<ReturnType<typeof ArrayPrototype.push<T, Items>>> {
-    return new TypedArray([...this.array, ...items]);
+  ): TypedArray<ReturnType<typeof ArrayPrototype.push<ParseToArray<T>, Items>>> {
+    const initialValue = ArrayPrototype.push<ParseToArray<T>, Items>(this.array, ...items);
+    return new TypedArray(initialValue);
   }
 
   /**
@@ -106,7 +135,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    */
   at<Index extends number = 0>(
     index: Index | TypedNumber<Index> = new TypedNumber(),
-  ): ReturnType<typeof ArrayPrototype.at<T, Index>> {
+  ): ReturnType<typeof ArrayPrototype.at<ParseToArray<T>, Index>> {
     const primitiveIndex = this.isTypedClass(index) ? index.toPrimitive() : index;
     return this.array.at(primitiveIndex);
   }
@@ -123,14 +152,14 @@ export class TypedArray<T extends ReadonlyOrNot<any[]>>
    */
   join<Separator extends string = ','>(
     separator: Separator | TypedString<Separator> = ',' as Separator,
-  ): TypedString<ReturnType<typeof ArrayPrototype.join<T, Separator>>> {
+  ): TypedString<ReturnType<typeof ArrayPrototype.join<ParseToArray<T>, Separator>>> {
     const primitiveSeparator = this.isTypedClass(separator) ? separator.toPrimitive() : separator;
     const initialValue = ArrayPrototype.join(this.array, primitiveSeparator);
     return new TypedString(initialValue);
   }
 
-  toPrimitive(): [...T] {
-    return [...this.array];
+  toPrimitive(): ParseToArray<T> {
+    return this.array;
   }
 }
 

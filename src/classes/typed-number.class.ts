@@ -1,11 +1,11 @@
-import { toPrimitive } from '../interfaces/to-primitive.interface';
+import { ToPrimitive } from '../interfaces/to-primitive.interface';
 import { StringType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 import { TypedDecimal } from './numbers/typed-decimal.class';
 import { TypedInt } from './numbers/typed-int.class';
 import { TypedObject } from './typed-object.class';
 
-export class TypedNumber<T extends number> extends TypedObject<T> implements toPrimitive<T> {
+export class TypedNumber<T extends number> extends TypedObject<T> implements ToPrimitive<T> {
   private readonly number: T;
 
   constructor(data = 0 as T) {
@@ -13,22 +13,32 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements toP
     this.number = data;
   }
 
+  /**
+   * A function that makes it possible to narrow down the range of TypeNumber types more narrowly.
+   *
+   * @param format 'int' | 'decimal'
+   * @example
+   * ```ts
+   * TypedNumber.refine('int')(3); // only int.
+   *
+   * TypedNumber.refine('decimal', 1, 2)(3.14); // only decimal(1,2).
+   * TypedNumber.refine('decimal')(3.14); // decimal, if is same as float.
+   * TypedNumber.refine('decimal(1,2)')(3.14);
+   * ```
+   *
+   * @todo if format is `decimal(n,n)`, integer and fractional parameter have to be empty.
+   */
+  static refine<Integer extends number>(format: 'int'): <N extends number>(data: StringType.IsInt<N>) => TypedInt<N>;
   static refine<Integer extends number>(
-    format: 'int',
-  ): { Int: <N extends number>(data: StringType.IsInt<N>) => TypedInt<N> };
-
+    format: 'float',
+  ): <N extends number>(data: StringType.IsDecimal<N, number, number>) => TypedDecimal<N, number, number>;
   static refine<Integer extends number, Fractional extends number>(
-    format: 'decimal',
+    format: 'decimal' | `decimal(${Integer},${Fractional})`,
     integer?: Integer,
     fractional?: Fractional,
-  ): {
-    Decimal: <N extends number>(
-      data: StringType.IsDecimal<N, Integer, Fractional>,
-    ) => TypedDecimal<N, Integer, Fractional>;
-  };
-
+  ): <N extends number>(data: StringType.IsDecimal<N, Integer, Fractional>) => TypedDecimal<N, Integer, Fractional>;
   static refine<Integer extends number, Fractional extends number>(
-    format: 'int' | 'decimal',
+    format: 'int' | 'float' | 'decimal' | `decimal(${Integer},${Fractional})`,
     integer?: Integer,
     fractional?: Fractional,
   ) {
@@ -36,14 +46,22 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements toP
       const Int = <N extends number>(data: StringType.IsInt<N>): TypedInt<N> => {
         return new TypedInt<N>(data);
       };
-
-      return { Int };
-    } else {
-      const Decimal = <N extends number>(data: StringType.IsDecimal<N, Integer, Fractional>) => {
-        return new TypedDecimal<N, Integer, Fractional>(data);
+      return Int;
+    } else if (format === 'float') {
+      const Float = <N extends number>(
+        data: StringType.IsDecimal<N, number, number>,
+      ): TypedDecimal<N, number, number> => {
+        return new TypedDecimal<N, number, number>(data);
       };
 
-      return { Decimal };
+      return Float;
+    } else {
+      const Decimal = <N extends number>(
+        data: StringType.IsDecimal<N, Integer, Fractional>,
+      ): TypedDecimal<N, Integer, Fractional> => {
+        return new TypedDecimal<N, Integer, Fractional>(data);
+      };
+      return Decimal;
     }
   }
 

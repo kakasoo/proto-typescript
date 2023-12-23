@@ -1,6 +1,6 @@
 import { ArrayType, NNTuple, NTuple } from './array.type';
-import { ErrorType } from './error.type';
-import { StringType } from './string.type';
+import { ReadonlyOrNot } from './primitive.type';
+import { RegExpType } from './regexp.type';
 
 export namespace NumberType {
   export type NToNumber<N> = N extends number ? N : never;
@@ -8,8 +8,6 @@ export namespace NumberType {
   export type NToNumberTuple<N> = N extends number[] ? N : never;
 
   export type Digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-  export type ToNumber<T> = T extends number ? T : never;
 
   export type Add<N1 extends number, N2 extends number> = [...NTuple<N1>, ...NTuple<N2>] extends [...infer U]
     ? ArrayType.Length<U>
@@ -22,8 +20,6 @@ export namespace NumberType {
   export type IsDigit<T extends string> = ArrayType.Includes<Digits, T>;
 
   export type NumberString<T extends number> = `${T}`;
-
-  export type ToNumberFromString<T extends string> = T extends NumberString<infer R> ? R : never;
 
   export type LessThan<N extends number, T extends any[] = []> = T['length'] extends N
     ? T
@@ -85,18 +81,9 @@ export namespace NumberType {
    */
   export type Absolute<T extends number | string | bigint> = `${T}` extends `-${infer R}` ? R : `${T}`;
 
-  /**
-   * number range
-   *
-   * @exmple 1-9 ok
-   * @exmple 5-1 x  (right is less than left)
-   * @exmple 2-2 ok (case which is left and right is equals)
-   */
-  export type Range<T extends number, P extends number> = Compare<T, '<=', P> extends true
-    ? `${T}-${P}`
-    : never | ErrorType.TO_HAVE_TO_BE_BIGGER_THAN_FROM;
-
-  // export type Decimal<Integer extends number, Fractional extends number> = `Decimal(${Integer},${Fractional})`;
-  // export type Float<Integer extends number, Fractional extends number> = `${Integer}.${Fractional}`;
-  // export type RealNumber<T extends number> = `${T}` | `+${T}` | `-${T}`;
+  export type Range<T extends RegExpType.Range<number, number>> = T extends RegExpType.Range<infer From, infer To>
+    ? ReadonlyOrNot<
+        Exclude<ArrayType.Values<NumberType.LessThanEqual<To>>, ArrayType.Values<NumberType.LessThan<From>>>[]
+      >
+    : never;
 }
