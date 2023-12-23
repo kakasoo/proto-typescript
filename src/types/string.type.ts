@@ -108,8 +108,8 @@ export namespace StringType {
 
   export type IsInt<T extends number> = Includes<`${T}`, '.'> extends true ? ErrorType.IS_NOT_INT_FORMAT : T;
 
-  type InsertedInteger<T extends number> = Split<`${T}`, '.'>[0];
-  type InsertedFractional<T extends number> = Split<`${T}`, '.'>[1];
+  export type InsertedInteger<T extends number> = Split<`${T}`, '.'>[0];
+  export type InsertedFractional<T extends number> = Split<`${T}`, '.'>[1];
 
   export type IsDecimal<
     T extends number,
@@ -124,4 +124,17 @@ export namespace StringType {
         : `INSERTED FRACTIONAL IS NOT NUMBER FORMAT. : ${InsertedFractional<T>}`
       : `INSERTED INTEGER DOES NOT EQUAL. : ${InsertedInteger<T>}`
     : `INSERTED INTEGER IS NOT NUMBER FORMAT. : ${InsertedInteger<T>}`;
+
+  export type PadEnd<
+    Container extends string,
+    TargetLength extends number,
+    PadString extends string = ' ',
+  > = NumberType.Compare<Length<Container>, '=', TargetLength> extends true
+    ? Container
+    : NumberType.Compare<NumberType.Add<Length<Container>, Length<PadString>>, '<', TargetLength> extends true
+      ? PadEnd<`${Container}${PadString}`, TargetLength, PadString>
+      : `${Container}${ArrayType.Join<
+          ArrayType.Take<Split<PadString>, NumberType.Sub<TargetLength, Length<Container>>>,
+          ''
+        >}`;
 }
