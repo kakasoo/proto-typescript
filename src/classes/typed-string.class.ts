@@ -89,7 +89,7 @@ export class TypedString<T extends string | number | boolean = ''>
     const primitiveContainer = this.isTypedClass(splitter) ? splitter.toPrimitive() : splitter;
     const primitiveLimit = this.isTypedClass(limit) ? limit.toPrimitive() : limit;
     const initialValue = StringPrototype.split(this.string, primitiveContainer, primitiveLimit);
-    return new TypedArray(initialValue);
+    return new TypedArray(...initialValue);
   }
 
   toPrimitive(): T;
