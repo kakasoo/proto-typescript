@@ -23,6 +23,11 @@ export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number
 
   constructor(data: T extends Array<any> ? T : never);
   constructor(...data: T extends Array<any> ? T : never);
+
+  /**
+   * @todo Can't we prioritize the values we received over the range? Why don't we just make a `refine` method for this, too?
+   * @param data
+   */
   constructor(data: T extends RegExpType.Range<number, number> ? ParseToArray<T> : never);
   constructor(...data: T extends RegExpType.Range<number, number> ? ParseToArray<T> : never);
   constructor(data: ParseToArray<T>) {

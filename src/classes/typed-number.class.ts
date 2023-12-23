@@ -25,6 +25,8 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements ToP
    * TypedNumber.refine('decimal')(3.14); // decimal, if is same as float.
    * TypedNumber.refine('decimal(1,2)')(3.14);
    * ```
+   *
+   * @todo if format is `decimal(n,n)`, integer and fractional parameter have to be empty.
    */
   static refine<Integer extends number>(format: 'int'): <N extends number>(data: StringType.IsInt<N>) => TypedInt<N>;
   static refine<Integer extends number, Fractional extends number>(
