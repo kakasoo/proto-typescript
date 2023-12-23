@@ -122,6 +122,6 @@ export namespace StringType {
           ? T
           : `INSERTED FRACTIONAL DOES NOT EQUAL. : ${InsertedFractional<T>}`
         : `INSERTED FRACTIONAL IS NOT NUMBER FORMAT. : ${InsertedFractional<T>}`
-      : `INTEGER DOES NOT EQUAL. : ${InsertedInteger<T>}`
+      : `INSERTED INTEGER DOES NOT EQUAL. : ${InsertedInteger<T>}`
     : `INSERTED INTEGER IS NOT NUMBER FORMAT. : ${InsertedInteger<T>}`;
 }
