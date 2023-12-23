@@ -29,13 +29,16 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements ToP
    * @todo if format is `decimal(n,n)`, integer and fractional parameter have to be empty.
    */
   static refine<Integer extends number>(format: 'int'): <N extends number>(data: StringType.IsInt<N>) => TypedInt<N>;
+  static refine<Integer extends number>(
+    format: 'float',
+  ): <N extends number>(data: StringType.IsDecimal<N, number, number>) => TypedInt<N>;
   static refine<Integer extends number, Fractional extends number>(
     format: 'decimal' | `decimal(${Integer},${Fractional})`,
     integer?: Integer,
     fractional?: Fractional,
   ): <N extends number>(data: StringType.IsDecimal<N, Integer, Fractional>) => TypedDecimal<N, Integer, Fractional>;
   static refine<Integer extends number, Fractional extends number>(
-    format: 'int' | 'decimal' | `decimal(${Integer},${Fractional})`,
+    format: 'int' | 'float' | 'decimal' | `decimal(${Integer},${Fractional})`,
     integer?: Integer,
     fractional?: Fractional,
   ) {
@@ -44,6 +47,14 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements ToP
         return new TypedInt<N>(data);
       };
       return Int;
+    } else if (format === 'float') {
+      const Float = <N extends number>(
+        data: StringType.IsDecimal<N, number, number>,
+      ): TypedDecimal<N, number, number> => {
+        return new TypedDecimal<N, number, number>(data);
+      };
+
+      return Float;
     } else {
       const Decimal = <N extends number>(
         data: StringType.IsDecimal<N, Integer, Fractional>,
