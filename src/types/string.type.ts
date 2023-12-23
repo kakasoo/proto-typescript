@@ -108,8 +108,8 @@ export namespace StringType {
 
   export type IsInt<T extends number> = Includes<`${T}`, '.'> extends true ? ErrorType.IS_NOT_INT_FORMAT : T;
 
-  export type InsertedInteger<T extends number> = Split<`${T}`, '.'>[0];
-  export type InsertedFractional<T extends number> = Split<`${T}`, '.'>[1];
+  export type InsertedInteger<T extends number> = Includes<`${T}`, '.'> extends true ? Split<`${T}`, '.'>[0] : '';
+  export type InsertedFractional<T extends number> = Includes<`${T}`, '.'> extends true ? Split<`${T}`, '.'>[1] : '';
 
   export type IsDecimal<
     T extends number,
