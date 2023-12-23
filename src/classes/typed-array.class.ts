@@ -1,6 +1,6 @@
 import { ToPrimitive } from '../interfaces/to-primitive.interface';
 import { ArrayPrototype } from '../prototypes';
-import { FunctionType, ArrayType, NumberType, RegExpType } from '../types';
+import { FunctionType, ArrayType, NumberType, RegExpType, ErrorType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
@@ -22,17 +22,31 @@ export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number
   private readonly array: ParseToArray<T>;
 
   constructor(data: T extends Array<any> ? T : never);
-  constructor(...data: T extends Array<any> ? T : never);
+  constructor(...data: T extends Array<any> ? T : []);
 
   /**
    * @todo Can't we prioritize the values we received over the range? Why don't we just make a `refine` method for this, too?
    * @param data
    */
-  constructor(data: T extends RegExpType.Range<number, number> ? ParseToArray<T> : never);
-  constructor(...data: T extends RegExpType.Range<number, number> ? ParseToArray<T> : never);
+  constructor(data: T extends RegExpType.Range<number, number> ? ErrorType.CONSTRUCTOR_RECEIVE_NOTHING_1 : never);
   constructor(data: ParseToArray<T>) {
     super(data);
     this.array = data;
+  }
+
+  /**
+   * @param data
+   */
+  refine<P extends ReadonlyOrNot<any[]>>(
+    ...data: ArrayType.ElementOf<P> extends ArrayType.ElementOf<ParseToArray<T>> ? P : []
+  ): TypedArray<P>;
+  refine<P extends ReadonlyOrNot<any[]>>(
+    data: ArrayType.ElementOf<P> extends ArrayType.ElementOf<ParseToArray<T>> ? P : [],
+  ): TypedArray<P>;
+  refine<P extends ReadonlyOrNot<any[]>>(
+    data: ArrayType.ElementOf<P> extends ArrayType.ElementOf<ParseToArray<T>> ? P : [],
+  ) {
+    return new TypedArray(data);
   }
 
   [Symbol.iterator](): Iterator<ArrayType.ElementOf<ParseToArray<T>>, any> {
