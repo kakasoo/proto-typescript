@@ -1,8 +1,21 @@
 import { ArrayType, NNTuple, NTuple } from './array.type';
 import { ReadonlyOrNot } from './primitive.type';
 import { RegExpType } from './regexp.type';
+import { StringType } from './string.type';
 
 export namespace NumberType {
+  /**
+   * @todo Math.round type needed.
+   */
+  export type ToFixed<
+    N extends number,
+    Length extends ArrayType.Values<LessThan<21>> = 0,
+  > = `${StringType.InsertedInteger<N>}.${StringType.PadEnd<
+    `${ArrayType.Join<StringType.Split<`${StringType.InsertedFractional<N>}`, '', Length>, ''>}`,
+    Length,
+    '0'
+  >}`;
+
   export type NToNumber<N> = N extends number ? N : never;
 
   export type NToNumberTuple<N> = N extends number[] ? N : never;
