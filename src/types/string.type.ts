@@ -129,7 +129,7 @@ export namespace StringType {
     Container extends string,
     TargetLength extends number,
     PadString extends string = ' ',
-  > = NumberType.Compare<Length<Container>, '=', TargetLength> extends true
+  > = NumberType.Compare<Length<Container>, '>=', TargetLength> extends true
     ? Container
     : NumberType.Compare<NumberType.Add<Length<Container>, Length<PadString>>, '<', TargetLength> extends true
       ? PadEnd<`${Container}${PadString}`, TargetLength, PadString>
