@@ -31,7 +31,7 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements ToP
   static refine<Integer extends number>(format: 'int'): <N extends number>(data: StringType.IsInt<N>) => TypedInt<N>;
   static refine<Integer extends number>(
     format: 'float',
-  ): <N extends number>(data: StringType.IsDecimal<N, number, number>) => TypedInt<N>;
+  ): <N extends number>(data: StringType.IsDecimal<N, number, number>) => TypedDecimal<N, number, number>;
   static refine<Integer extends number, Fractional extends number>(
     format: 'decimal' | `decimal(${Integer},${Fractional})`,
     integer?: Integer,
