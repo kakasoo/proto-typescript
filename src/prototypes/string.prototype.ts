@@ -1,9 +1,49 @@
 import { ArrayType, StringType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 
-String.prototype.includes;
-
 export const StringPrototype = {
+  /**
+   * Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length.
+   * The padding is applied from the start (left) of the current string.
+   *
+   * @param targetLength The length of the resulting string once the current string has been padded.
+   *        If this parameter is smaller than the current string's length, the current string will be returned as it is.
+   *
+   * @param padString The string to pad the current string with.
+   *        If this string is too long, it will be truncated and the left-most part will be applied.
+   *        The default value for this parameter is " " (U+0020).
+   */
+  padStart<Conatiner extends string, TargetLength extends number, PadString extends string>(
+    container: Conatiner,
+    targetLength: TargetLength,
+    padString: PadString,
+  ): StringType.PadStart<Conatiner, TargetLength, PadString> {
+    return container.padStart(targetLength, padString ?? ' ') as StringType.PadStart<
+      Conatiner,
+      TargetLength,
+      PadString
+    >;
+  },
+
+  /**
+   * Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length.
+   * The padding is applied from the end (right) of the current string.
+   *
+   * @param targetLength The length of the resulting string once the current string has been padded.
+   *        If this parameter is smaller than the current string's length, the current string will be returned as it is.
+   *
+   * @param padString The string to pad the current string with.
+   *        If this string is too long, it will be truncated and the left-most part will be applied.
+   *        The default value for this parameter is " " (U+0020).
+   */
+  padEnd<Conatiner extends string, TargetLength extends number, PadString extends string>(
+    container: Conatiner,
+    targetLength: TargetLength,
+    padString: PadString,
+  ): StringType.PadEnd<Conatiner, TargetLength, PadString> {
+    return container.padEnd(targetLength, padString ?? ' ') as StringType.PadEnd<Conatiner, TargetLength, PadString>;
+  },
+
   /**
    * Returns true if searchString appears as a substring of the result of converting this
    * object to a String, at one or more positions that are
