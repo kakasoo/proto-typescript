@@ -16,7 +16,7 @@ export class TypedNumber<T extends number> extends TypedObject<T> implements ToP
   /**
    * A function that makes it possible to narrow down the range of TypeNumber types more narrowly.
    *
-   * @param format 'int' | 'decimal'
+   * @param format 'int' | 'decimal' | 'decimal(n,n)' | 'float'
    * @example
    * ```ts
    * TypedNumber.refine('int')(3); // only int.
