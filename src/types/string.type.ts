@@ -104,7 +104,9 @@ export namespace StringType {
    */
   export type At<Container extends string, Index extends number> = ArrayType.At<Split<Container>, Index>;
 
-  export type Length<T extends string> = ArrayType.Length<Split<T>>;
+  export type Length<T extends string> = ArrayType.Includes<Split<T>, string> extends true
+    ? number
+    : ArrayType.Length<Split<T>>;
 
   export type IsInt<T extends number> = Includes<`${T}`, '.'> extends true ? ErrorType.IS_NOT_INT_FORMAT : T;
 

@@ -85,6 +85,15 @@ export class TypedString<T extends string | number | boolean = ''>
     return new TypedString(initialValue);
   }
 
+  typedLength(): TypedNumber<StringType.Length<`${T}`>> {
+    return new TypedNumber(this.length);
+  }
+
+  get length(): StringType.Length<`${T}`> {
+    const primitiveLength = this.string.length as StringType.Length<`${T}`>;
+    return primitiveLength;
+  }
+
   /**
    * If a value greater than the length of the current data is given as an index, it is inferred as underdefined that no wrapper exists.
    * @inheritdoc
