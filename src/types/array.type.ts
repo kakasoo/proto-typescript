@@ -193,9 +193,9 @@ export namespace ArrayType {
  * Push<[], 1> // [1]
  */
 
-export type NTuple<N extends number, T extends ReadonlyOrNot<any[]> = []> = T['length'] extends N
+export type NTuple<N extends number, T extends ReadonlyOrNot<any[]> = [], defaultType = any> = T['length'] extends N
   ? T
-  : NTuple<N, ArrayType.Push<T, any>>;
+  : NTuple<N, ArrayType.Push<T, defaultType>>;
 
 /**
  * N1 * N2 크기의 NTuple을 반환하는 타입으로, 최적화를 위해 N1, N2 숫자를 비교하는 과정이 포함된 타입
