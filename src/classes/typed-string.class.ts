@@ -12,7 +12,10 @@ import { TypedObject } from './typed-object.class';
 export class TypedString<T extends string | number | boolean = ''>
   extends TypedObject<T>
   implements
-    Pick<FunctionType.MethodsFrom<String>, 'split' | 'at' | 'concat' | 'trimStart' | 'trimEnd' | 'trim'>,
+    Pick<
+      FunctionType.MethodsFrom<String>,
+      'split' | 'at' | 'concat' | 'trimStart' | 'trimEnd' | 'trim' | 'padEnd' | 'padStart'
+    >,
     ToPrimitive<T | `${T}`>
 {
   private readonly string: `${T}`;
@@ -20,6 +23,28 @@ export class TypedString<T extends string | number | boolean = ''>
   constructor(data: T = '' as T) {
     super(data);
     this.string = String(data) as `${T}`;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  padStart<TargetLength extends number, PadString extends string>(
+    targetLength: TargetLength,
+    padString: PadString,
+  ): TypedString<ReturnType<typeof StringPrototype.padStart<`${T}`, TargetLength, PadString>>> {
+    const initialValue = StringPrototype.padStart(this.string, targetLength, padString ?? ' ');
+    return new TypedString(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  padEnd<TargetLength extends number, PadString extends string>(
+    targetLength: TargetLength,
+    padString: PadString,
+  ): TypedString<ReturnType<typeof StringPrototype.padEnd<`${T}`, TargetLength, PadString>>> {
+    const initialValue = StringPrototype.padEnd(this.string, targetLength, padString ?? ' ');
+    return new TypedString(initialValue);
   }
 
   /**
