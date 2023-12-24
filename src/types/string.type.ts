@@ -138,6 +138,19 @@ export namespace StringType {
           ''
         >}`;
 
+  export type PadStart<
+    Container extends string,
+    TargetLength extends number,
+    PadString extends string = ' ',
+  > = NumberType.Compare<Length<Container>, '>=', TargetLength> extends true
+    ? Container
+    : NumberType.Compare<NumberType.Add<Length<Container>, Length<PadString>>, '<', TargetLength> extends true
+      ? PadStart<`${PadString}${Container}`, TargetLength, PadString>
+      : `${ArrayType.Join<
+          ArrayType.Take<Split<PadString>, NumberType.Sub<TargetLength, Length<Container>>>,
+          ''
+        >}${Container}`;
+
   export type Take<T extends string, P extends number> = ArrayType.Join<Split<T, '', P>, ''>;
   export type ThrowAway<T extends string, P extends number> = ArrayType.Join<
     Split<T, '', NumberType.Sub<StringType.Length<T>, P>>,
