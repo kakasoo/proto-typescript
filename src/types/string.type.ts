@@ -137,4 +137,10 @@ export namespace StringType {
           ArrayType.Take<Split<PadString>, NumberType.Sub<TargetLength, Length<Container>>>,
           ''
         >}`;
+
+  export type Take<T extends string, P extends number> = ArrayType.Join<Split<T, '', P>, ''>;
+  export type ThrowAway<T extends string, P extends number> = ArrayType.Join<
+    Split<T, '', NumberType.Sub<StringType.Length<T>, P>>,
+    ''
+  >;
 }
