@@ -12,6 +12,9 @@ type ParseToArray<T> = T extends ReadonlyOrNot<infer R>
     ? NumberType.Range<T>
     : [];
 
+/**
+ * @todo  [n: number]: ArrayType.At<T, number>;
+ */
 export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number, number>>
   extends TypedObject<ParseToArray<T>>
   implements
