@@ -114,6 +114,8 @@ export class TypedString<T extends string | number | boolean = ''>
 
   /**
    * type-safe split.
+   *
+   * @todo remove `as any` statement
    * @inheritdoc
    */
   split<Splitter extends string = '', Limit extends number = 0>(
@@ -123,7 +125,7 @@ export class TypedString<T extends string | number | boolean = ''>
     const primitiveContainer = this.isTypedClass(splitter) ? splitter.toPrimitive() : splitter;
     const primitiveLimit = this.isTypedClass(limit) ? limit.toPrimitive() : limit;
     const initialValue = StringPrototype.split(this.string, primitiveContainer, primitiveLimit);
-    return new TypedArray(...initialValue);
+    return new TypedArray(initialValue) as any;
   }
 
   toPrimitive(): T;
