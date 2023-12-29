@@ -12,9 +12,6 @@ type ParseToArray<T> = T extends ReadonlyOrNot<infer R>
     ? NumberType.Range<T>
     : [];
 
-/**
- * @todo  [n: number]: ArrayType.At<T, number>;
- */
 export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number, number>>
   extends TypedObject<ParseToArray<T>>
   implements
@@ -22,6 +19,8 @@ export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number
     ToPrimitive<ParseToArray<T>>,
     Iterable<ArrayType.ElementOf<ParseToArray<T>>>
 {
+  [n: number]: ArrayType.At<ParseToArray<T>, number>;
+
   private readonly array: ParseToArray<T>;
 
   constructor(data: T extends Array<any> ? T : never);
@@ -35,6 +34,13 @@ export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number
   constructor(data: ParseToArray<T>) {
     super(data);
     this.array = data;
+
+    /**
+     * mapping for index signature
+     */
+    data.forEach((el, i) => {
+      this[i] = el;
+    });
   }
 
   /**
@@ -165,6 +171,8 @@ export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number
     return this.array;
   }
 }
+
+const a = new TypedArray(123 as const)[0];
 
 export namespace TypedArray {
   /**
