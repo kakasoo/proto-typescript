@@ -3,6 +3,7 @@ import { ArrayPrototype, StringPrototype } from '../prototypes';
 import { ArrayType, FunctionType, NumberType, StringType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 import { TypedArray } from './typed-array.class';
+import { TypedBoolean } from './typed-boolean.class';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
 
@@ -24,6 +25,7 @@ export class TypedString<T extends string | number | boolean = ''>
       | 'padStart'
       | 'toLowerCase'
       | 'toUpperCase'
+      | 'includes'
     >,
     ToPrimitive<T | `${T}`>
 {
@@ -32,6 +34,31 @@ export class TypedString<T extends string | number | boolean = ''>
   constructor(data: T = '' as T) {
     super(data);
     this.string = String(data) as `${T}`;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  concat<Strings extends ReadonlyOrNot<(string | TypedString<string>)[]>>(
+    ...strings: Strings
+  ): TypedString<ReturnType<typeof StringPrototype.concat<`${T}`, TypedString.ValueTypes<Strings>>>> {
+    const primitiveStrs = strings.map((el) => (this.isTypedClass(el) ? el.toPrimitive() : el));
+    const initialValue = ArrayPrototype.join([this.string, ...primitiveStrs] as const, '') as ArrayType.Join<
+      [`${T}`, ...TypedString.ValueTypes<Strings>],
+      ''
+    >;
+    return new TypedString(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  includes<SearchString extends string, Position extends number>(
+    searchString: SearchString,
+    position?: Position,
+  ): TypedBoolean<ReturnType<typeof StringPrototype.includes<`${T}`, SearchString, Position>>> {
+    const initialValue = StringPrototype.includes(this.string, searchString, position);
+    return new TypedBoolean(initialValue);
   }
 
   /**
@@ -93,20 +120,6 @@ export class TypedString<T extends string | number | boolean = ''>
    */
   trimStart(): TypedString<ReturnType<typeof StringPrototype.trimStart<`${T}`>>> {
     const initialValue = StringPrototype.trimStart(this.string);
-    return new TypedString(initialValue);
-  }
-
-  /**
-   * @inheritdoc
-   */
-  concat<Strings extends ReadonlyOrNot<(string | TypedString<string>)[]>>(
-    ...strings: Strings
-  ): TypedString<ReturnType<typeof StringPrototype.concat<`${T}`, TypedString.ValueTypes<Strings>>>> {
-    const primitiveStrs = strings.map((el) => (this.isTypedClass(el) ? el.toPrimitive() : el));
-    const initialValue = ArrayPrototype.join([this.string, ...primitiveStrs] as const, '') as ArrayType.Join<
-      [`${T}`, ...TypedString.ValueTypes<Strings>],
-      ''
-    >;
     return new TypedString(initialValue);
   }
 

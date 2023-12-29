@@ -81,7 +81,7 @@ export namespace Math {
     infer Last extends keyof CeilingMap,
   ]
     ? CeilingMap[BeforeLast] extends '0'
-      ? _Ceil<StringType.ThrowAway<N, _FindLastCeilTarget<StringType.Split<N>>>>
+      ? _Ceil<StringType.ThrowRight<N, _FindLastCeilTarget<StringType.Split<N>>>>
       : ArrayType.Join<[...Rest, CeilingMap[BeforeLast]], ''>
     : '';
 
@@ -106,7 +106,7 @@ export namespace Math {
            * @example
            * type a3 = Math.Round<1.39946, 3>; // '1.400'
            */
-          `${StringType.InsertedInteger<N>}.${StringType.ThrowAway<
+          `${StringType.InsertedInteger<N>}.${StringType.ThrowRight<
             StringType.InsertedFractional<N>,
             NumberType.Sub<TargetDigit, 2>
           >}`

@@ -54,11 +54,12 @@ export namespace StringType {
   /**
    * @todo support Position type
    */
-  export type Includes<
-    Conatiner extends string,
-    SearchString extends string,
-    Position extends number = 0,
-  > = Conatiner extends `${string}${SearchString}${string}` ? true : false;
+  export type Includes<Conatiner extends string, SearchString extends string, Position extends number = 0> = ThrowLeft<
+    Conatiner,
+    Position
+  > extends `${string}${SearchString}${string}`
+    ? true
+    : false;
 
   /**
    * It refers to a substitute string, and if there is an un substitute key-value pair, it is inferred as `never`.
@@ -154,8 +155,13 @@ export namespace StringType {
         >}${Container}`;
 
   export type Take<T extends string, P extends number> = ArrayType.Join<Split<T, '', P>, ''>;
-  export type ThrowAway<T extends string, P extends number> = ArrayType.Join<
+  export type ThrowRight<T extends string, P extends number> = ArrayType.Join<
     Split<T, '', NumberType.Sub<StringType.Length<T>, P>>,
     ''
+  >;
+
+  export type Reverse<T extends string> = ArrayType.Join<ArrayType.Reverse<Split<T>>, ''>;
+  export type ThrowLeft<T extends string, P extends number> = Reverse<
+    ArrayType.Join<Split<Reverse<T>, '', NumberType.Sub<StringType.Length<T>, P>>, ''>
   >;
 }

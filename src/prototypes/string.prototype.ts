@@ -71,8 +71,8 @@ export const StringPrototype = {
     container: Container,
     searchString: SearchString,
     position?: Position,
-  ): StringType.Includes<Container, SearchString> {
-    return container.includes(searchString) as StringType.Includes<Container, SearchString>;
+  ): StringType.Includes<Container, SearchString, Position> {
+    return container.includes(searchString, position) as StringType.Includes<Container, SearchString, Position>;
   },
 
   /**
