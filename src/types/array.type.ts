@@ -25,11 +25,13 @@ export namespace ArrayType {
     R extends ReadonlyOrNot<any[]> = [],
   > = ArrayType.Length<R> extends P ? R : T extends [infer F, ...infer Rest] ? Take<Rest, P, ArrayType.Push<R, F>> : R;
 
+  export type Slice<T extends ReadonlyOrNot<any[]>, A extends number, B extends number> = SliceByValue<T, T[A], T[B]>;
+
   /**
    * Returns matching A to matching B in tuple form.
    * If there are no elements that match A or B, then never type.
    */
-  export type Slice<
+  export type SliceByValue<
     T extends ReadonlyOrNot<any[]>,
     A extends any,
     B extends any,
@@ -37,15 +39,15 @@ export namespace ArrayType {
   > = T extends [infer X, ...infer Rest]
     ? CONDITION extends true
       ? X extends B // If you find something that matches B,
-        ? [X, ...Slice<Rest, A, B, false>] // End the option to include unconditionally if you find a match for B
-        : [X, ...Slice<Rest, A, B, true>] // include next type unconditionally
+        ? [X, ...SliceByValue<Rest, A, B, false>] // End the option to include unconditionally if you find a match for B
+        : [X, ...SliceByValue<Rest, A, B, true>] // include next type unconditionally
       : X extends A // If you find something that matches A,
         ? X extends B
-          ? [X, ...Slice<Rest, A, B, false>] // include A & CONDTION type is true
-          : [X, ...Slice<Rest, A, B, true>] // include A & CONDTION type is true
-        : Slice<Rest, A, B, false> // The first type parameter of the Slice type is the intermediate element of the tuple...
-    : CONDITION extends true // If CONDITION is still true while circulating all arrays, then the last point was not found, so never
-      ? never
+          ? [X, ...SliceByValue<Rest, A, B, false>] // include A & CONDTION type is true
+          : [X, ...SliceByValue<Rest, A, B, true>] // include A & CONDTION type is true
+        : SliceByValue<Rest, A, B, false> // The first type parameter of the Slice type is the intermediate element of the tuple...
+    : CONDITION extends true // If CONDITION is still true while circulating all arrays, then the last point was not found, so get all element of this array.
+      ? []
       : [];
 
   export type At<Tuple extends ReadonlyOrNot<any[]>, Index extends number> = Tuple[Index];
