@@ -14,7 +14,16 @@ export class TypedString<T extends string | number | boolean = ''>
   implements
     Pick<
       FunctionType.MethodsFrom<String>,
-      'split' | 'at' | 'concat' | 'trimStart' | 'trimEnd' | 'trim' | 'padEnd' | 'padStart'
+      | 'split'
+      | 'at'
+      | 'concat'
+      | 'trimStart'
+      | 'trimEnd'
+      | 'trim'
+      | 'padEnd'
+      | 'padStart'
+      | 'toLowerCase'
+      | 'toUpperCase'
     >,
     ToPrimitive<T | `${T}`>
 {
@@ -23,6 +32,22 @@ export class TypedString<T extends string | number | boolean = ''>
   constructor(data: T = '' as T) {
     super(data);
     this.string = String(data) as `${T}`;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  toLowerCase(): TypedString<ReturnType<typeof StringPrototype.toLowerCase<`${T}`>>> {
+    const initialValue = StringPrototype.toLowerCase(this.string);
+    return new TypedString(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  toUpperCase(): TypedString<ReturnType<typeof StringPrototype.toUpperCase<`${T}`>>> {
+    const initialValue = StringPrototype.toUpperCase(this.string);
+    return new TypedString(initialValue);
   }
 
   /**

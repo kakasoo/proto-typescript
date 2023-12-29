@@ -3,6 +3,20 @@ import { ReadonlyOrNot } from '../types/primitive.type';
 
 export const StringPrototype = {
   /**
+   * Converts all the alphabetic characters in a string to lowercase.
+   */
+  toLowerCase<Conatiner extends string>(container: Conatiner): Lowercase<Conatiner> {
+    return container.toLowerCase() as Lowercase<Conatiner>;
+  },
+
+  /**
+   * Converts all the alphabetic characters in a string to uppercase.
+   */
+  toUpperCase<Conatiner extends string>(container: Conatiner): Uppercase<Conatiner> {
+    return container.toUpperCase() as Uppercase<Conatiner>;
+  },
+
+  /**
    * Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length.
    * The padding is applied from the start (left) of the current string.
    *
