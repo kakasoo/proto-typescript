@@ -19,6 +19,9 @@ export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number
     ToPrimitive<ParseToArray<T>>,
     Iterable<ArrayType.ElementOf<ParseToArray<T>>>
 {
+  /**
+   * type `ArrayType.At<ParseToArray<T>, number>` is union type combined of element type of `ParseToArray<T>`
+   */
   [n: number]: ArrayType.At<ParseToArray<T>, number>;
 
   private readonly array: ParseToArray<T>;
@@ -168,11 +171,9 @@ export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number
   }
 
   toPrimitive(): ParseToArray<T> {
-    return this.array;
+    return [...this.array] as ParseToArray<T>;
   }
 }
-
-const a = new TypedArray(123 as const)[0];
 
 export namespace TypedArray {
   /**
