@@ -16,8 +16,7 @@
     "prepublishOnly": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "prepare": "ts-patch install && typia patch"
+    "test:cov": "jest --coverage"
   },
   "keywords": [
     "type-safe",
