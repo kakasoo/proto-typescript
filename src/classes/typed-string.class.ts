@@ -26,6 +26,7 @@ export class TypedString<T extends string | number | boolean = ''>
       | 'toLowerCase'
       | 'toUpperCase'
       | 'includes'
+      | 'substring'
     >,
     ToPrimitive<T | `${T}`>
 {
@@ -47,6 +48,17 @@ export class TypedString<T extends string | number | boolean = ''>
       [`${T}`, ...TypedString.ValueTypes<Strings>],
       ''
     >;
+    return new TypedString(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  substring<Start extends number, End extends number | never = never>(
+    start: Start,
+    end?: End,
+  ): TypedString<ReturnType<typeof StringPrototype.substring<`${T}`, Start, End>>> {
+    const initialValue = StringPrototype.substring(this.string, start, end);
     return new TypedString(initialValue);
   }
 

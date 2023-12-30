@@ -34,6 +34,11 @@ export namespace StringType {
 
   export type IsLowerCase<T extends string> = Lowercase<T> extends T ? true : false;
 
+  export type Substring<T extends string, Start extends number, End extends number | never> = ArrayType.Join<
+    ArrayType.Slice<Split<T, ''>, Start, End>,
+    ''
+  >;
+
   /**
    * Means to repeat T string N times
    */

@@ -3,6 +3,20 @@ import { ReadonlyOrNot } from '../types/primitive.type';
 
 export const StringPrototype = {
   /**
+   * Returns the substring at the specified location within a String object.
+   * @param start The zero-based index number indicating the beginning of the substring.
+   * @param end Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
+   * If end is omitted, the characters from start through the end of the original string are returned.
+   */
+  substring<Conatiner extends string, Start extends number, End extends number | never = never>(
+    container: Conatiner,
+    start: Start,
+    end?: End,
+  ): StringType.Substring<Conatiner, Start, End> {
+    return container.substring(start, end) as StringType.Substring<Conatiner, Start, End>;
+  },
+
+  /**
    * Converts all the alphabetic characters in a string to lowercase.
    */
   toLowerCase<Conatiner extends string>(container: Conatiner): Lowercase<Conatiner> {

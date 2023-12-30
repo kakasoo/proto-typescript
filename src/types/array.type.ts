@@ -1,3 +1,4 @@
+import { NeverType } from './never.type';
 import { NumberType } from './number.type';
 import { Equal, ObjectType } from './object.type';
 import { Primitive, ReadonlyOrNot } from './primitive.type';
@@ -25,7 +26,11 @@ export namespace ArrayType {
     R extends ReadonlyOrNot<any[]> = [],
   > = ArrayType.Length<R> extends P ? R : T extends [infer F, ...infer Rest] ? Take<Rest, P, ArrayType.Push<R, F>> : R;
 
-  export type Slice<T extends ReadonlyOrNot<any[]>, A extends number, B extends number> = SliceByValue<T, T[A], T[B]>;
+  export type Slice<T extends ReadonlyOrNot<any[]>, A extends number, B extends number> = SliceByValue<
+    T,
+    T[A],
+    NeverType.IsNever<B> extends true ? never : T[B]
+  >;
 
   /**
    * Returns matching A to matching B in tuple form.
