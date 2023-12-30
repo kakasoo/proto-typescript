@@ -2,6 +2,22 @@ import { ArrayType, StringType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 
 export const StringPrototype = {
+  startsWith<Container extends string, SearchString extends string, Position extends number>(
+    container: Container,
+    searchString: SearchString,
+    position?: Position,
+  ): StringType.StartsWith<Container, SearchString, Position> {
+    return container.startsWith(searchString, position) as StringType.StartsWith<Container, SearchString, Position>;
+  },
+
+  endsWith<Container extends string, SearchString extends string, EndPosition extends number>(
+    container: Container,
+    searchString: SearchString,
+    endPosition?: EndPosition,
+  ): StringType.EndsWith<Container, SearchString, EndPosition> {
+    return container.endsWith(searchString, endPosition) as StringType.EndsWith<Container, SearchString, EndPosition>;
+  },
+
   /**
    * Returns the substring at the specified location within a String object.
    * @param start The zero-based index number indicating the beginning of the substring.
