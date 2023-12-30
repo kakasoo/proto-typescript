@@ -27,6 +27,8 @@ export class TypedString<T extends string | number | boolean = ''>
       | 'toUpperCase'
       | 'includes'
       | 'substring'
+      | 'startsWith'
+      | 'endsWith'
     >,
     ToPrimitive<T | `${T}`>
 {
@@ -49,6 +51,28 @@ export class TypedString<T extends string | number | boolean = ''>
       ''
     >;
     return new TypedString(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  startsWith<SearchString extends string, Position extends number>(
+    searchString: SearchString,
+    position?: Position,
+  ): TypedBoolean<ReturnType<typeof StringPrototype.startsWith<`${T}`, SearchString, Position>>> {
+    const initialValue = StringPrototype.startsWith(this.string, searchString, position);
+    return new TypedBoolean(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  endsWith<SearchString extends string, EndPosition extends number>(
+    searchString: SearchString,
+    endPosition?: EndPosition,
+  ): TypedBoolean<ReturnType<typeof StringPrototype.endsWith<`${T}`, SearchString, EndPosition>>> {
+    const initialValue = StringPrototype.endsWith(this.string, searchString, endPosition);
+    return new TypedBoolean(initialValue);
   }
 
   /**
