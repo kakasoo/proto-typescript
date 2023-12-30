@@ -3,6 +3,19 @@ import { ReadonlyOrNot } from '../types/primitive.type';
 
 export const StringPrototype = {
   /**
+   * Returns the position of the first occurrence of a substring.
+   * @param searchString The substring to search for in the string
+   * @param position The index at which to begin searching the String object. If omitted, search starts at the beginning of the string.
+   */
+  indexOf<Container extends string, SearchString extends string = '', Position extends number = 0>(
+    container: Container,
+    searchString: SearchString = '' as SearchString,
+    position: Position = 0 as Position,
+  ): StringType.IndexOf<Container, SearchString, Position> {
+    return container.indexOf(searchString, position) as StringType.IndexOf<Container, SearchString, Position>;
+  },
+
+  /**
    * Returns a String value that is made from count copies appended together. If count is 0,
    * the empty string is returned.
    * @param count number of copies to append

@@ -1,5 +1,5 @@
 import { Conditional } from './arithmetic.type';
-import { ArrayType } from './array.type';
+import { ArrayType, NNTuple, NTuple } from './array.type';
 import { ErrorType } from './error.type';
 import { NumberType } from './number.type';
 import { Equal } from './object.type';
@@ -178,5 +178,21 @@ export namespace StringType {
   export type Reverse<T extends string> = ArrayType.Join<ArrayType.Reverse<Split<T>>, ''>;
   export type ThrowLeft<T extends string, P extends number> = Reverse<
     ArrayType.Join<Split<Reverse<T>, '', NumberType.Sub<StringType.Length<T>, P>>, ''>
+  >;
+
+  type _IndexOf<
+    Container extends string,
+    SearchString extends string,
+    Stack extends string[] = [],
+  > = Container extends `${SearchString}${string}`
+    ? ArrayType.Length<Stack>
+    : Container extends `${infer FirstLetter}${infer Rest}`
+      ? _IndexOf<Rest, SearchString, ArrayType.Push<Stack, FirstLetter>>
+      : -1;
+
+  export type IndexOf<Container extends string, SearchString extends string, Position extends number = 0> = _IndexOf<
+    StringType.ThrowLeft<Container, Position>,
+    SearchString,
+    Position extends 0 ? [] : NTuple<Position>
   >;
 }

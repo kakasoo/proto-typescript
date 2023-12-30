@@ -30,6 +30,7 @@ export class TypedString<T extends string | number | boolean = ''>
       | 'startsWith'
       | 'endsWith'
       | 'repeat'
+      | 'indexOf'
     >,
     ToPrimitive<T | `${T}`>,
     Iterable<ArrayType.ElementOf<StringType.Split<`${T}`>>>
@@ -72,14 +73,6 @@ export class TypedString<T extends string | number | boolean = ''>
   /**
    * @inheritdoc
    */
-  repeat<Counter extends number>(counter: Counter = 0 as Counter) {
-    const initialValue = StringPrototype.repeat(this.string, counter);
-    return new TypedString(initialValue);
-  }
-
-  /**
-   * @inheritdoc
-   */
   concat<Strings extends ReadonlyOrNot<(string | TypedString<string>)[]>>(
     ...strings: Strings
   ): TypedString<ReturnType<typeof StringPrototype.concat<`${T}`, TypedString.ValueTypes<Strings>>>> {
@@ -89,6 +82,25 @@ export class TypedString<T extends string | number | boolean = ''>
       ''
     >;
     return new TypedString(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  repeat<Counter extends number>(counter: Counter = 0 as Counter) {
+    const initialValue = StringPrototype.repeat(this.string, counter);
+    return new TypedString(initialValue);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  indexOf<SearchString extends string = '', Position extends number = 0>(
+    searchString: SearchString = '' as SearchString,
+    position: Position = 0 as Position,
+  ): TypedNumber<ReturnType<typeof StringPrototype.indexOf<`${T}`, SearchString, Position>>> {
+    const initialValue = StringPrototype.indexOf(this.string, searchString, position);
+    return new TypedNumber<typeof initialValue>(initialValue);
   }
 
   /**
