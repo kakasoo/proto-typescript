@@ -2,6 +2,23 @@ import { ArrayType, StringType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 
 export const StringPrototype = {
+  /**
+   * Returns a String value that is made from count copies appended together. If count is 0,
+   * the empty string is returned.
+   * @param count number of copies to append
+   */
+  repeat<Container extends string, Counter extends number>(
+    container: Container,
+    counter: Counter,
+  ): StringType.Repeat<Container, Counter> {
+    return container.repeat(counter) as StringType.Repeat<Container, Counter>;
+  },
+
+  /**
+   * Returns true if the sequence of elements of searchString converted to a String is the
+   * same as the corresponding elements of this object (converted to a String) starting at
+   * position. Otherwise returns false.
+   */
   startsWith<Container extends string, SearchString extends string, Position extends number>(
     container: Container,
     searchString: SearchString,
@@ -10,6 +27,11 @@ export const StringPrototype = {
     return container.startsWith(searchString, position) as StringType.StartsWith<Container, SearchString, Position>;
   },
 
+  /**
+   * Returns true if the sequence of elements of searchString converted to a String is the
+   * same as the corresponding elements of this object (converted to a String) starting at
+   * endPosition – length(this). Otherwise returns false.
+   */
   endsWith<Container extends string, SearchString extends string, EndPosition extends number>(
     container: Container,
     searchString: SearchString,

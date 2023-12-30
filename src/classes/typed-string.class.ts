@@ -29,6 +29,7 @@ export class TypedString<T extends string | number | boolean = ''>
       | 'substring'
       | 'startsWith'
       | 'endsWith'
+      | 'repeat'
     >,
     ToPrimitive<T | `${T}`>
 {
@@ -37,6 +38,14 @@ export class TypedString<T extends string | number | boolean = ''>
   constructor(data: T = '' as T) {
     super(data);
     this.string = String(data) as `${T}`;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  repeat<Counter extends number>(counter: Counter = 0 as Counter) {
+    const initialValue = StringPrototype.repeat(this.string, counter);
+    return new TypedString(initialValue);
   }
 
   /**
