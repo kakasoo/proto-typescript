@@ -74,12 +74,22 @@ export namespace StringType {
   /**
    * StartsWith<'abc', 'a'> // true
    */
-  export type StartsWith<T extends string, U extends string> = T extends `${U}${string}` ? true : false;
+  export type StartsWith<T extends string, SearchString extends string, Position extends number> = ThrowLeft<
+    T,
+    Position
+  > extends `${SearchString}${string}`
+    ? true
+    : false;
 
   /**
    * EndsWith<'abc', 'c'> // true
    */
-  export type EndsWith<T extends string, U extends string> = T extends `${string}${U}` ? true : false;
+  export type EndsWith<T extends string, SearchString extends string, EndPosition extends number> = ThrowRight<
+    T,
+    NumberType.Sub<Length<T>, EndPosition>
+  > extends `${string}${SearchString}`
+    ? true
+    : false;
 
   type _Split<Conatiner extends string, Splitter extends string = ''> = Conatiner extends ''
     ? []
