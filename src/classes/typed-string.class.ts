@@ -31,13 +31,42 @@ export class TypedString<T extends string | number | boolean = ''>
       | 'endsWith'
       | 'repeat'
     >,
-    ToPrimitive<T | `${T}`>
+    ToPrimitive<T | `${T}`>,
+    Iterable<ArrayType.ElementOf<StringType.Split<`${T}`>>>
 {
+  [n: number]: ArrayType.At<StringType.Split<`${T}`>, number>;
+
   private readonly string: `${T}`;
 
   constructor(data: T = '' as T) {
     super(data);
     this.string = String(data) as `${T}`;
+
+    /**
+     * mapping for index signature
+     */
+    String(data)
+      .split('')
+      .forEach((el, i) => {
+        this[i] = el;
+      });
+  }
+
+  [Symbol.iterator](): Iterator<ArrayType.ElementOf<StringType.Split<`${T}`>>, any> {
+    let i = 0;
+    return {
+      next: () => {
+        return i === this.string.length
+          ? {
+              done: true as const,
+              value: undefined,
+            }
+          : {
+              value: this.at(i++)?.toPrimitive() as ArrayType.ElementOf<StringType.Split<`${T}`>>,
+              done: false as const,
+            };
+      },
+    };
   }
 
   /**
