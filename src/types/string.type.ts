@@ -1,5 +1,5 @@
 import { Conditional } from './arithmetic.type';
-import { ArrayType, NNTuple, NTuple } from './array.type';
+import { ArrayType, NTuple } from './array.type';
 import { ErrorType } from './error.type';
 import { NumberType } from './number.type';
 import { Equal } from './object.type';
