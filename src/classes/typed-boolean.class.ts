@@ -16,6 +16,8 @@ export class TypedBoolean<T extends boolean = false> extends TypedObject<T> impl
    * const yn = TypedBoolean.refine({ true: 'Y', false: 'N' });
    * const t = yn('Y'); // true
    * const f = yn('N'); // false
+   * const y = yn(true); // 'Y'
+   * const n = yn(false); // 'N'
    * ```
    * @param map
    * @returns
