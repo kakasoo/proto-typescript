@@ -21,11 +21,26 @@ export class TypedBoolean<T extends boolean = false> extends TypedObject<T> impl
    * @returns
    */
   static refine<T extends string, F extends string>(map: { true: T; false: F }) {
-    return function <Choice extends T | F>(data: Choice): Equal<Choice, T> extends true ? T : F {
+    return function <Choice extends T | F | boolean>(
+      data: Choice | boolean,
+    ): Equal<Choice, T> extends true
+      ? true
+      : Equal<Choice, F> extends true
+        ? false
+        : Equal<Choice, true> extends true
+          ? T
+          : Equal<Choice, false> extends true
+            ? F
+            : never {
       if (data === map.true) {
         return true as any;
+      } else if (data === map.false) {
+        return false as any;
+      } else if (data === true) {
+        return map.true as any;
+      } else {
+        return map.false as any;
       }
-      return false as any;
     };
   }
 
