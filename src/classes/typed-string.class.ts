@@ -98,8 +98,9 @@ export class TypedString<T extends string | number | boolean = ''>
   /**
    * @inheritdoc
    */
-  repeat<Counter extends number>(counter: Counter = 0 as Counter) {
-    const initialValue = StringPrototype.repeat(this.string, counter);
+  repeat<Counter extends number = 0>(counter: Counter | TypedNumber<Counter> = new TypedNumber<Counter>()) {
+    const primitiveCounter = this.isTypedClass(counter) ? counter.toPrimitive() : counter;
+    const initialValue = StringPrototype.repeat(this.string, primitiveCounter);
     return new TypedString(initialValue);
   }
 
