@@ -195,4 +195,9 @@ export namespace StringType {
     SearchString,
     Position extends 0 ? [] : NTuple<Position>
   >;
+
+  export type Slice<Container extends string, Start extends number, End extends number> = ArrayType.Join<
+    ArrayType.Slice<Split<Container, ''>, Start, End>,
+    ''
+  >;
 }

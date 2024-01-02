@@ -26,10 +26,10 @@ export namespace ArrayType {
     R extends ReadonlyOrNot<any[]> = [],
   > = ArrayType.Length<R> extends P ? R : T extends [infer F, ...infer Rest] ? Take<Rest, P, ArrayType.Push<R, F>> : R;
 
-  export type Slice<T extends ReadonlyOrNot<any[]>, A extends number, B extends number> = SliceByValue<
+  export type Slice<T extends ReadonlyOrNot<any[]>, Start extends number, End extends number> = SliceByValue<
     T,
-    T[A],
-    NeverType.IsNever<B> extends true ? never : T[B]
+    T[Start],
+    NeverType.IsNever<End> extends true ? never : T[End]
   >;
 
   /**
