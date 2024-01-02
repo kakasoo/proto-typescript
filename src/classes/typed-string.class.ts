@@ -108,11 +108,13 @@ export class TypedString<T extends string | number | boolean = ''>
    * @inheritdoc
    */
   indexOf<SearchString extends string = '', Position extends number = 0>(
-    searchString: SearchString = '' as SearchString,
-    position: Position = 0 as Position,
+    searchString: SearchString | TypedString<SearchString> = new TypedString(),
+    position: Position | TypedNumber<Position> = new TypedNumber(),
   ): TypedNumber<ReturnType<typeof StringPrototype.indexOf<`${T}`, SearchString, Position>>> {
-    const initialValue = StringPrototype.indexOf(this.string, searchString, position);
-    return new TypedNumber<typeof initialValue>(initialValue);
+    const primitiveSearchString = this.isTypedClass(searchString) ? searchString.toPrimitive() : searchString;
+    const primitivePosition = this.isTypedClass(position) ? position.toPrimitive() : position;
+    const initialValue = StringPrototype.indexOf(this.string, primitiveSearchString, primitivePosition);
+    return new TypedNumber(initialValue);
   }
 
   /**
