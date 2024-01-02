@@ -2,6 +2,14 @@ import { ArrayType, StringType } from '../types';
 import { ReadonlyOrNot } from '../types/primitive.type';
 
 export const StringPrototype = {
+  slice<Container extends string, Start extends number, End extends number>(
+    container: Container,
+    start?: Start,
+    end?: End,
+  ): StringType.Slice<Container, Start, End> {
+    return container.slice(start, end) as StringType.Slice<Container, Start, End>;
+  },
+
   /**
    * Returns the position of the first occurrence of a substring.
    * @param searchString The substring to search for in the string
