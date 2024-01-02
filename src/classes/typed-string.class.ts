@@ -7,6 +7,9 @@ import { TypedBoolean } from './typed-boolean.class';
 import { TypedNumber } from './typed-number.class';
 import { TypedObject } from './typed-object.class';
 
+/**
+ * @todo allow each method's parameter to use TypedClass format
+ */
 export class TypedString<T extends string | number | boolean = ''>
   extends TypedObject<T>
   implements
