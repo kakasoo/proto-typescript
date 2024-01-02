@@ -28,6 +28,7 @@ export class TypedString<T extends string | number | boolean = ''>
       | 'endsWith'
       | 'repeat'
       | 'indexOf'
+      | 'slice'
     >,
     ToPrimitive<T | `${T}`>,
     Iterable<ArrayType.ElementOf<StringType.Split<`${T}`>>>
@@ -65,6 +66,19 @@ export class TypedString<T extends string | number | boolean = ''>
             };
       },
     };
+  }
+
+  /**
+   * @inheritdoc
+   */
+  slice<Start extends number, End extends number>(
+    start?: Start | TypedNumber<Start>,
+    end?: End | TypedNumber<End>,
+  ): TypedString<ReturnType<typeof StringPrototype.slice<`${T}`, Start, End>>> {
+    const primitiveStart = this.isTypedClass(start) ? start.toPrimitive() : start;
+    const primitiveEnd = this.isTypedClass(end) ? end.toPrimitive() : end;
+    const initialValue = StringPrototype.slice(this.string, primitiveStart, primitiveEnd);
+    return new TypedString(initialValue);
   }
 
   /**
