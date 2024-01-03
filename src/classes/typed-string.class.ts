@@ -123,11 +123,13 @@ export class TypedString<T extends string | number | boolean = ''>
   /**
    * @inheritdoc
    */
-  startsWith<SearchString extends string, Position extends number>(
-    searchString: SearchString,
-    position?: Position,
+  startsWith<SearchString extends string = '', Position extends number = 0>(
+    searchString: SearchString | TypedString<SearchString> = new TypedString(),
+    position: Position | TypedNumber<Position> = new TypedNumber(),
   ): TypedBoolean<ReturnType<typeof StringPrototype.startsWith<`${T}`, SearchString, Position>>> {
-    const initialValue = StringPrototype.startsWith(this.string, searchString, position);
+    const primitiveSearchString = this.isTypedClass(searchString) ? searchString.toPrimitive() : searchString;
+    const primitivePosition = this.isTypedClass(position) ? position.toPrimitive() : position;
+    const initialValue = StringPrototype.startsWith(this.string, primitiveSearchString, primitivePosition);
     return new TypedBoolean(initialValue);
   }
 
