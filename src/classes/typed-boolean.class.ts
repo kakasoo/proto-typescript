@@ -14,34 +14,35 @@ export class TypedBoolean<T extends boolean = false> extends TypedObject<T> impl
    * @example
    * ```ts
    * const yn = TypedBoolean.refine({ true: 'Y', false: 'N' });
+   *
    * const t = yn('Y'); // true
    * const f = yn('N'); // false
    * const y = yn(true); // 'Y'
    * const n = yn(false); // 'N'
    * ```
-   * @param map
+   * @param map Defines the key name that you want to specify with true and false.
    * @returns
    */
   static refine<T extends string, F extends string>(map: { true: T; false: F }) {
-    return function <Choice extends T | F | boolean>(
-      data: Choice | boolean,
-    ): Equal<Choice, T> extends true
-      ? true
-      : Equal<Choice, F> extends true
-        ? false
-        : Equal<Choice, true> extends true
-          ? T
-          : Equal<Choice, false> extends true
-            ? F
-            : never {
+    return function <Choice extends T | F | boolean>(data: Choice | boolean) {
+      type RETURN_TYPE = Equal<Choice, T> extends true
+        ? true
+        : Equal<Choice, F> extends true
+          ? false
+          : Equal<Choice, true> extends true
+            ? T
+            : Equal<Choice, false> extends true
+              ? F
+              : never;
+
       if (data === map.true) {
-        return true as any;
+        return true as RETURN_TYPE;
       } else if (data === map.false) {
-        return false as any;
+        return false as RETURN_TYPE;
       } else if (data === true) {
-        return map.true as any;
+        return map.true as RETURN_TYPE;
       } else {
-        return map.false as any;
+        return map.false as RETURN_TYPE;
       }
     };
   }
