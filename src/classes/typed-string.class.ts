@@ -190,21 +190,25 @@ export class TypedString<T extends string | number | boolean = ''>
    * @inheritdoc
    */
   padStart<TargetLength extends number = StringType.Length<`${T}`>, PadString extends string = ' '>(
-    targetLength: TargetLength,
-    padString: PadString,
+    targetLength: TargetLength | TypedNumber<TargetLength> = new TypedNumber(this.string.length as TargetLength),
+    padString: PadString | TypedString<PadString> = new TypedString<PadString>(' ' as PadString),
   ): TypedString<ReturnType<typeof StringPrototype.padStart<`${T}`, TargetLength, PadString>>> {
-    const initialValue = StringPrototype.padStart(this.string, targetLength, padString ?? ' ');
+    const primitiveTargetLength = this.isTypedClass(targetLength) ? targetLength.toPrimitive() : targetLength;
+    const primitivePadString = this.isTypedClass(padString) ? padString.toPrimitive() : padString;
+    const initialValue = StringPrototype.padStart(this.string, primitiveTargetLength, primitivePadString);
     return new TypedString(initialValue);
   }
 
   /**
    * @inheritdoc
    */
-  padEnd<TargetLength extends number, PadString extends string>(
-    targetLength: TargetLength,
-    padString: PadString,
+  padEnd<TargetLength extends number = StringType.Length<`${T}`>, PadString extends string = ' '>(
+    targetLength: TargetLength | TypedNumber<TargetLength> = new TypedNumber(this.string.length as TargetLength),
+    padString: PadString | TypedString<PadString> = new TypedString<PadString>(' ' as PadString),
   ): TypedString<ReturnType<typeof StringPrototype.padEnd<`${T}`, TargetLength, PadString>>> {
-    const initialValue = StringPrototype.padEnd(this.string, targetLength, padString ?? ' ');
+    const primitiveTargetLength = this.isTypedClass(targetLength) ? targetLength.toPrimitive() : targetLength;
+    const primitivePadString = this.isTypedClass(padString) ? padString.toPrimitive() : padString;
+    const initialValue = StringPrototype.padEnd(this.string, primitiveTargetLength, primitivePadString);
     return new TypedString(initialValue);
   }
 
