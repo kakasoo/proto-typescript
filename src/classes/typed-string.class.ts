@@ -190,7 +190,7 @@ export class TypedString<T extends string | number | boolean = ''>
    * @inheritdoc
    */
   padStart<TargetLength extends number = StringType.Length<`${T}`>, PadString extends string = ' '>(
-    targetLength: TargetLength | TypedNumber<TargetLength> = new TypedNumber(this.string.length as TargetLength),
+    targetLength: TargetLength | TypedNumber<TargetLength> = new TypedNumber(this.length as TargetLength),
     padString: PadString | TypedString<PadString> = new TypedString<PadString>(' ' as PadString),
   ): TypedString<ReturnType<typeof StringPrototype.padStart<`${T}`, TargetLength, PadString>>> {
     const primitiveTargetLength = this.isTypedClass(targetLength) ? targetLength.toPrimitive() : targetLength;
@@ -203,7 +203,7 @@ export class TypedString<T extends string | number | boolean = ''>
    * @inheritdoc
    */
   padEnd<TargetLength extends number = StringType.Length<`${T}`>, PadString extends string = ' '>(
-    targetLength: TargetLength | TypedNumber<TargetLength> = new TypedNumber(this.string.length as TargetLength),
+    targetLength: TargetLength | TypedNumber<TargetLength> = new TypedNumber(this.length as TargetLength),
     padString: PadString | TypedString<PadString> = new TypedString<PadString>(' ' as PadString),
   ): TypedString<ReturnType<typeof StringPrototype.padEnd<`${T}`, TargetLength, PadString>>> {
     const primitiveTargetLength = this.isTypedClass(targetLength) ? targetLength.toPrimitive() : targetLength;
@@ -249,12 +249,11 @@ export class TypedString<T extends string | number | boolean = ''>
    * If a value greater than the length of the current data is given as an index, it is inferred as underdefined that no wrapper exists.
    * @inheritdoc
    */
-  at<
-    Index extends number,
-    RETURN_TYPE extends NumberType.Compare<Index, '<', StringType.Length<`${T}`>> extends true
+  at<Index extends number = 0>(index: Index | TypedNumber<Index> = new TypedNumber()) {
+    type RETURN_TYPE = NumberType.Compare<Index, '<', StringType.Length<`${T}`>> extends true
       ? TypedString<ReturnType<typeof StringPrototype.at<`${T}`, Index>>>
-      : undefined,
-  >(index: Index | TypedNumber<Index> = new TypedNumber()): RETURN_TYPE {
+      : undefined;
+
     const primitiveIndex = this.isTypedClass(index) ? index.toPrimitive() : index;
     const initialValue = StringPrototype.at(this.string, primitiveIndex);
     if (initialValue) {
