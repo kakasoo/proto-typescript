@@ -160,11 +160,13 @@ export class TypedString<T extends string | number | boolean = ''>
   /**
    * @inheritdoc
    */
-  includes<SearchString extends string, Position extends number>(
-    searchString: SearchString,
-    position?: Position,
+  includes<SearchString extends string = '', Position extends number = 0>(
+    searchString: SearchString | TypedString<SearchString> = new TypedString(),
+    position: Position | TypedNumber<Position> = new TypedNumber(),
   ): TypedBoolean<ReturnType<typeof StringPrototype.includes<`${T}`, SearchString, Position>>> {
-    const initialValue = StringPrototype.includes(this.string, searchString, position);
+    const primitiveSearchString = this.isTypedClass(searchString) ? searchString.toPrimitive() : searchString;
+    const primitivePosition = this.isTypedClass(position) ? position.toPrimitive() : position;
+    const initialValue = StringPrototype.includes(this.string, primitiveSearchString, primitivePosition);
     return new TypedBoolean(initialValue);
   }
 
@@ -187,7 +189,7 @@ export class TypedString<T extends string | number | boolean = ''>
   /**
    * @inheritdoc
    */
-  padStart<TargetLength extends number, PadString extends string>(
+  padStart<TargetLength extends number = StringType.Length<`${T}`>, PadString extends string = ' '>(
     targetLength: TargetLength,
     padString: PadString,
   ): TypedString<ReturnType<typeof StringPrototype.padStart<`${T}`, TargetLength, PadString>>> {
