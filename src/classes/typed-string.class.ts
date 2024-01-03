@@ -136,11 +136,13 @@ export class TypedString<T extends string | number | boolean = ''>
   /**
    * @inheritdoc
    */
-  endsWith<SearchString extends string, EndPosition extends number>(
-    searchString: SearchString,
-    endPosition?: EndPosition,
+  endsWith<SearchString extends string = '', EndPosition extends number = 0>(
+    searchString: SearchString | TypedString<SearchString> = new TypedString(),
+    position: EndPosition | TypedNumber<EndPosition> = new TypedNumber(),
   ): TypedBoolean<ReturnType<typeof StringPrototype.endsWith<`${T}`, SearchString, EndPosition>>> {
-    const initialValue = StringPrototype.endsWith(this.string, searchString, endPosition);
+    const primitiveSearchString = this.isTypedClass(searchString) ? searchString.toPrimitive() : searchString;
+    const primitivePosition = this.isTypedClass(position) ? position.toPrimitive() : position;
+    const initialValue = StringPrototype.endsWith(this.string, primitiveSearchString, primitivePosition);
     return new TypedBoolean(initialValue);
   }
 
