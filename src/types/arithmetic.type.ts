@@ -113,6 +113,9 @@ export namespace Math {
       : N
     : N;
 
+  /**
+   * @todo Implement. Currently, It's not enough.
+   */
   export type Round<N extends number, TargetDigit extends number> = _Round<
     StringType.ToNumber<StringType.Take<`${N}`, NumberType.Add<TargetDigit, 3>>>,
     TargetDigit
