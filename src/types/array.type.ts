@@ -4,7 +4,21 @@ import { Equal, ObjectType } from './object.type';
 import { Primitive, ReadonlyOrNot } from './primitive.type';
 
 export namespace ArrayType {
-  export type Filter = any;
+  export type _FilterNull<AllowNull extends boolean, Target> = [
+    ...(AllowNull extends false ? (Equal<Target, null> extends true ? [] : [Target]) : [Target]),
+  ];
+
+  export type _FilterUndefined<AllowUndefined extends boolean, Target> = [
+    ...(AllowUndefined extends false ? (Equal<Target, undefined> extends true ? [] : [Target]) : [Target]),
+  ];
+
+  export type Filter<
+    T extends ReadonlyOrNot<any[]>,
+    AllowNull extends boolean,
+    AllowUndefined extends boolean,
+  > = T extends [infer First, ...infer Rest]
+    ? [..._FilterNull<AllowNull, First>, Filter<Rest, AllowNull, AllowUndefined>]
+    : [];
 
   /**
    * Get length of tuple or string literal type.
