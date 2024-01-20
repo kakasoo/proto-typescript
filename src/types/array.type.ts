@@ -4,18 +4,21 @@ import { Equal, ObjectType } from './object.type';
 import { Primitive, ReadonlyOrNot } from './primitive.type';
 
 export namespace ArrayType {
-  type _FilterNull<AllowNull extends boolean, Target> = AllowNull extends false
+  type _FilterNull<FilterNull extends boolean, Target> = FilterNull extends true
     ? Equal<Target, null> extends true
       ? never
       : Target
     : Target;
 
-  type _FilterUndefined<AllowUndefined extends boolean, Target> = AllowUndefined extends false
+  type _FilterUndefined<FilterUndefined extends boolean, Target> = FilterUndefined extends true
     ? Equal<Target, undefined> extends true
       ? never
       : Target
     : Target;
 
+  /**
+   * type a = ArrayType.Filter<[1, 2, true, 3, undefined, null, 5], true, true> // [1, 2, 3, 5]
+   */
   export type Filter<
     T extends ReadonlyOrNot<any[]>,
     AllowNull extends boolean,
