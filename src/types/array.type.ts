@@ -4,13 +4,13 @@ import { Equal, ObjectType } from './object.type';
 import { Primitive, ReadonlyOrNot } from './primitive.type';
 
 export namespace ArrayType {
-  export type _FilterNull<AllowNull extends boolean, Target> = AllowNull extends false
+  type _FilterNull<AllowNull extends boolean, Target> = AllowNull extends false
     ? Equal<Target, null> extends true
       ? never
       : Target
     : Target;
 
-  export type _FilterUndefined<AllowUndefined extends boolean, Target> = AllowUndefined extends false
+  type _FilterUndefined<AllowUndefined extends boolean, Target> = AllowUndefined extends false
     ? Equal<Target, undefined> extends true
       ? never
       : Target
@@ -21,7 +21,11 @@ export namespace ArrayType {
     AllowNull extends boolean,
     AllowUndefined extends boolean,
   > = T extends [infer First, ...infer Rest]
-    ? [_FilterUndefined<AllowUndefined, _FilterNull<AllowNull, First>>, ...Filter<Rest, AllowNull, AllowUndefined>]
+    ? NeverType.IsNever<_FilterNull<AllowNull, First>> extends true
+      ? Filter<Rest, AllowNull, AllowUndefined>
+      : NeverType.IsNever<_FilterUndefined<AllowUndefined, First>> extends true
+        ? Filter<Rest, AllowNull, AllowUndefined>
+        : [First, ...Filter<Rest, AllowNull, AllowUndefined>]
     : [];
 
   /**
