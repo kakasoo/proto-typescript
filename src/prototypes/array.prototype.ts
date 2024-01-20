@@ -1,6 +1,47 @@
 import { ArrayType, NumberType } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
+function filter<Container extends ReadonlyOrNot<any[]>>(
+  conatiner: Container,
+  predicate: <Index extends number>(value: ArrayType.At<Container, Index>, index?: Index, array?: Container) => boolean,
+): Partial<Container>;
+function filter<Container extends ReadonlyOrNot<any[]>, FilterNull extends boolean, FilterUndefined extends boolean>(
+  container: Container,
+  predicate: {
+    filterNull: FilterNull;
+    filterUndefined: FilterUndefined;
+  },
+): ArrayType.Filter<Container, FilterNull, FilterUndefined>;
+function filter<Container extends ReadonlyOrNot<any[]>, FilterNull extends boolean, FilterUndefined extends boolean>(
+  container: Container,
+  predicate:
+    | {
+        filterNull: FilterNull;
+        filterUndefined: FilterUndefined;
+      }
+    | (<Index extends number>(value: ArrayType.At<Container, Index>, index?: Index, array?: Container) => boolean),
+): ArrayType.Filter<Container, FilterNull, FilterUndefined> | Partial<Container> {
+  return (
+    predicate instanceof Function
+      ? container.filter(predicate as any)
+      : typeof predicate === 'object' &&
+          typeof predicate.filterNull === 'boolean' &&
+          typeof predicate.filterUndefined === 'boolean'
+        ? container.filter((element) => {
+            if (predicate.filterNull === true) {
+              return element !== null;
+            }
+
+            if (predicate.filterUndefined === true) {
+              return element !== undefined;
+            }
+
+            return true;
+          })
+        : container
+  ) as ArrayType.Filter<Container, FilterNull, FilterUndefined>;
+}
+
 export const ArrayPrototype = {
   /**
    * Filter `null` or `undefined` element of Array Container.
@@ -8,31 +49,7 @@ export const ArrayPrototype = {
    * @param options filtering options
    * @returns
    */
-  filter<Container extends ReadonlyOrNot<any[]>, FilterNull extends boolean, FilterUndefined extends boolean>(
-    container: Container,
-    options: {
-      filterNull: FilterNull;
-      filterUndefined: FilterUndefined;
-    },
-  ): ArrayType.Filter<Container, FilterNull, FilterUndefined> {
-    return (
-      typeof options === 'object' &&
-      typeof options.filterNull === 'boolean' &&
-      typeof options.filterUndefined === 'boolean'
-        ? container.filter((element) => {
-            if (options.filterNull === true) {
-              return element !== null;
-            }
-
-            if (options.filterUndefined === true) {
-              return element !== undefined;
-            }
-
-            return true;
-          })
-        : container
-    ) as ArrayType.Filter<Container, FilterNull, FilterUndefined>;
-  },
+  filter: filter,
 
   /**
    * It only returns the 0th index without subtracting the elements inside the actual container.
