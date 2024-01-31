@@ -1,55 +1,60 @@
 import { ArrayType, NumberType } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
-function filter<Container extends ReadonlyOrNot<any[]>>(
-  conatiner: Container,
-  predicate: <Index extends number>(value: ArrayType.At<Container, Index>, index?: Index, array?: Container) => boolean,
-): Partial<Container>;
-function filter<Container extends ReadonlyOrNot<any[]>, FilterNull extends boolean, FilterUndefined extends boolean>(
+type TypePredicate<Container extends ReadonlyOrNot<any[]>, Target> = {
+  <Index extends number, __Target extends Target = Target>(
+    value: ArrayType.At<Container, Index>,
+    index?: Index,
+    array?: Container,
+  ): value is Target;
+};
+
+/**
+ * Filter `null` or `undefined` element of Array Container.
+ * @param container
+ * @param predicate filtering options
+ * @returns
+ */
+function filterNullish<
+  Container extends ReadonlyOrNot<any[]>,
+  FilterNull extends boolean,
+  FilterUndefined extends boolean,
+>(
   container: Container,
   predicate: {
     filterNull: FilterNull;
     filterUndefined: FilterUndefined;
   },
-): ArrayType.Filter<Container, FilterNull, FilterUndefined>;
-function filter<Container extends ReadonlyOrNot<any[]>, FilterNull extends boolean, FilterUndefined extends boolean>(
-  container: Container,
-  predicate:
-    | {
-        filterNull: FilterNull;
-        filterUndefined: FilterUndefined;
-      }
-    | (<Index extends number>(value: ArrayType.At<Container, Index>, index?: Index, array?: Container) => boolean),
-): ArrayType.Filter<Container, FilterNull, FilterUndefined> | Partial<Container> {
-  return (
-    predicate instanceof Function
-      ? container.filter(predicate as any)
-      : typeof predicate === 'object' &&
-          typeof predicate.filterNull === 'boolean' &&
-          typeof predicate.filterUndefined === 'boolean'
-        ? container.filter((element) => {
-            if (predicate.filterNull === true) {
-              return element !== null;
-            }
+): ArrayType.FilterNullish<Container, FilterNull, FilterUndefined> {
+  return container.filter((element) => {
+    if (predicate.filterNull === true) {
+      return element !== null;
+    }
 
-            if (predicate.filterUndefined === true) {
-              return element !== undefined;
-            }
+    if (predicate.filterUndefined === true) {
+      return element !== undefined;
+    }
 
-            return true;
-          })
-        : container
-  ) as ArrayType.Filter<Container, FilterNull, FilterUndefined>;
+    return true;
+  }) as ArrayType.FilterNullish<Container, FilterNull, FilterUndefined>;
 }
 
 export const ArrayPrototype = {
   /**
-   * Filter `null` or `undefined` element of Array Container.
    * @param container
-   * @param options filtering options
+   * @param predicate
+   * @example
+   * ```ts
+   * const answer = ArrayPrototype.filter<[1, 2, 3, 4, 5], 2>([1, 2, 3, 4, 5] as const, (el: any): el is 2 => el === 2);
+   * ```
    * @returns
    */
-  filter: filter,
+  filter<Container extends ReadonlyOrNot<any[]>, Target = any>(
+    container: Container,
+    predicate: TypePredicate<Container, Target>,
+  ): ArrayType.Filter<Container, Target> {
+    return container.filter(predicate as any) as any;
+  },
 
   /**
    * It only returns the 0th index without subtracting the elements inside the actual container.

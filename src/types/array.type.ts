@@ -4,6 +4,15 @@ import { Equal, ObjectType } from './object.type';
 import { Primitive, ReadonlyOrNot } from './primitive.type';
 
 export namespace ArrayType {
+  /**
+   * @todo don't use `Equal` type and use `includes` of `union types` ( make `union incldues` type )
+   */
+  export type Filter<T extends ReadonlyOrNot<any[]>, Target> = T extends [infer First, ...infer Rest]
+    ? Equal<First, Target> extends true
+      ? [First, ...Filter<Rest, Target>]
+      : Filter<Rest, Target>
+    : [];
+
   type _FilterNull<FilterNull extends boolean, Target> = FilterNull extends true
     ? Equal<Target, null> extends true
       ? never
@@ -19,16 +28,16 @@ export namespace ArrayType {
   /**
    * type a = ArrayType.Filter<[1, 2, true, 3, undefined, null, 5], true, true> // [1, 2, 3, 5]
    */
-  export type Filter<
+  export type FilterNullish<
     T extends ReadonlyOrNot<any[]>,
     AllowNull extends boolean,
     AllowUndefined extends boolean,
   > = T extends [infer First, ...infer Rest]
     ? NeverType.IsNever<_FilterNull<AllowNull, First>> extends true
-      ? Filter<Rest, AllowNull, AllowUndefined>
+      ? FilterNullish<Rest, AllowNull, AllowUndefined>
       : NeverType.IsNever<_FilterUndefined<AllowUndefined, First>> extends true
-        ? Filter<Rest, AllowNull, AllowUndefined>
-        : [First, ...Filter<Rest, AllowNull, AllowUndefined>]
+        ? FilterNullish<Rest, AllowNull, AllowUndefined>
+        : [First, ...FilterNullish<Rest, AllowNull, AllowUndefined>]
     : [];
 
   /**
