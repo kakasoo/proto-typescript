@@ -4,6 +4,14 @@ import { Equal, ObjectType } from './object.type';
 import { Primitive, ReadonlyOrNot } from './primitive.type';
 
 export namespace ArrayType {
+  export type TypePredicate<Container extends ReadonlyOrNot<any[]>, Target extends any = any> = {
+    <Index extends number, __Target extends Target = Target>(
+      value: ArrayType.At<Container, Index>,
+      index?: Index,
+      array?: Container,
+    ): value is Target;
+  };
+
   /**
    * @todo don't use `Equal` type and use `includes` of `union types` ( make `union incldues` type )
    */

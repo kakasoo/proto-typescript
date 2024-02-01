@@ -111,13 +111,7 @@ export class TypedArray<T extends ReadonlyOrNot<any[]> | RegExpType.Range<number
    * I'm reviewing whether internal functions that are different from the existing som should be provided by default for type inference.
    * @todo add function named `IsSameElement` for type inference.
    */
-  some<Target>(
-    predicate: <INNER_TARGET = Target, Index extends number = number>(
-      value: ArrayType.At<ParseToArray<T>, Index>,
-      index: Index,
-      array: ParseToArray<T>,
-    ) => ArrayType.Some<INNER_TARGET, ParseToArray<T>>,
-  ): ReturnType<typeof ArrayPrototype.some> {
+  some<Target>(predicate: ArrayType.TypePredicate<ParseToArray<T>, Target>): ReturnType<typeof ArrayPrototype.some> {
     return ArrayPrototype.some(this.array, predicate);
   }
 
