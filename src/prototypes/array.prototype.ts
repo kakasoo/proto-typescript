@@ -15,16 +15,8 @@ export const ArrayPrototype = {
   filter<Container extends ReadonlyOrNot<any[]>, Target = any>(
     container: Container,
     predicate: ArrayType.TypePredicate<Container, Target>,
-  ): Equal<Target, unknown> extends true
-    ? boolean
-    : Equal<Target, any> extends true
-      ? boolean
-      : ArrayType.Filter<Container, Target> {
-    return container.filter(predicate as any) as Equal<Target, unknown> extends true
-      ? boolean
-      : Equal<Target, any> extends true
-        ? boolean
-        : ArrayType.Filter<Container, Target>;
+  ): ArrayType.Filter<Container, Target> {
+    return container.filter(predicate as any) as ArrayType.Filter<Container, Target>;
   },
 
   /**

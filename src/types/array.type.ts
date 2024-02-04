@@ -4,9 +4,9 @@ import { Equal, ObjectType } from './object.type';
 import { Primitive, ReadonlyOrNot } from './primitive.type';
 
 export namespace ArrayType {
-  export type TypePredicate<Container extends ReadonlyOrNot<any[]>, Target extends any = any> = {
+  export type TypePredicate<Container extends ReadonlyOrNot<any[]>, Target> = {
     <Index extends number, __Target extends Target = Target>(
-      value: ArrayType.At<Container, Index>,
+      value?: ArrayType.At<Container, Index>,
       index?: Index,
       array?: Container,
     ): value is Target;
