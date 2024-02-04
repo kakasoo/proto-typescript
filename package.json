@@ -1,6 +1,6 @@
 {
   "name": "@kakasoo/proto-typescript",
-  "version": "1.27.2",
+  "version": "1.27.3",
   "publishConfig": {
     "access": "public"
   },
