@@ -110,11 +110,36 @@ export namespace StringType {
     Limit extends number = ArrayType.Length<_Split<Conatiner, Splitter>>,
   > = Conditional<Limit extends 0 ? true : false, [], ArrayType.Take<_Split<Conatiner, Splitter>, Limit>>;
 
-  export type SplitIfIncludes<Container extends string, Splitter extends readonly string[] = []> = Container extends ''
+  /**
+   * type answer = SplitMap<['aaa', 'bab'], 'a'>; // ["", "", "", "b", "b"]
+   */
+  export type SplitMap<Containers extends string[], Splitter extends string = ''> = Containers extends []
     ? []
-    : Container extends `${infer FirstWord}${infer SecondWord extends ArrayType.Values<Splitter>}${infer Rest}`
-      ? [FirstWord, ...SplitIfIncludes<Rest, Splitter>]
-      : [Container];
+    : Containers extends [infer First extends string, ...infer Rest extends string[]]
+      ? [..._Split<First, Splitter>, ...SplitMap<Rest, Splitter>]
+      : [];
+
+  /**
+   * type answer1 = SplitByManySplitter<['Hello-bbb_ccc'], [' ', '-', '_']>;
+   * type answer2 = StringType.SplitByManySplitter<['Hello world'], ['_', ' ', '.', '-', '/']>;
+   * type answer3 = StringType.SplitByManySplitter<['Hello world-kakasoo'], ['_', ' ', '.', '-', '/']>;
+   * type answer4 = StringType.SplitByManySplitter<['Hello world, my name-is_kakasoo', 'ha ha ha'], ['_', ' ', ',', '.', '-', '/']>;
+   */
+  export type SplitByManySplitter<
+    Containers extends string[],
+    Splitters extends readonly string[] = [],
+  > = Splitters extends []
+    ? Containers
+    : Splitters extends [infer FirstSplitter extends string, ...infer RestSplitters extends string[]]
+      ? SplitMap<Containers, FirstSplitter> extends [infer FirstToken extends string]
+        ? SplitByManySplitter<[FirstToken], RestSplitters>
+        : SplitMap<Containers, FirstSplitter> extends [
+              infer FirstToken extends string,
+              ...infer RestTokens extends string[],
+            ]
+          ? [...SplitByManySplitter<[FirstToken], RestSplitters>, ...SplitByManySplitter<RestTokens, RestSplitters>]
+          : []
+      : [];
 
   /**
    * Type of getting one character from that location with index as the key value in the string
