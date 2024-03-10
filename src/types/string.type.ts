@@ -104,11 +104,11 @@ export namespace StringType {
    * Split<"abcdefg", ""> // ["a", "b", "c", "d", "e", "f", "g"]
    * Split<"abcdefg", "", 3> // ["a", "b", "c"]
    */
-  export type Split<Conatiner extends string, Splitter extends string = '', Limit extends number = 0> = Conditional<
-    Limit extends 0 ? true : false,
-    _Split<Conatiner, Splitter>,
-    ArrayType.Take<_Split<Conatiner, Splitter>, Limit>
-  >;
+  export type Split<
+    Conatiner extends string,
+    Splitter extends string = '',
+    Limit extends number = ArrayType.Length<_Split<Conatiner, Splitter>>,
+  > = Conditional<Limit extends 0 ? true : false, [], ArrayType.Take<_Split<Conatiner, Splitter>, Limit>>;
 
   /**
    * Type of getting one character from that location with index as the key value in the string
