@@ -110,6 +110,12 @@ export namespace StringType {
     Limit extends number = ArrayType.Length<_Split<Conatiner, Splitter>>,
   > = Conditional<Limit extends 0 ? true : false, [], ArrayType.Take<_Split<Conatiner, Splitter>, Limit>>;
 
+  export type SplitIfIncludes<Container extends string, Splitter extends readonly string[] = []> = Container extends ''
+    ? []
+    : Container extends `${infer FirstWord}${infer SecondWord extends ArrayType.Values<Splitter>}${infer Rest}`
+      ? [FirstWord, ...SplitIfIncludes<Rest, Splitter>]
+      : [Container];
+
   /**
    * Type of getting one character from that location with index as the key value in the string
    *
