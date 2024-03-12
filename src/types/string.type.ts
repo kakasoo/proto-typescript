@@ -111,7 +111,9 @@ export namespace StringType {
   > = Conditional<Limit extends 0 ? true : false, [], ArrayType.Take<_Split<Conatiner, Splitter>, Limit>>;
 
   /**
-   * type answer = SplitMap<['aaa', 'bab'], 'a'>; // ["", "", "", "b", "b"]
+   * ```ts
+   * SplitMap<['aaa', 'bab'], 'a'>; // ["", "", "", "b", "b"]
+   * ```
    */
   export type SplitMap<Containers extends string[], Splitter extends string = ''> = Containers extends []
     ? []
@@ -120,10 +122,12 @@ export namespace StringType {
       : [];
 
   /**
-   * type answer1 = SplitByManySplitter<['Hello-bbb_ccc'], [' ', '-', '_']>;
-   * type answer2 = StringType.SplitByManySplitter<['Hello world'], ['_', ' ', '.', '-', '/']>;
-   * type answer3 = StringType.SplitByManySplitter<['Hello world-kakasoo'], ['_', ' ', '.', '-', '/']>;
-   * type answer4 = StringType.SplitByManySplitter<['Hello world, my name-is_kakasoo', 'ha ha ha'], ['_', ' ', ',', '.', '-', '/']>;
+   * ```ts
+   * SplitByManySplitter<['Hello-bbb_ccc'], [' ', '-', '_']>;
+   * StringType.SplitByManySplitter<['Hello world'], ['_', ' ', '.', '-', '/']>;
+   * StringType.SplitByManySplitter<['Hello world-kakasoo'], ['_', ' ', '.', '-', '/']>;
+   * StringType.SplitByManySplitter<['Hello world, my name-is_kakasoo', 'ha ha ha'], ['_', ' ', ',', '.', '-', '/']>;
+   * ```
    */
   export type SplitByManySplitter<
     Containers extends string[],
