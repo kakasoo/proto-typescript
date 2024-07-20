@@ -207,11 +207,11 @@ export namespace StringPrototype {
    *
    * @todo support `RegExp` as splitter
    */
-  export function split<Container extends string, Splitter extends string = '', Limit extends number = 0>(
-    container: Container,
-    splitter: Splitter,
-    limit?: Limit,
-  ): StringType.Split<Container, Splitter, Limit> {
+  export function split<
+    Container extends string,
+    Splitter extends string = '',
+    Limit extends number = ArrayType.Length<StringType.Split<Container, Splitter>>,
+  >(container: Container, splitter: Splitter, limit?: Limit): StringType.Split<Container, Splitter, Limit> {
     return container.split(splitter, limit) as StringType.Split<Container, Splitter, Limit>;
   }
 }
