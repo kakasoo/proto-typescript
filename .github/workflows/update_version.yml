@@ -14,23 +14,42 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 20.x
-      - name: Root Install
-        run: npm i
-      - name: Publish
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Clean Git working directory
         run: |
-          git pull
-          npm i
+          git reset --hard
+          git clean -fd
+
+      - name: Pull latest changes
+        run: git pull
+
+      - name: Install dependencies again
+        run: npm install
+
+      - name: Configure git
+        run: |
           git config --local user.email "actions@example.com"
           git config --local user.name "GitHub Actions"
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          npm version patch
-          npm publish
-          git add package*
-          git commit -m "Bump version to $(jq -r .version package.json) [skip ci]"
+
+      - name: Authenticate to NPM registry
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      - name: Bump version
+        run: npm version patch
+
+      - name: Publish to NPM
+        run: npm publish
+
+      - name: Push changes to repository
+        run: |
           git push --set-upstream origin main --follow-tags
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
