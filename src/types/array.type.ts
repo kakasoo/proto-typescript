@@ -149,7 +149,12 @@ export namespace ArrayType {
   /**
    * Shift<[1,2,3]> // [2,3]
    */
-  export type Shift<T extends ReadonlyOrNot<any[]>> = T extends [infer F, ...infer Rest] ? Rest : [];
+  export type Shift<T extends ReadonlyOrNot<any[]>, N extends number> = T extends [
+    ...infer F extends NTuple<N>,
+    ...infer Rest,
+  ]
+    ? Rest
+    : [];
 
   /**
    * Unshift<[1, 2, 3], 4> // [4,1,2,3]

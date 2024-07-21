@@ -2,7 +2,8 @@
   "name": "@kakasoo/proto-typescript",
   "version": "1.28.1",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "description": "Utility types and implementations based on JavaScript prototypes.",
   "main": "./dist/index.js",
