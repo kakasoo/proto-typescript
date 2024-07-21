@@ -16,7 +16,8 @@
     "prepublishOnly": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage"
+    "test:cov": "jest --coverage",
+    "deploy": "npm publish"
   },
   "keywords": [
     "type-safe",
