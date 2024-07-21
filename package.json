@@ -1,6 +1,6 @@
 {
   "name": "@kakasoo/proto-typescript",
-  "version": "1.28.6",
+  "version": "1.28.7",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
