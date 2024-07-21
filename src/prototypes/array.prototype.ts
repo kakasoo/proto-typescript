@@ -1,7 +1,7 @@
 import { ArrayType, Equal, NumberType } from '../types';
 import { Primitive, ReadonlyOrNot } from '../types/primitive.type';
 
-export const ArrayPrototype = {
+export namespace ArrayPrototype {
   /**
    * @param container
    * @param predicate
@@ -12,12 +12,12 @@ export const ArrayPrototype = {
    * ```
    * @returns
    */
-  filter<Container extends ReadonlyOrNot<any[]>, Target = any>(
+  export function filter<Container extends ReadonlyOrNot<any[]>, Target = any>(
     container: Container,
     predicate: ArrayType.TypePredicate<Container, Target>,
   ): ArrayType.Filter<Container, Target> {
     return container.filter(predicate as any) as ArrayType.Filter<Container, Target>;
-  },
+  }
 
   /**
    * Filter `null` or `undefined` element of Array Container.
@@ -25,7 +25,11 @@ export const ArrayPrototype = {
    * @param predicate filtering options
    * @returns
    */
-  filterNullish<Container extends ReadonlyOrNot<any[]>, FilterNull extends boolean, FilterUndefined extends boolean>(
+  export function filterNullish<
+    Container extends ReadonlyOrNot<any[]>,
+    FilterNull extends boolean,
+    FilterUndefined extends boolean,
+  >(
     container: Container,
     predicate: {
       filterNull: FilterNull;
@@ -43,39 +47,39 @@ export const ArrayPrototype = {
 
       return true;
     }) as ArrayType.FilterNullish<Container, FilterNull, FilterUndefined>;
-  },
+  }
 
   /**
    * It only returns the 0th index without subtracting the elements inside the actual container.
    * @param conatiner
    * @returns
    */
-  shift<Container extends ReadonlyOrNot<any[]>>(conatiner: Container): ArrayType.At<Container, 0> {
+  export function shift<Container extends ReadonlyOrNot<any[]>>(conatiner: Container): ArrayType.At<Container, 0> {
     return conatiner.at(0);
-  },
+  }
 
   /**
    * Only return the last index without subtracting the elements inside the actual container.
    * @param conatiner
    * @returns
    */
-  pop<Container extends ReadonlyOrNot<any[]>>(
+  export function pop<Container extends ReadonlyOrNot<any[]>>(
     conatiner: Container,
   ): ArrayType.At<Container, NumberType.Sub<ArrayType.Length<Container>, 1>> {
     return conatiner.at(conatiner.length - 1);
-  },
+  }
 
   /**
    * @param container
    * @param items
    * @returns
    */
-  unshift<Container extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
+  export function unshift<Container extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
     container: Container,
     ...items: Items
   ): ArrayType.Concat<Items, Container> {
     return [...items, ...container];
-  },
+  }
 
   /**
    * @todo add paramter of this method, named `thisArg`.
@@ -84,7 +88,7 @@ export const ArrayPrototype = {
    * @param predicate
    * @returns
    */
-  some<Container extends ReadonlyOrNot<any[]>, Target = any>(
+  export function some<Container extends ReadonlyOrNot<any[]>, Target = any>(
     container: Container,
     predicate: ArrayType.TypePredicate<Container, Target>,
     thisArg?: any,
@@ -98,29 +102,29 @@ export const ArrayPrototype = {
       : Equal<Target, any> extends true
         ? boolean
         : ArrayType.Includes<Container, Target>;
-  },
+  }
 
   /**
    * @param container
    * @param items
    * @returns
    */
-  push<Container extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
+  export function push<Container extends ReadonlyOrNot<any[]>, Items extends ReadonlyOrNot<any[]>>(
     container: Container,
     ...items: Items
   ): ArrayType.Concat<Container, Items> {
     return [...container, ...items];
-  },
+  }
 
   /**
    * @param container
    */
-  at<Container extends ReadonlyOrNot<any[]>, Index extends number>(
+  export function at<Container extends ReadonlyOrNot<any[]>, Index extends number>(
     container: Container,
     index: Index,
   ): ArrayType.At<Container, Index> {
     return container.at(index);
-  },
+  }
 
   /**
    * type-safe join.
@@ -132,10 +136,10 @@ export const ArrayPrototype = {
    *
    * @todo support bigint type (es2020) as element of Array.
    */
-  join<Container extends ReadonlyOrNot<Exclude<Primitive, symbol>[]>, Separator extends string = ','>(
+  export function join<Container extends ReadonlyOrNot<Exclude<Primitive, symbol>[]>, Separator extends string = ','>(
     container: Container,
     separator: Separator = ',' as Separator,
   ): ArrayType.Join<Container, Separator> {
     return container.join(separator) as ArrayType.Join<Container, Separator>;
-  },
-};
+  }
+}

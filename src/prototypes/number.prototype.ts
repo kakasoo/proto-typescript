@@ -1,1 +1,1 @@
-export const NumberPrototype = {};
+export namespace NumberPrototype {}
