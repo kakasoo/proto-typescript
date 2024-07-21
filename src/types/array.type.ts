@@ -40,13 +40,18 @@ export namespace ArrayType {
     T extends ReadonlyOrNot<any[]>,
     AllowNull extends boolean,
     AllowUndefined extends boolean,
-  > = T extends [infer First, ...infer Rest]
-    ? NeverType.IsNever<_FilterNull<AllowNull, First>> extends true
-      ? FilterNullish<Rest, AllowNull, AllowUndefined>
-      : NeverType.IsNever<_FilterUndefined<AllowUndefined, First>> extends true
+  > = IsTuple<T> extends false
+    ? Exclude<
+        ElementOf<T>,
+        (AllowNull extends true ? null : never) | (AllowUndefined extends true ? undefined : never)
+      >[]
+    : T extends [infer First, ...infer Rest]
+      ? NeverType.IsNever<_FilterNull<AllowNull, First>> extends true
         ? FilterNullish<Rest, AllowNull, AllowUndefined>
-        : [First, ...FilterNullish<Rest, AllowNull, AllowUndefined>]
-    : [];
+        : NeverType.IsNever<_FilterUndefined<AllowUndefined, First>> extends true
+          ? FilterNullish<Rest, AllowNull, AllowUndefined>
+          : [First, ...FilterNullish<Rest, AllowNull, AllowUndefined>]
+      : [];
 
   /**
    * Get length of tuple or string literal type.
