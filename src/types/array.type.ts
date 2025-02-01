@@ -204,16 +204,12 @@ export namespace ArrayType {
     ? [[First, Second], ...PartitionByTwo<Rest, NumberType.Sub<L, 2>>]
     : [];
 
-  export type BubbleSort<
-    T extends ReadonlyOrNot<any[]>,
-    L extends number = ArrayType.Length<T>,
-    ASC extends boolean = false,
-  > = L extends 1
+  export type BubbleSort<T extends ReadonlyOrNot<any[]>, L extends number = ArrayType.Length<T>> = L extends 1
     ? T
     : T extends [infer F, infer S, ...infer Rest]
       ? BubbleSort<
           [
-            ...(NumberType.Compare<NumberType.NToNumber<F>, '>=', NumberType.NToNumber<S>> extends ASC
+            ...(NumberType.Compare<NumberType.NToNumber<F>, '>=', NumberType.NToNumber<S>> extends false
               ? [F, ...BubbleSort<[S, ...Rest], NumberType.Sub<L, 1>>]
               : [S, ...BubbleSort<[F, ...Rest], NumberType.Sub<L, 1>>]),
           ],
